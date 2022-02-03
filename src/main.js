@@ -6,6 +6,12 @@ window.addEventListener("error", function (event) {
 
 var myCard;
 
+function clamp(l, n, u) {
+  if (n < l) return l;
+  else if (n > u) return u;
+  else return n;
+}
+
 Image.prototype.rotate = function (angle) {
   var c = document.createElement("canvas");
   c.width = this.width;
@@ -42,12 +48,13 @@ function startGame() {
     }
   }
   myGameArea.start();
+  myGameArea.update();
 
   try {
-    console.log(myGameArea.push(6, 6, "l"));
-    console.log(myGameArea.push(5, 6, "u"));
-    console.log(myGameArea.push(5, 5, "l"));
-    console.log(myGameArea.push(4, 5, "u"));
+    // console.log(myGameArea.push(6, 6, "l"));
+    // console.log(myGameArea.push(5, 6, "u"));
+    // console.log(myGameArea.push(5, 5, "l"));
+    // console.log(myGameArea.push(4, 5, "u"));
     // console.log(myGameArea.push(4, 4, "l"));
     // console.log(myGameArea.push(3, 4, "u"));
     // console.log(myGameArea.push(3, 3, "l"));
@@ -64,20 +71,46 @@ function startGame() {
 }
 
 class Cursor {
-  constructor(ctx, size) {
+  constructor(size) {
     this.x = Math.ceil(size / 2);
     this.y = Math.ceil(size / 2);
-    this.ctx = ctx
+    this.size = size;
+    // this.ctx = ctx
   }
 
-  update() {
-    const ctx = this.ctx;
+  move(direction) {
+    console.log("MOVE", direction);
+    switch (direction) {
+      case "u":
+        this.y -= 1;
+        break;
+      case "d":
+        this.y += 1;
+        break;
+      case "l":
+        this.x -= 1;
+        break;
+      case "r":
+        this.x += 1;
+        break;
+    }
+    this.x = clamp(0, this.x, this.size - 1);
+    this.y = clamp(0, this.y, this.size - 1);
+  }
+
+  push(direction) {
+    console.log("scoot", this.x, this.y, direction);
+    myGameArea.push(this.x, this.y, direction);
+  }
+
+  update(ctx) {
     ctx.lineWidth = 10;
+    ctx.beginPath();
     ctx.rect(
-      myGameArea.xToCoord(this.x)+ctx.lineWidth/2,
-      myGameArea.xToCoord(this.y)+ctx.lineWidth/2,
-      cardWidth-ctx.lineWidth,
-      cardWidth-ctx.lineWidth
+      myGameArea.xToCoord(this.x) + ctx.lineWidth / 2,
+      myGameArea.xToCoord(this.y) + ctx.lineWidth / 2,
+      cardWidth - ctx.lineWidth,
+      cardWidth - ctx.lineWidth
     );
     ctx.stroke();
   }
@@ -85,7 +118,7 @@ class Cursor {
 
 class Game {
   canvas = document.createElement("canvas");
-  cardMap = new Array(8);
+  // cardMap = new Array(8);
 
   constructor(boardSize) {
     this.boardSize = boardSize;
@@ -102,7 +135,7 @@ class Game {
     this.ctx = this.context;
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.frameNo = 0;
-    this.cursor = new Cursor(this.ctx, 8);
+    this.cursor = new Cursor(this.boardSize);
     this.interval = setInterval(updateGameArea, 20);
   }
   inBounds(x, y) {
@@ -115,6 +148,10 @@ class Game {
     return y * cardWidth;
   }
   update() {
+    console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "green";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     for (var i = 0; i < this.cardMap.length; i++) {
       for (var j = 0; j < this.cardMap.length; j++) {
         let c = this.getCard(i, j);
@@ -123,9 +160,9 @@ class Game {
         }
       }
     }
-    this.cursor.update();
-    this.cursor.x++
-    if (this.cursor.x >= this.boardSize) this.cursor.x=0
+    this.cursor.update(this.ctx);
+    // this.cursor.x++;
+    // if (this.cursor.x >= this.boardSize) this.cursor.x = 0;
   }
   // if card exists then return it
   // false -> out of bounds
@@ -149,9 +186,7 @@ class Game {
     r: [(x) => x + 1, (y) => y],
   };
   push(x, y, direction) {
-    // console.log(direction);
-    // console.log(this.directions);
-    // console.log(this.directions[direction]);
+    console.log("PUSHING", x, y, direction);
     const xf = this.directions[direction][0];
     const yf = this.directions[direction][1];
     let nx = xf(x);
@@ -160,6 +195,7 @@ class Game {
     // find if it can push the next card
     const nc = this.getCard(nx, ny);
     const c = this.getCard(x, y);
+    if (!c) return undefined;
     if (nc === false) return false;
     if (nc !== undefined) {
       const cando = this.push(nx, ny, direction);
@@ -296,3 +332,40 @@ function everyinterval(n) {
 }
 
 startGame();
+
+console.log(myGameArea.push(6, 6, "l"));
+console.log(myGameArea.push(5, 6, "u"));
+console.log(myGameArea.push(5, 5, "l"));
+console.log(myGameArea.push(4, 5, "u"));
+
+document.onkeydown = (e) => {
+  console.log(e);
+  var cursor = myGameArea.cursor;
+  e = e || window.event;
+  switch (e.key) {
+    case "ArrowUp":
+      cursor.move("u");
+      break;
+    case "ArrowDown":
+      cursor.move("d");
+      break;
+    case "ArrowLeft":
+      cursor.move("l");
+      break;
+    case "ArrowRight":
+      cursor.move("r");
+      break;
+    case "w":
+      cursor.push("u");
+      break;
+    case "a":
+      cursor.push("l");
+      break;
+    case "s":
+      cursor.push("d");
+      break;
+    case "d":
+      cursor.push("r");
+      break;
+  }
+};
