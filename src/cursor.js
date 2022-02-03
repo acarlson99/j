@@ -30,8 +30,9 @@ class Cursor {
   }
 
   push(direction) {
-    console.log("scoot", this.x, this.y, direction);
-    gc.push(this.x, this.y, direction);
+    console.log("cursor push", this.x, this.y, direction);
+    const c = gc.board.getCard(this.x, this.y);
+    if (c) gc.push(this.x, this.y, direction);
   }
 
   update(ctx) {

@@ -4,20 +4,18 @@ import { Cursor } from "./cursor.js";
 export var cardWidth = 100;
 
 class GameController {
-  canvas = document.createElement("canvas");
-
   constructor(boardSize) {
+    this.canvas = document.createElement("canvas");
     this.interval = undefined;
     // console.log("CANVAS", this.canvas);
     this.board = new Board(boardSize);
     this.boardSize = function () {
-        return this.board.size;
+      return this.board.size;
     };
     this.cursor = new Cursor(this.boardSize());
     this.push = (x, y, d) => this.board.push(x, y, d);
     console.log("boardsize", this.boardSize());
-  }
-  start() {
+
     this.canvas.width = this.boardSize() * cardWidth;
     this.canvas.height = this.boardSize() * cardWidth;
     this.context = this.canvas.getContext("2d");
@@ -26,7 +24,7 @@ class GameController {
     this.frameNo = 0;
   }
   update() {
-    console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
+    // console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "green";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
