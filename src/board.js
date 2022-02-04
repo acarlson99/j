@@ -74,6 +74,7 @@ class Board {
     }
     // obstacles
     this.obstacles = new Obstacles(size);
+    this.gameover = false;
   }
 
   inBounds(x, y) {
@@ -92,6 +93,7 @@ class Board {
   }
 
   setCard(x, y, c) {
+    if (this.gameover) return false;
     // if (!c) {
     //   console.warn("NOTE: UNSETTING CARD", x, y);
     // }
@@ -117,6 +119,7 @@ class Board {
   }
 
   push(x, y, direction, priority) {
+    if (this.gameover) return false;
     console.log("PUSHING", x, y, direction);
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
@@ -150,6 +153,7 @@ class Board {
   // direction param optional
   // sans direction this function places instead
   pushC(x, y, c, direction) {
+    if (this.gameover) return false;
     if (direction) {
       // cannot push in direction
       if (!(c.stats && direction in c.stats)) return false;
@@ -181,6 +185,7 @@ class Board {
     if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
     console.log("WINNER WINNER CHICKEN DINNER", v);
+    this.gameover = true;
     return v;
   }
 

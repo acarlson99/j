@@ -42,14 +42,28 @@ class Cursor {
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) return false;
     this.heldCard = undefined;
-    gc.board.checkWin();
+
+    // FIXME: this does not belong here
+    const winner = gc.board.checkWin();
+    if (winner) {
+      document.getElementById(
+        winner == 1 ? "p1score" : "p2score"
+      ).style.background = "lavender";
+    }
     return true;
   }
 
   placeHeldCard() {
     if (gc.board.getCard(this.x, this.y) !== undefined) return false;
     const r = gc.pushC(this.x, this.y, this.heldCard);
-    gc.board.checkWin();
+
+    // FIXME: this does not belong here
+    const winner = gc.board.checkWin();
+    if (winner) {
+      document.getElementById(
+        winner == 1 ? "p1score" : "p2score"
+      ).style.background = "lightgreen";
+    }
     return r;
     // return gc.pushC(this.x, this.y, this.heldCard);
   }
