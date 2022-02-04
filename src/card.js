@@ -1,65 +1,70 @@
 import { cardWidth } from "./gameController.js";
 
+const opposites = {
+  l: "r",
+  r: "l",
+  u: "d",
+  d: "u",
+};
+
 // color -- red/blue
 // x,y   -- x,y coords on board
 function card(color, name, stats) {
-  // var img = new Image();
-  // img.src = cardNames[name][color];
-  // img.name = name;
   this.color = color;
   this.name = name;
-  // img.src =
-  //   "https://static.wikia.nocookie.net/shovelknight/images/8/8b/CardCloakedFigure.png";
-  // if (this.color == "red") {
-  //   img.src =
-  //     "https://static.wikia.nocookie.net/shovelknight/images/d/d3/RedCardCloakedFigure.png";
-  // }
-  // img.name = "Cloaked Figure";
-  // this.img = img;
-  this.stats = stats;
+  this.width = cardWidth;
+  // lmao no deep copy method so i do this :shrug:
+  this.stats = JSON.parse(JSON.stringify(stats));
   const colors = {
     1: "black",
     2: "white",
     3: "maroon",
   };
 
+  this.canBePushed = function (direction, priority) {
+    if (priority === undefined) return this.canBePushed(direction, 1);
+    if (opposites[direction] in stats) {
+      return stats[opposites[direction]].v < priority;
+    }
+    return true;
+  };
+
   this.drawArrows = function (ctx, x, y) {
     // 1/5 wide/ 3/5 long
     const border = 2;
-    const margin = cardWidth / 5;
-    const width = cardWidth / 5 - border;
-    // l
+    const margin = this.width / 5;
+    const width = this.width / 5 - border;
     ctx.fillStyle = "black";
-    const l = [
+    const arrowFuncs = [
       {
         d: "l",
-        v: [x + border, y + margin, width, cardWidth - margin * 2],
+        v: [x + border, y + margin, width, this.width - margin * 2],
       },
       {
         d: "r",
         v: [
-          x + cardWidth - width - border,
+          x + this.width - width - border,
           y + margin,
           width,
-          cardWidth - margin * 2,
+          this.width - margin * 2,
         ],
       },
       {
         d: "u",
-        v: [x + margin, y + border, cardWidth - margin * 2, width],
+        v: [x + margin, y + border, this.width - margin * 2, width],
       },
       {
         d: "d",
         v: [
           x + margin,
-          y + cardWidth - width - border,
-          cardWidth - margin * 2,
+          y + this.width - width - border,
+          this.width - margin * 2,
           width,
         ],
       },
     ];
 
-    l.forEach((e) => {
+    arrowFuncs.forEach((e) => {
       if (!(e.d in this.stats)) {
         return;
       }
@@ -71,7 +76,7 @@ function card(color, name, stats) {
   };
   this.update = function (ctx, x, y) {
     ctx.fillStyle = this.color;
-    ctx.fillRect(x, y, cardWidth, cardWidth);
+    ctx.fillRect(x, y, this.width, this.width);
     ctx.fillStyle = "black";
     if (this.stats) {
       this.drawArrows(ctx, x, y);

@@ -1,11 +1,69 @@
 import { xToCoord, yToCoord } from "./gameController.js";
+import { cardWidth } from "./gameController.js";
+import { clamp } from "./util.js";
 
-const directions = {
+const directionF = {
   u: [(x) => x, (y) => y - 1],
   d: [(x) => x, (y) => y + 1],
   l: [(x) => x - 1, (y) => y],
   r: [(x) => x + 1, (y) => y],
 };
+
+class Obstacles {
+  constructor(size, numGems = undefined) {
+    this.size = size;
+    if (numGems === undefined) {
+      numGems = Math.floor(size / 4) * 2 + 1;
+      console.log(numGems);
+    }
+    this.numGems = numGems;
+    this.m = new Array(this.size);
+    for (let i = 0; i < this.size; i++) {
+      this.m[i] = new Array(this.size);
+    }
+    for (let i = 0; i < this.numGems; i++) {
+      const x = Math.floor(Math.random() * this.size);
+      const y = Math.floor(Math.random() * this.size);
+      if (this.m[y][x]) {
+        i--;
+        continue;
+      }
+
+      this.m[y][x] = new this.gem(x, y);
+      //   console.log("GEM", x, y);
+    }
+    // console.log(this.getGemsPos());
+  }
+  getGemsPos() {
+    // this.m.flatMap((a) => console.log(a));
+    return this.m.flat().map((v) => [v.x, v.y]);
+  }
+  getGem(x, y) {
+    const g = this.m[y][x];
+    return g && g.s == new this.gem().s;
+  }
+  gem(x, y) {
+    this.x = x;
+    this.y = y;
+    this.s = "gem";
+    this.update = (context) => {
+      const radius = cardWidth / 3;
+      const centerX = xToCoord(x) + cardWidth / 2;
+      const centerY = yToCoord(y) + cardWidth / 2;
+
+      context.beginPath();
+      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+      context.fillStyle = "green";
+      context.fill();
+      context.lineWidth = 5;
+      context.strokeStyle = "#003300";
+      context.stroke();
+    };
+  }
+  update(ctx) {
+    this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx) : o)));
+  }
+}
 
 class Board {
   constructor(size) {
@@ -14,6 +72,8 @@ class Board {
     for (let i = 0; i < this.cardMap.length; i++) {
       this.cardMap[i] = new Array(this.size);
     }
+    // obstacles
+    this.obstacles = new Obstacles(size);
   }
 
   inBounds(x, y) {
@@ -30,42 +90,100 @@ class Board {
     }
     return undefined;
   }
+
   setCard(x, y, c) {
+    // if (!c) {
+    //   console.warn("NOTE: UNSETTING CARD", x, y);
+    // }
+    // cannot place on gem
+    if (this.obstacles.getGem(x, y)) return false;
+    return this.setCard_(x, y, c);
+    // this.cardMap[y][x] = c;
+    // return true;
+  }
+
+  // unsafe, private function
+  // will just slap that bad boy down
+  // will not check for gem intersection
+  setCard_(x, y, c) {
     if (!c) {
-      console.log("NOTE: UNSETTING CARD", x, y);
+      console.warn("NOTE: UNSETTING CARD", x, y);
     }
     if (!this.inBounds(x, y)) {
       return false;
     }
     this.cardMap[y][x] = c;
+    return true;
   }
 
-  push(x, y, direction) {
+  push(x, y, direction, priority) {
     console.log("PUSHING", x, y, direction);
-    const xf = directions[direction][0];
-    const yf = directions[direction][1];
-    let nx = xf(x);
-    let ny = yf(y);
+    const [xf, yf] = directionF[direction];
+    const nx = xf(x);
+    const ny = yf(y);
 
     // find if it can push the next card
     const nc = this.getCard(nx, ny);
     const c = this.getCard(x, y);
     if (!c) {
       return undefined;
+    } else if (!c.canBePushed(direction, priority)) {
+      // can this card be pushed in direction
+      return false;
     }
     if (nc === false) {
       return false;
     }
     if (nc !== undefined) {
-      const cando = this.push(nx, ny, direction);
+      // next to non-empty space
+      // attempt to push next card out of the way
+      const cando = this.push(nx, ny, direction, priority);
       if (!cando) {
         return false;
       } // cannot push for some reason
     }
-    this.setCard(nx, ny, c);
+    const r = this.setCard_(nx, ny, c);
     delete this.cardMap[y][x];
-    return true;
+    return r;
   }
+
+  // direction param optional
+  // sans direction this function places instead
+  pushC(x, y, c, direction) {
+    if (direction) {
+      // cannot push in direction
+      if (!(c.stats && direction in c.stats)) return false;
+      const p = c.stats[direction].v;
+      if (this.push(x, y, direction, p)) return this.setCard_(x, y, c);
+      return false;
+    } else {
+      if (this.getCard(x, y)) return false;
+      return this.setCard(x, y, c);
+    }
+  }
+
+  getScore() {
+    const poss = this.obstacles.getGemsPos();
+    var scoreB = 0;
+    var scoreR = 0;
+    poss.map(([x, y]) => {
+      const c = this.getCard(x, y);
+      if (!c) return;
+      if (c.color == "blue") scoreB++;
+      if (c.color == "red") scoreR++;
+    });
+    return [scoreB, scoreR];
+  }
+
+  checkWin() {
+    const poss = this.obstacles.getGemsPos();
+    const [scoreB, scoreR] = this.getScore();
+    if (scoreB + scoreR < poss.length) return undefined;
+    const v = clamp(-1, scoreB - scoreR, 1);
+    console.log("WINNER WINNER CHICKEN DINNER", v);
+    return v;
+  }
+
   update(ctx) {
     for (var i = 0; i < this.size; i++) {
       for (var j = 0; j < this.size; j++) {
@@ -75,6 +193,7 @@ class Board {
         }
       }
     }
+    this.obstacles.update(ctx);
   }
 }
 

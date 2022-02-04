@@ -2,6 +2,7 @@
 
 import { gc } from "./gameController.js";
 import { card } from "./card.js";
+import { blue } from "picocolors";
 
 // window.addEventListener("error", function (event) {
 //   console.error(event);
@@ -28,43 +29,35 @@ const shieldKnight = (color) =>
       wind: true,
     },
   });
-
-// Game Controller
-// var gc = new GameController(10);
+const propellerRat = (color, p) =>
+  new card(color, "Propeller Rat", {
+    u: { v: p ? p : 1 },
+  });
+const blitzsteed = (color, p) =>
+  new card(color, "blitzsteed", {
+    l: { v: p ? p : 1 },
+  });
+const blorb = (color, p) =>
+  new card(color, "blorb", {
+    d: { v: p ? p : 1 },
+  });
+const beeto = (color, p) =>
+  new card(color, "beeto", {
+    r: { v: p ? p : 1 },
+  });
 
 function startGame() {
-  gc.interval = setInterval(updateGameArea, 20);
   for (var i = 1; i < gc.boardSize() - 1; i++) {
     for (var j = 1; j < gc.boardSize() - 1; j++) {
       let c = trouppleAcolyte((i + j) % 2 == 0 ? "blue" : "red");
       if (i % 2 == 0) {
         c = shieldKnight(c.color);
       }
-      console.log(c);
+      // console.log(c);
       gc.board.setCard(i, j, c);
     }
   }
-  // gc.start();
-  // gc.update();
-
-  try {
-    // console.log(gc.push(6, 6, "l"));
-    // console.log(gc.push(5, 6, "u"));
-    // console.log(gc.push(5, 5, "l"));
-    // console.log(gc.push(4, 5, "u"));
-    // console.log(gc.push(4, 4, "l"));
-    // console.log(gc.push(3, 4, "u"));
-    // console.log(gc.push(3, 3, "l"));
-    // console.log(gc.push(2, 3, "u"));
-    // console.log(gc.push(2, 2, "l"));
-    // console.log(gc.push(1, 2, "u"));
-    // console.log(gc.push(1, 1, "l"));
-    // console.log(gc.push(0, 1, "d"));
-    // console.log(gc.push(0, 2, "d"));
-    console.log(gc.cardMap);
-  } catch (error) {
-    console.log(error);
-  }
+  gc.interval = setInterval(updateGameArea, 20);
 }
 
 function updateGameArea() {
@@ -103,48 +96,89 @@ function btocard(v) {
   return JSON.parse(atob(v));
 }
 
-function everyinterval(n) {
-  if ((gc.frameNo / n) % 1 == 0) {
-    return true;
-  }
-  return false;
-}
-
 startGame();
 
-console.log(gc.board.push(6, 6, "l"));
-console.log(gc.board.push(5, 6, "u"));
-console.log(gc.board.push(5, 5, "l"));
-console.log(gc.board.push(4, 5, "u"));
+// console.log(gc.board.push(6, 6, "l"));
+// console.log(gc.board.push(5, 6, "u"));
+// console.log(gc.board.push(5, 5, "l"));
+// console.log(gc.board.push(4, 5, "u"));
+
+// const keyFuncs = {
+//   ArrowUp: () => cursor.move('u'),
+//   ArrowDown: () => cursor.move('d'),
+//   ArrowLeft: () => cursor.move('l'),
+//   ArrowRight: () => cursor.move('r'),
+//   w: () => cursor.push('u'),
+//   s: () => cursor.push('d'),
+//   a: () => cursor.push('l'),
+//   d: () => cursor.push('r'),
+// }
+
+const doEvent = (() => {
+  var priority;
+  var cursor = gc.cursor;
+  var turn = 0;
+  const turnC = ["blue", "red"];
+  return function (e) {
+    console.log(priority);
+    switch (e.key) {
+      case "ArrowUp":
+        cursor.move("u");
+        break;
+      case "ArrowDown":
+        cursor.move("d");
+        break;
+      case "ArrowLeft":
+        cursor.move("l");
+        break;
+      case "ArrowRight":
+        cursor.move("r");
+        break;
+      case "w":
+        cursor.holdCard(gc.ce.c());
+        if (cursor.pushHeldCard("u")) turn++;
+        break;
+      case "a":
+        cursor.holdCard(gc.ce.c());
+        if (cursor.pushHeldCard("l")) turn++;
+        break;
+      case "s":
+        cursor.holdCard(gc.ce.c());
+        if (cursor.pushHeldCard("d")) turn++;
+        break;
+      case "d":
+        cursor.holdCard(gc.ce.c());
+        if (cursor.pushHeldCard("r")) turn++;
+        break;
+      case " ":
+        // console.log(turn);
+        cursor.holdCard(gc.ce.c());
+        if (cursor.placeHeldCard()) turn++;
+        break;
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+        const udlr = "udlr";
+        const stats = gc.ce.stats;
+        const k = udlr[Number(e.key) - 1];
+        if (k in stats) {
+          stats[k].v += 1;
+          if (stats[k].v > 3) delete stats[k];
+        } else {
+          stats[k] = { v: 1 };
+        }
+        break;
+      // priority = Number(e.key);
+    }
+    turn = turn % 2;
+    gc.ce.color = turn == 0 ? "blue" : "red";
+  };
+})();
 
 document.onkeydown = (e) => {
   console.log(e);
-  var cursor = gc.cursor;
   e = e || window.event;
-  switch (e.key) {
-    case "ArrowUp":
-      cursor.move("u");
-      break;
-    case "ArrowDown":
-      cursor.move("d");
-      break;
-    case "ArrowLeft":
-      cursor.move("l");
-      break;
-    case "ArrowRight":
-      cursor.move("r");
-      break;
-    case "w":
-      cursor.push("u");
-      break;
-    case "a":
-      cursor.push("l");
-      break;
-    case "s":
-      cursor.push("d");
-      break;
-    case "d":
-      cursor.push("r");
-      break;
-  }
+
+  doEvent(e);
 };

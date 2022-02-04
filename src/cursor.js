@@ -3,10 +3,10 @@ import { clamp } from "./util.js";
 
 class Cursor {
   constructor(size) {
-    this.x = Math.ceil(size / 2);
-    this.y = Math.ceil(size / 2);
+    this.x = Math.floor(size / 2);
+    this.y = Math.floor(size / 2);
     this.size = size;
-    // this.ctx = ctx
+    this.heldCard = undefined;
   }
 
   move(direction) {
@@ -29,10 +29,29 @@ class Cursor {
     this.y = clamp(0, this.y, this.size - 1);
   }
 
-  push(direction) {
+  holdCard(c) {
+    this.heldCard = c;
+    console.log("HOLDING CARD", this.heldCard);
+  }
+
+  pushHeldCard(direction) {
     console.log("cursor push", this.x, this.y, direction);
     const c = gc.board.getCard(this.x, this.y);
-    if (c) gc.push(this.x, this.y, direction);
+    if (!c || !this.heldCard) return false;
+    const pushed = gc.pushC(this.x, this.y, this.heldCard, direction);
+    console.log("PUSH RETURNED:", pushed);
+    if (!pushed) return false;
+    this.heldCard = undefined;
+    gc.board.checkWin();
+    return true;
+  }
+
+  placeHeldCard() {
+    if (gc.board.getCard(this.x, this.y) !== undefined) return false;
+    const r = gc.pushC(this.x, this.y, this.heldCard);
+    gc.board.checkWin();
+    return r;
+    // return gc.pushC(this.x, this.y, this.heldCard);
   }
 
   update(ctx) {

@@ -1,0 +1,14 @@
+* TODO [2/4]:
+  - [-] Pushing [1/2]:
+    - [X] Priority
+    - [ ] Special [0/4]:
+      - [ ] Slam
+      - [ ] Wind
+      - [ ] Bomb
+      - [ ] Flip
+  - [X] Gems
+  - [ ] Winning
+  - [X] Piece builder
+  - [ ] Players [0/2]:
+    - [ ] Deck
+    - [ ] Hand
