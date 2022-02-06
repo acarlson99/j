@@ -1,20 +1,21 @@
 "use strict";
 
-import { gc } from "./gameController.js";
-import { card } from "./card.js";
-
 window.addEventListener("error", function (event) {
   console.error(event);
 });
 
+import { gc } from "./gameController";
+import { Card } from "./card";
+import { Direction } from "./board";
+
 const trouppleAcolyte = (color) =>
-  new card(color, "Troupple Acolyte", {
+  new Card(color, "Troupple Acolyte", {
     l: { v: 1 },
     r: { v: 2 },
     d: { v: 1 },
   });
 const shieldKnight = (color) =>
-  new card(color, "Shield Knight", {
+  new Card(color, "Shield Knight", {
     l: {
       v: 2,
       wind: true,
@@ -29,19 +30,19 @@ const shieldKnight = (color) =>
     },
   });
 const propellerRat = (color, p) =>
-  new card(color, "Propeller Rat", {
+  new Card(color, "Propeller Rat", {
     u: { v: p ? p : 1 },
   });
 const blitzsteed = (color, p) =>
-  new card(color, "blitzsteed", {
+  new Card(color, "blitzsteed", {
     l: { v: p ? p : 1 },
   });
 const blorb = (color, p) =>
-  new card(color, "blorb", {
+  new Card(color, "blorb", {
     d: { v: p ? p : 1 },
   });
 const beeto = (color, p) =>
-  new card(color, "beeto", {
+  new Card(color, "beeto", {
     r: { v: p ? p : 1 },
   });
 
@@ -113,7 +114,6 @@ startGame();
 // }
 
 const doEvent = (() => {
-  var priority;
   var turn = 0;
   const turnC = ["blue", "red"];
   var cardHeld = [0, 0];
@@ -125,36 +125,36 @@ const doEvent = (() => {
   gc.ce.color = turn == 0 ? "blue" : "red";
 
   return function (e) {
+    console.log("--------------------");
     var cursor = gc.cursor;
-    console.log(priority);
     switch (e.key) {
       case "ArrowUp":
-        cursor.move("u");
+        cursor.move(Direction.Up);
         break;
       case "ArrowDown":
-        cursor.move("d");
+        cursor.move(Direction.Down);
         break;
       case "ArrowLeft":
-        cursor.move("l");
+        cursor.move(Direction.Left);
         break;
       case "ArrowRight":
-        cursor.move("r");
+        cursor.move(Direction.Right);
         break;
       case "w":
         cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard("u")) turn++;
+        if (cursor.pushHeldCard(Direction.Up)) turn++;
         break;
       case "a":
         cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard("l")) turn++;
+        if (cursor.pushHeldCard(Direction.Left)) turn++;
         break;
       case "s":
         cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard("d")) turn++;
+        if (cursor.pushHeldCard(Direction.Down)) turn++;
         break;
       case "d":
         cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard("r")) turn++;
+        if (cursor.pushHeldCard(Direction.Right)) turn++;
         break;
       case " ":
         // console.log(turn);
@@ -191,7 +191,9 @@ const doEvent = (() => {
 
 document.onkeydown = (e) => {
   console.log(e);
-  e = e || window.event;
+  let e_ = e || window.event;
 
-  doEvent(e);
+  doEvent(e_);
 };
+
+console.log("A");

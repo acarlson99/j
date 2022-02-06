@@ -1,6 +1,9 @@
 "use strict";
 
+import { Card } from "./card";
+
 class Deck {
+  cs: Card[];
   constructor(cs) {
     this.cs = new Array();
     for (const k in cs) {
@@ -13,7 +16,7 @@ class Deck {
   }
 
   shuffle() {
-    this.cs.sort(() => Math.random - 0.5);
+    this.cs.sort(() => Math.random() - 0.5);
   }
 
   draw() {
@@ -35,10 +38,8 @@ class Deck {
 
 export { Deck };
 
-import { card } from "./card.js";
-
 const trouppleAcolyte = (color) =>
-  new card(color, "Troupple Acolyte", {
+  new Card(color, "Troupple Acolyte", {
     u: { v: Math.floor(Math.random() * 3) },
     l: { v: Math.floor(Math.random() * 3) },
     r: { v: Math.floor(Math.random() * 3) },
@@ -47,8 +48,16 @@ const trouppleAcolyte = (color) =>
 
 function colorDeck(size, color) {
   var a = [];
-  for (let i = 0; i < 10; i++) {
-    a.push(trouppleAcolyte(color));
+  for (let i = 0; i < size; i++) {
+    // a.push(trouppleAcolyte(color));
+    let t = trouppleAcolyte(color);
+    console.log("keys", Object.keys(t));
+    Object.keys(t.stats).forEach((i) => {
+      // console.log("CUMMMMMM", t, i, t[i]);
+      if (t.stats[i].v == 0) delete t.stats[i];
+      // else console.log("no lol", t[i].v);
+    });
+    a.push(t);
   }
   return new Deck(a);
 }

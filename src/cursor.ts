@@ -1,10 +1,20 @@
 "use strict";
 
-import { cardWidth, xToCoord, yToCoord } from "./gameController.js";
-import { clamp } from "./util.js";
+import { cardWidth, xToCoord, yToCoord } from "./gameController";
+import { clamp } from "./util";
+import { Direction } from "./board";
+import { Game, CardEditor } from "./gameController";
+import { Card } from "./card";
 
 class Cursor {
-  constructor(game, ce) {
+  size: number;
+  game: Game;
+  ce: any;
+  x: number;
+  y: number;
+  heldCard: any;
+
+  constructor(game: Game, ce: CardEditor) {
     this.size = game.boardSize();
     this.game = game;
     this.ce = ce;
@@ -13,19 +23,19 @@ class Cursor {
     this.heldCard = undefined;
   }
 
-  move(direction) {
+  move(direction: Direction) {
     console.log("MOVE", direction);
     switch (direction) {
-      case "u":
+      case Direction.Up:
         this.y -= 1;
         break;
-      case "d":
+      case Direction.Down:
         this.y += 1;
         break;
-      case "l":
+      case Direction.Left:
         this.x -= 1;
         break;
-      case "r":
+      case Direction.Right:
         this.x += 1;
         break;
     }
@@ -33,12 +43,12 @@ class Cursor {
     this.y = clamp(0, this.y, this.size - 1);
   }
 
-  holdCard(c) {
+  holdCard(c: Card) {
     this.heldCard = c;
     console.log("HOLDING CARD", this.heldCard);
   }
 
-  pushHeldCard(direction) {
+  pushHeldCard(direction: Direction) {
     console.log("cursor push", this.x, this.y, direction);
     const c = this.game.board.getCard(this.x, this.y);
     if (!c || !this.heldCard) return false;
@@ -60,7 +70,7 @@ class Cursor {
 
   placeHeldCard() {
     // if (this.game.board.getCard(this.x, this.y) !== undefined) return false;
-    const r = this.game.pushC(this.x, this.y, false, this.heldCard);
+    const r = this.game.pushC(this.x, this.y, Direction.None, this.heldCard);
     console.log("PUSH RETURNED:", r);
 
     // FIXME: this does not belong here
@@ -74,7 +84,7 @@ class Cursor {
     // return this.game.pushC(this.x, this.y, this.heldCard);
   }
 
-  update(ctx) {
+  update(ctx: HTMLCanvasElement) {
     ctx.lineWidth = 10;
     ctx.beginPath();
     ctx.rect(

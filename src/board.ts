@@ -1,25 +1,53 @@
 "use strict";
 
-import { xToCoord, yToCoord } from "./gameController.js";
-import { cardWidth } from "./gameController.js";
-import { clamp } from "./util.js";
-import { rock } from "./card.js";
+import { xToCoord, yToCoord } from "./gameController";
+import { cardWidth } from "./gameController";
+import { clamp } from "./util";
+import { Card, statDirection } from "./card";
+// import { rock } from "./Card";
+
+enum Direction {
+  None = 1,
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
+const dss = {
+  [Direction.None]: "X",
+  [Direction.Up]: "u",
+  [Direction.Down]: "d",
+  [Direction.Left]: "l",
+  [Direction.Right]: "r",
+};
+
+const directionToStr = (d: Direction) => dss[d];
+
+export { Direction, directionToStr };
 
 const directionF = {
-  u: [(x) => x, (y) => y - 1],
-  d: [(x) => x, (y) => y + 1],
-  l: [(x) => x - 1, (y) => y],
-  r: [(x) => x + 1, (y) => y],
+  [Direction.Up]: [(x: number) => x, (y: number) => y - 1],
+  [Direction.Down]: [(x: number) => x, (y: number) => y + 1],
+  [Direction.Left]: [(x: number) => x - 1, (y: number) => y],
+  [Direction.Right]: [(x: number) => x + 1, (y: number) => y],
 };
 
 class Obstacles {
-  constructor(size, numGems = undefined) {
+  size: number;
+  numGems: number;
+  m: any[];
+  x: number;
+  y: number;
+  s: string;
+  constructor(size: number, numGems = undefined) {
     this.size = size;
     if (numGems === undefined) {
-      numGems = Math.floor(size / 4) * 2 + 1;
+      this.numGems = Math.floor(size / 4) * 2 + 1;
       console.log(numGems);
+    } else {
+      this.numGems = numGems;
     }
-    this.numGems = numGems;
     this.m = new Array(this.size);
     for (let i = 0; i < this.size; i++) {
       this.m[i] = new Array(this.size);
@@ -41,11 +69,11 @@ class Obstacles {
     // this.m.flatMap((a) => console.log(a));
     return this.m.flat().map((v) => [v.x, v.y]);
   }
-  getGem(x, y) {
+  getGem(x: number, y: number) {
     const g = this.m[y][x];
-    return g && g.s == new this.gem().s;
+    return g && g.s == new this.gem(x, y).s;
   }
-  gem(x, y) {
+  gem(x: number, y: number) {
     this.x = x;
     this.y = y;
     this.s = "gem";
@@ -63,12 +91,16 @@ class Obstacles {
       context.stroke();
     };
   }
-  update(ctx) {
+  update(ctx: HTMLCanvasElement) {
     this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx) : o)));
   }
 }
 
 class Board {
+  size: any;
+  cardMap: any[];
+  obstacles: Obstacles;
+  gameover: boolean;
   constructor(size) {
     this.size = size;
     this.cardMap = new Array(this.size);
@@ -81,13 +113,13 @@ class Board {
     this.gameover = false;
   }
 
-  inBounds(x, y) {
+  inBounds(x: number, y: number) {
     return x >= 0 && y >= 0 && x < this.size && y < this.size;
   }
-  // if card exists then return it
+  // if Card exists then return it
   // false -> out of bounds
   // true -> empty square
-  getCard(x, y) {
+  getCard(x: number, y: number) {
     if (!this.inBounds(x, y)) {
       return false;
     } else if (this.cardMap[y][x]) {
@@ -96,7 +128,7 @@ class Board {
     return undefined;
   }
 
-  setCard(x, y, c, dontSet) {
+  setCard(x: number, y: number, c: Card, dontSet = false) {
     if (this.gameover) return false;
     // if (!c) {
     //   console.warn("NOTE: UNSETTING CARD", x, y);
@@ -111,7 +143,7 @@ class Board {
   // unsafe, private function
   // will just slap that bad boy down
   // will not check for gem intersection
-  setCard_(x, y, c, dontSet) {
+  setCard_(x: number, y: number, c: any, dontSet = false) {
     if (!c) {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
@@ -122,20 +154,30 @@ class Board {
     return true;
   }
 
-  push(x, y, direction, priority, dontPush) {
+  push(
+    x: number,
+    y: number,
+    direction: Direction,
+    priority: any,
+    dontPush = false
+  ) {
     if (this.gameover) return false;
-    console.log("PUSHING", x, y, direction);
+    console.log("PUSHING", x, y, directionToStr(direction));
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
     const ny = yf(y);
+    console.log(x, y);
+    console.log("TO");
+    console.log(nx, ny);
 
-    // find if it can push the next card
+    // find if it can push the next Card
     const nc = this.getCard(nx, ny);
     const c = this.getCard(x, y);
     if (!c) {
       return undefined;
-    } else if (!c.canBePushed(direction, priority)) {
-      // can this card be pushed in direction
+    } else if (!c.canPush(direction, priority)) {
+      // can this Card be pushed in direction
+      console.log("no push");
       return false;
     }
     if (nc === false) {
@@ -143,32 +185,35 @@ class Board {
     }
     if (nc !== undefined) {
       // next to non-empty space
-      // attempt to push next card out of the way
+      // attempt to push next Card out of the way
       const cando = this.push(nx, ny, direction, priority, dontPush);
+      console.log("cando", cando);
       if (!cando) {
         return false;
       } // cannot push for some reason
     }
     const r = this.setCard_(nx, ny, c, dontPush);
+    console.log("SET:", r);
     if (!dontPush) delete this.cardMap[y][x];
     return r;
   }
 
   // direction param optional
   // sans direction this function places instead
-  pushC(x, y, direction, c, dontPush) {
+  pushC(x: number, y: number, direction: Direction, c: Card, dontPush = false) {
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
     // console.log("a", this.gameover);
     if (this.gameover) return false;
-    if (direction) {
-      // cannot push in direction
+    if (direction != Direction.None) {
       console.log("C:", c);
       console.log("dir", direction);
-      if (!c.canPush(direction)) return false;
-      const p = c.stats[direction].v;
+      // cannot push in direction
+      console.log("CAN BE PUSHED", c.canPush(direction));
+      const p = statDirection(c.stats, direction)?.v;
       console.log("priority", p);
-      if (this.push(x, y, direction, p, dontPush))
+      if (!c.canBePushed(direction, p)) return false;
+      if (p && this.push(x, y, direction, p, dontPush))
         return this.setCard_(x, y, c, dontPush);
       return false;
     } else {
@@ -202,7 +247,7 @@ class Board {
     return v;
   }
 
-  update(ctx) {
+  update(ctx: HTMLCanvasElement) {
     for (var i = 0; i < this.size; i++) {
       for (var j = 0; j < this.size; j++) {
         let c = this.getCard(i, j);
