@@ -3,9 +3,9 @@
 import { gc } from "./gameController.js";
 import { card } from "./card.js";
 
-// window.addEventListener("error", function (event) {
-//   console.error(event);
-// });
+window.addEventListener("error", function (event) {
+  console.error(event);
+});
 
 const trouppleAcolyte = (color) =>
   new card(color, "Troupple Acolyte", {
@@ -52,8 +52,7 @@ function startGame() {
       if (i % 2 == 0) {
         c = shieldKnight(c.color);
       }
-      // console.log(c);
-      gc.board.setCard(i, j, c);
+      gc.game.board.setCard(i, j, c);
     }
   }
   gc.interval = setInterval(updateGameArea, 20);
@@ -115,10 +114,18 @@ startGame();
 
 const doEvent = (() => {
   var priority;
-  var cursor = gc.cursor;
   var turn = 0;
   const turnC = ["blue", "red"];
+  var cardHeld = [0, 0];
+
+  const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
+  console.log("HOLD", c);
+  if (!c) console.log("CARD NOT FOUND");
+  else gc.ce.setC(c);
+  gc.ce.color = turn == 0 ? "blue" : "red";
+
   return function (e) {
+    var cursor = gc.cursor;
     console.log(priority);
     switch (e.key) {
       case "ArrowUp":
@@ -157,9 +164,7 @@ const doEvent = (() => {
       case "1":
       case "2":
       case "3":
-        const c = (turn == 0 ? gc.p1 : gc.p2).handAt(Number(e.key) - 1);
-        if (!c) console.log("CARD NOT FOUND");
-        gc.ce.setC(c);
+        cardHeld[turn] = Number(e.key) - 1;
       // case "4":
       //   const udlr = "udlr";
       //   const stats = gc.ce.stats;
@@ -174,7 +179,13 @@ const doEvent = (() => {
       // // priority = Number(e.key);
     }
     turn = turn % 2;
+    console.log("turn", turn);
+    const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
+    console.log("HOLD", c);
+    if (!c) console.log("CARD NOT FOUND");
+    else gc.ce.setC(c);
     gc.ce.color = turn == 0 ? "blue" : "red";
+    console.log("clr", gc.ce.color);
   };
 })();
 

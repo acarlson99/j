@@ -70,11 +70,40 @@ class Player {
   }
 
   handAt(i) {
-    console.log(this.h);
+    console.log("HAND", this.h);
     return this.h.cs[i];
   }
   hand() {
     return [...this.h.cs];
+  }
+}
+
+class Game {
+  constructor(size) {
+    this.size = size;
+    this.p1 = new Player(new Hand(3), colorDeck("blue"));
+    this.p2 = new Player(new Hand(3), colorDeck("red"));
+    for (let i = 0; i < 3; i++) {
+      console.log(this.p1.draw());
+      console.log(this.p2.draw());
+    }
+    this.board = new Board(size);
+    this.boardSize = function () {
+      return this.board.size;
+    };
+    this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
+    this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
+    this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
+    this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
+    console.log("boardsize", this.boardSize());
+  }
+  update(ctx) {
+    this.board.update(ctx);
+    const [b, r] = this.board.getScore();
+    if (b != document.getElementById("p1score").innerHTML)
+      document.getElementById("p1score").innerHTML = b;
+    if (r != document.getElementById("p2score").innerHTML)
+      document.getElementById("p2score").innerHTML = r;
   }
 }
 
@@ -86,46 +115,53 @@ class GameController {
     this.canvas = document.getElementById("boardCanvas");
     this.interval = undefined;
 
-    this.p1 = new Player(new Hand(3), colorDeck("blue"));
-    this.p2 = new Player(new Hand(3), colorDeck("red"));
-    for (let i = 0; i < 3; i++) {
-      console.log(this.p1.draw());
-      console.log(this.p2.draw());
-    }
-    this.board = new Board(boardSize);
+    this.game = new Game(boardSize);
+    this.cursor = new Cursor(this.game, this.ce);
+    
+    // this.p1 = new Player(new Hand(3), colorDeck("blue"));
+    // this.p2 = new Player(new Hand(3), colorDeck("red"));
+    // for (let i = 0; i < 3; i++) {
+    //   console.log(this.p1.draw());
+    //   console.log(this.p2.draw());
+    // }
+    // this.board = new Board(boardSize);
     this.boardSize = function () {
-      return this.board.size;
+      return this.game.boardSize();
     };
-    this.cursor = new Cursor(this.boardSize());
-    this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
-    this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
-    this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
-    this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
-    console.log("boardsize", this.boardSize());
-
+    // this.cursor = new Cursor(this.boardSize());
+    // this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
+    // this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
+    // this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
+    // this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
+    // console.log("boardsize", this.boardSize());
+    
     this.canvas.width = this.boardSize() * cardWidth;
     this.canvas.height = this.boardSize() * cardWidth;
-
+    
     // this.canvas.width = this.canvas.height;
     // cardWidth = this.canvas.width / this.boardSize();
     this.context = this.canvas.getContext("2d");
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.frameNo = 0;
+    console.log("GAEM", this.game);
   }
   update() {
     // console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "green";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.board.update(this.ctx);
-    this.cursor.update(this.ctx);
+    this.game.update(this.ctx);
     this.ce.update();
-    const [b, r] = this.board.getScore();
-    if (b != document.getElementById("p1score").innerHTML)
-      document.getElementById("p1score").innerHTML = b;
-    if (r != document.getElementById("p2score").innerHTML)
-      document.getElementById("p2score").innerHTML = r;
+    this.cursor.update(this.ctx);
+    // this.board.update(this.ctx);
+    // this.cursor.update(this.ctx);
+    // this.ce.update();
+    // const [b, r] = this.board.getScore();
+    // if (b != document.getElementById("p1score").innerHTML)
+    //   document.getElementById("p1score").innerHTML = b;
+    // if (r != document.getElementById("p2score").innerHTML)
+    //   document.getElementById("p2score").innerHTML = r;
   }
 }
 
@@ -144,5 +180,11 @@ function everyinterval(n) {
   }
   return false;
 }
+var gc;
+try {
+  gc = new GameController(5);
+} catch (e) {
+  console.warn(e);
+}
 
-export var gc = new GameController(2);
+export { gc };

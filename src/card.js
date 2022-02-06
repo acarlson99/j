@@ -31,6 +31,10 @@ function card(color, name, stats) {
     3: "maroon",
   };
 
+  this.canPush = function (direction) {
+    return this.stats && direction in this.stats && this.stats[direction].v > 0;
+  };
+
   this.canBePushed = function (direction, priority) {
     if (priority === undefined) return this.canBePushed(direction, 1);
     if (opposites[direction] in stats) {
@@ -79,6 +83,7 @@ function card(color, name, stats) {
         return;
       }
       const s = this.stats[e.d];
+      if (!(s.v > 0)) return;
       const c = colors[s.v];
       ctx.fillStyle = c;
       ctx.fillRect(...e.v);

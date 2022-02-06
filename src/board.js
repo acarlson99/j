@@ -159,15 +159,15 @@ class Board {
   pushC(x, y, direction, c, dontPush) {
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
-    console.log("a", this.gameover);
+    // console.log("a", this.gameover);
     if (this.gameover) return false;
     if (direction) {
       // cannot push in direction
       console.log("C:", c);
       console.log("dir", direction);
-      if (!(c.stats && direction in c.stats)) return false;
+      if (!c.canPush(direction)) return false;
       const p = c.stats[direction].v;
-      console.log("p", p);
+      console.log("priority", p);
       if (this.push(x, y, direction, p, dontPush))
         return this.setCard_(x, y, c, dontPush);
       return false;
