@@ -2,7 +2,6 @@
 
 import { gc } from "./gameController.js";
 import { card } from "./card.js";
-import { blue } from "picocolors";
 
 // window.addEventListener("error", function (event) {
 //   console.error(event);
@@ -158,18 +157,21 @@ const doEvent = (() => {
       case "1":
       case "2":
       case "3":
-      case "4":
-        const udlr = "udlr";
-        const stats = gc.ce.stats;
-        const k = udlr[Number(e.key) - 1];
-        if (k in stats) {
-          stats[k].v += 1;
-          if (stats[k].v > 3) delete stats[k];
-        } else {
-          stats[k] = { v: 1 };
-        }
-        break;
-      // priority = Number(e.key);
+        const c = (turn == 0 ? gc.p1 : gc.p2).handAt(Number(e.key) - 1);
+        if (!c) console.log("CARD NOT FOUND");
+        gc.ce.setC(c);
+      // case "4":
+      //   const udlr = "udlr";
+      //   const stats = gc.ce.stats;
+      //   const k = udlr[Number(e.key) - 1];
+      //   if (k in stats) {
+      //     stats[k].v += 1;
+      //     if (stats[k].v > 3) delete stats[k];
+      //   } else {
+      //     stats[k] = { v: 1 };
+      //   }
+      //   break;
+      // // priority = Number(e.key);
     }
     turn = turn % 2;
     gc.ce.color = turn == 0 ? "blue" : "red";

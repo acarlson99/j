@@ -1,6 +1,9 @@
+"use strict";
+
 import { xToCoord, yToCoord } from "./gameController.js";
 import { cardWidth } from "./gameController.js";
 import { clamp } from "./util.js";
+import { rock } from "./card.js";
 
 const directionF = {
   u: [(x) => x, (y) => y - 1],
@@ -73,6 +76,7 @@ class Board {
       this.cardMap[i] = new Array(this.size);
     }
     // obstacles
+    // this.cardMap[0][0] = rock();
     this.obstacles = new Obstacles(size);
     this.gameover = false;
   }
@@ -92,14 +96,14 @@ class Board {
     return undefined;
   }
 
-  setCard(x, y, c) {
+  setCard(x, y, c, dontSet) {
     if (this.gameover) return false;
     // if (!c) {
     //   console.warn("NOTE: UNSETTING CARD", x, y);
     // }
     // cannot place on gem
     if (this.obstacles.getGem(x, y)) return false;
-    return this.setCard_(x, y, c);
+    return this.setCard_(x, y, c, dontSet);
     // this.cardMap[y][x] = c;
     // return true;
   }
@@ -107,18 +111,18 @@ class Board {
   // unsafe, private function
   // will just slap that bad boy down
   // will not check for gem intersection
-  setCard_(x, y, c) {
+  setCard_(x, y, c, dontSet) {
     if (!c) {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
     if (!this.inBounds(x, y)) {
       return false;
     }
-    this.cardMap[y][x] = c;
+    if (!dontSet) this.cardMap[y][x] = c;
     return true;
   }
 
-  push(x, y, direction, priority) {
+  push(x, y, direction, priority, dontPush) {
     if (this.gameover) return false;
     console.log("PUSHING", x, y, direction);
     const [xf, yf] = directionF[direction];
@@ -140,29 +144,37 @@ class Board {
     if (nc !== undefined) {
       // next to non-empty space
       // attempt to push next card out of the way
-      const cando = this.push(nx, ny, direction, priority);
+      const cando = this.push(nx, ny, direction, priority, dontPush);
       if (!cando) {
         return false;
       } // cannot push for some reason
     }
-    const r = this.setCard_(nx, ny, c);
-    delete this.cardMap[y][x];
+    const r = this.setCard_(nx, ny, c, dontPush);
+    if (!dontPush) delete this.cardMap[y][x];
     return r;
   }
 
   // direction param optional
   // sans direction this function places instead
-  pushC(x, y, c, direction) {
+  pushC(x, y, direction, c, dontPush) {
+    // FIXME: make different functions to interface with internal push func
+    // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
+    console.log("a", this.gameover);
     if (this.gameover) return false;
     if (direction) {
       // cannot push in direction
+      console.log("C:", c);
+      console.log("dir", direction);
       if (!(c.stats && direction in c.stats)) return false;
       const p = c.stats[direction].v;
-      if (this.push(x, y, direction, p)) return this.setCard_(x, y, c);
+      console.log("p", p);
+      if (this.push(x, y, direction, p, dontPush))
+        return this.setCard_(x, y, c, dontPush);
       return false;
     } else {
       if (this.getCard(x, y)) return false;
-      return this.setCard(x, y, c);
+      console.log("c");
+      return this.setCard(x, y, c, dontPush);
     }
   }
 
@@ -180,9 +192,10 @@ class Board {
   }
 
   checkWin() {
-    const poss = this.obstacles.getGemsPos();
+    // const poss = this.obstacles.getGemsPos();
     const [scoreB, scoreR] = this.getScore();
-    if (scoreB + scoreR < poss.length) return undefined;
+    if (scoreB + scoreR < this.obstacles.numGems) return undefined;
+    // if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
     console.log("WINNER WINNER CHICKEN DINNER", v);
     this.gameover = true;

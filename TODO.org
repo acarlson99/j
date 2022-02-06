@@ -1,4 +1,4 @@
-* TODO [2/4]:
+* TODO [1/5]:
   - [-] Pushing [1/2]:
     - [X] Priority
     - [ ] Special [0/4]:
@@ -6,9 +6,20 @@
       - [ ] Wind
       - [ ] Bomb
       - [ ] Flip
-  - [X] Gems
-  - [ ] Winning
+  - [-] Winning [1/2]:
+    - [X] Gem win
+    - [ ] No valid move win
   - [X] Piece builder
-  - [ ] Players [0/2]:
+  - [-] Players [1/4]:
+    - [X] Turns
     - [ ] Deck
     - [ ] Hand
+    - [ ] Powers/characters/abilities
+  - [-] Board [0/2]:
+    - [ ] Configuration
+    - [-] Obstacles [1/5]:
+      - [X] Gems
+      - [ ] Pitfalls
+      - [ ] Cannot place here (must be pushed)
+      - [ ] Illegal card pos
+      - [ ] Rocks

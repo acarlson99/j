@@ -1,3 +1,5 @@
+"use strict";
+
 import { cardWidth } from "./gameController.js";
 
 const opposites = {
@@ -6,6 +8,14 @@ const opposites = {
   u: "d",
   d: "u",
 };
+
+function rock() {
+  var c = new card("brown", "rock", {});
+  c.canBePushed = () => false;
+  return c;
+}
+
+export { rock };
 
 // color -- red/blue
 // x,y   -- x,y coords on board

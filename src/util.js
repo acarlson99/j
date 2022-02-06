@@ -1,3 +1,5 @@
+"use strict";
+
 export function clamp(l, n, u) {
   if (n < l) {
     return l;

@@ -1,6 +1,9 @@
+"use strict";
+
 import { Board } from "./board.js";
 import { Cursor } from "./cursor.js";
 import { card } from "./card.js";
+import { colorDeck } from "./deck.js";
 
 export var cardWidth = 100;
 
@@ -20,10 +23,58 @@ class CardEditor {
   c() {
     return new card(this.color, "edit", this.stats);
   }
+  setC(c) {
+    const c_ = c.copy();
+    this.stats = c_.stats;
+    this.color = c_.color;
+  }
   update() {
     const c = this.c();
     c.width = this.canvas.width;
     c.update(this.ctx, 0, 0);
+  }
+}
+
+class Hand {
+  constructor(size) {
+    this.size = size;
+    this.cs = [];
+  }
+
+  push(c) {
+    if (this.cs.length >= this.size) return false;
+    return this.cs.push(c);
+  }
+
+  pop(i) {
+    if (i >= this.size)
+      throw "`pop(" + String(i) + ") exceeds size " + String(this.size);
+    if (i >= this.cs.length) return undefined;
+    return this.cs.pop(i);
+  }
+}
+
+class Player {
+  constructor(hand, deck) {
+    console.log("DECK", deck);
+    this.h = hand;
+    this.d = deck;
+  }
+  draw() {
+    if (this.d.size() > 0) return this.h.push(this.d.draw());
+    else return false;
+  }
+  play(i) {
+    const c = this.h.pop(i);
+    if (!c) return false;
+  }
+
+  handAt(i) {
+    console.log(this.h);
+    return this.h.cs[i];
+  }
+  hand() {
+    return [...this.h.cs];
   }
 }
 
@@ -34,14 +85,22 @@ class GameController {
     // this.canvas = document.createElement("canvas");
     this.canvas = document.getElementById("boardCanvas");
     this.interval = undefined;
-    // console.log("CANVAS", this.canvas);
+
+    this.p1 = new Player(new Hand(3), colorDeck("blue"));
+    this.p2 = new Player(new Hand(3), colorDeck("red"));
+    for (let i = 0; i < 3; i++) {
+      console.log(this.p1.draw());
+      console.log(this.p2.draw());
+    }
     this.board = new Board(boardSize);
     this.boardSize = function () {
       return this.board.size;
     };
     this.cursor = new Cursor(this.boardSize());
-    this.push = (x, y, d, p) => this.board.push(x, y, d, p);
-    this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c);
+    this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
+    this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
+    this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
+    this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
     console.log("boardsize", this.boardSize());
 
     this.canvas.width = this.boardSize() * cardWidth;
@@ -63,7 +122,6 @@ class GameController {
     this.cursor.update(this.ctx);
     this.ce.update();
     const [b, r] = this.board.getScore();
-    console.log("SCORE", b, r);
     if (b != document.getElementById("p1score").innerHTML)
       document.getElementById("p1score").innerHTML = b;
     if (r != document.getElementById("p2score").innerHTML)
@@ -87,4 +145,4 @@ function everyinterval(n) {
   return false;
 }
 
-export var gc = new GameController(6);
+export var gc = new GameController(2);

@@ -1,3 +1,5 @@
+"use strict";
+
 import { cardWidth, xToCoord, yToCoord, gc } from "./gameController.js";
 import { clamp } from "./util.js";
 
@@ -38,7 +40,7 @@ class Cursor {
     console.log("cursor push", this.x, this.y, direction);
     const c = gc.board.getCard(this.x, this.y);
     if (!c || !this.heldCard) return false;
-    const pushed = gc.pushC(this.x, this.y, this.heldCard, direction);
+    const pushed = gc.pushC(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) return false;
     this.heldCard = undefined;
@@ -54,8 +56,9 @@ class Cursor {
   }
 
   placeHeldCard() {
-    if (gc.board.getCard(this.x, this.y) !== undefined) return false;
-    const r = gc.pushC(this.x, this.y, this.heldCard);
+    // if (gc.board.getCard(this.x, this.y) !== undefined) return false;
+    const r = gc.pushC(this.x, this.y, false, this.heldCard);
+    console.log("PUSH RETURNED:", r);
 
     // FIXME: this does not belong here
     const winner = gc.board.checkWin();
