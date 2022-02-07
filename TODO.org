@@ -1,25 +1,35 @@
-* TODO [1/5]:
-  - [-] Pushing [1/2]:
-    - [X] Priority
-    - [ ] Special [0/4]:
-      - [ ] Slam
-      - [ ] Wind
-      - [ ] Bomb
-      - [ ] Flip
-  - [-] Winning [1/2]:
-    - [X] Gem win
-    - [ ] No valid move win
-  - [X] Piece builder
-  - [-] Players [1/4]:
-    - [X] Turns
-    - [ ] Deck
-    - [ ] Hand
-    - [ ] Powers/characters/abilities
-  - [-] Board [0/2]:
-    - [ ] Configuration
-    - [-] Obstacles [1/5]:
-      - [X] Gems
-      - [ ] Pitfalls
-      - [ ] Cannot place here (must be pushed)
-      - [ ] Illegal card pos
-      - [ ] Rocks
+* TODO [0/3]:
+  - [-] MVP [3/5]:
+    - [X] Pushing [1/1]:
+      - [X] Priority
+    - [-] Winning [1/2]:
+      - [X] Gem win
+      - [ ] No valid move win
+    - [X] Piece editor
+    - [X] Players [3/3]:
+      - [X] Turns
+      - [X] Deck
+      - [X] Hand:
+    - [-] Board [0/2]:
+      - [ ] Configuration
+      - [-] Obstacles [1/3]:
+        - [X] Gems
+        - [ ] Cannot place here (must be pushed)
+        - [ ] Illegal card pos
+  - [ ] Full Game [0/4]:
+    - [ ] Pushing [0/1]:
+      - [ ] Special [0/4]:
+        - [ ] Slam
+        - [ ] Wind
+        - [ ] Bomb
+        - [ ] Flip
+    - [ ] Players [0/1]:
+      - [ ] Deck/hand/turn/score display
+    - [ ] Board [0/1]:
+      - [ ] Obstacles [0/2]:
+        - [ ] Pitfalls
+        - [ ] Rocks
+    - [ ] Extra cool stuff [0/0]:
+  - [ ] Polish [0/1]:
+	- [ ] Players [0/1]:
+      - [ ] Powers/characters/abilities
