@@ -10,12 +10,16 @@ export var cardWidth = 100;
 
 class CardEditor {
   canvas: HTMLCanvasElement;
-  context: any;
-  ctx: any;
-  color: string;
-  stats: {};
+  context: CanvasRenderingContext2D;
+  ctx: CanvasRenderingContext2D;
+  board: Board;
+  cursor: Cursor;
+  i: number;
+  j: number;
   constructor() {
     // this.canvas = document.createElement("canvas");
+    this.i = 0;
+    this.j = 0;
     this.canvas = document.getElementById(
       "cardEditCanvas"
     ) as HTMLCanvasElement;
@@ -25,21 +29,44 @@ class CardEditor {
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     // document.body.insertBefore("<br>", document.body.childNodes[0]);
-    this.color = "blue";
-    this.stats = {};
+    // this.color = "blue";
+    // this.stats = {};
+    this.board = new Board(3, false);
+    this.cursor = new Cursor(undefined, undefined); //FIXME: dont break lmao
+    this.cursor.x = this.i;
+    this.cursor.y = this.j;
   }
-  c() {
-    return new Card(this.color, "edit", this.stats);
-  }
-  setC(c: Card) {
-    const c_ = c.copy();
-    this.stats = c_.stats;
-    this.color = c_.color;
+  // c() {
+  //   return new Card(this.color, "edit", this.stats);
+  // }
+  // setC(c: Card) {
+  //   const c_ = c.copy();
+  //   this.stats = c_.stats;
+  //   this.color = c_.color;
+  // }
+  selectCard(i, c) {
+    this.i = i;
+    this.j = c == "blue" ? 0 : 2;
+    this.cursor.x = this.j;
+    this.cursor.y = this.i;
   }
   update() {
-    const c = this.c();
-    c.width = this.canvas.width;
-    c.update(this.ctx, 0, 0);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "blueviolet";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // const c = this.c();
+    // c.width = this.canvas.width;
+    // c.update(this.ctx, 0, 0);
+    let h1 = gc.game.p1.h.cs;
+    let h2 = gc.game.p2.h.cs;
+    for (let i = 0; i < 3; i++) {
+      if (h1[i]) this.board.setCard(0, i, h1[i]);
+      else this.board.unsetCard(0, i);
+      if (h2[i]) this.board.setCard(2, i, h2[i]);
+      else this.board.unsetCard(0, i);
+    }
+    this.board.update(this.ctx);
+    this.cursor.update(this.ctx);
   }
 }
 
@@ -48,45 +75,63 @@ export { CardEditor };
 class Hand {
   size: number;
   cs: Card[];
-  constructor(size) {
+  constructor(size: number) {
     this.size = size;
-    this.cs = [];
+    this.cs = new Array(size);
   }
 
-  push(c: Card) {
-    if (this.cs.length >= this.size) return false;
-    return this.cs.push(c);
+  push(i: number, c: Card) {
+    console.log("in push");
+    if (i >= this.size) return false;
+    // return this.cs.push(c);
+    console.log("set", i, c);
+    console.log(this.cs);
+    this.cs[i] = c;
+    console.log(this.cs);
+    return true;
   }
 
   pop(i: number) {
     if (i >= this.size)
       throw "`pop(" + String(i) + ") exceeds size " + String(this.size);
-    if (i >= this.cs.length) return undefined;
-    return this.cs.splice(i, i)[0];
+    const c = this.cs[i];
+    this.cs[i] = undefined;
+    return c;
+  }
+
+  shift() {
+    this.cs = this.cs.filter((c) => c);
   }
 }
 
 class Player {
   h: Hand;
   d: Deck;
-  constructor(hand, deck) {
+  constructor(hand: Hand, deck: Deck) {
     console.log("PLAYER DECK", deck);
     this.h = hand;
     this.d = deck;
   }
-  draw() {
-    if (this.d.size() > 0) return this.h.push(this.d.draw());
+
+  draw(i: number) {
+    console.log("drawing into handpos", i);
+    if (this.d.size() > 0) return this.h.push(i, this.d.draw());
     else return false;
   }
-  play(i) {
+
+  play(i: number) {
     const c = this.h.pop(i);
     if (!c) return false;
+    if (this.d.size() > 0) return this.draw(i);
+    else this.h.shift();
+    return true;
   }
 
   handAt(i) {
     console.log("PLAYER HAND", this.h);
     return this.h.cs[i];
   }
+
   hand() {
     return [...this.h.cs];
   }
@@ -105,11 +150,11 @@ class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.p1 = new Player(new Hand(3), colorDeck(20, "blue"));
-    this.p2 = new Player(new Hand(3), colorDeck(20, "red"));
+    this.p1 = new Player(new Hand(3), colorDeck(7, "blue"));
+    this.p2 = new Player(new Hand(3), colorDeck(7, "red"));
     for (let i = 0; i < 3; i++) {
-      this.p1.draw();
-      this.p2.draw();
+      this.p1.draw(i);
+      this.p2.draw(i);
     }
     this.board = new Board(size);
     this.boardSize = function () {
@@ -121,7 +166,8 @@ class Game {
     this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
     console.log("boardsize", this.boardSize());
   }
-  update(ctx: HTMLCanvasElement) {
+
+  update(ctx: CanvasRenderingContext2D) {
     this.board.update(ctx);
     const [b, r] = this.board.getScore();
     if (b.toString() != document.getElementById("p1score").innerHTML)
@@ -139,9 +185,9 @@ class GameController {
   interval: any;
   game: Game;
   cursor: Cursor;
-  boardSize: () => any;
-  context: any;
-  ctx: any;
+  boardSize: () => number;
+  context: CanvasRenderingContext2D;
+  ctx: CanvasRenderingContext2D;
   frameNo: number;
   constructor(boardSize) {
     this.ce = new CardEditor();

@@ -67,7 +67,7 @@ class Card {
     return p < priority;
   }
 
-  drawArrows(ctx: HTMLCanvasElement, x: number, y: number) {
+  drawArrows(ctx: CanvasRenderingContext2D, x: number, y: number) {
     // 1/5 wide/ 3/5 long
     const border = 2;
     const margin = this.width / 5;
@@ -110,10 +110,10 @@ class Card {
       if (!(s.v > 0)) return;
       const c = this.colors[s.v];
       ctx.fillStyle = c;
-      ctx.fillRect(...e.v);
+      ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
     });
   }
-  update(ctx: HTMLCanvasElement, x: number, y: number) {
+  update(ctx: CanvasRenderingContext2D, x: number, y: number) {
     ctx.fillStyle = this.color;
     ctx.fillRect(x, y, this.width, this.width);
     ctx.fillStyle = "black";

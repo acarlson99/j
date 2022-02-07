@@ -106,14 +106,14 @@ class Obstacles {
 
       context.beginPath();
       context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.fillStyle = "green";
+      context.fillStyle = "lavender";
       context.fill();
       context.lineWidth = 5;
       context.strokeStyle = "#003300";
       context.stroke();
     };
   }
-  update(ctx: HTMLCanvasElement) {
+  update(ctx: CanvasRenderingContext2D) {
     this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx) : o)));
   }
 }
@@ -153,9 +153,9 @@ class Board {
   setCard(x: number, y: number, c: Card, dontSet = false) {
     // console.log("this board", this);
     if (this.gameover) return false;
-    // if (!c) {
-    //   console.warn("NOTE: UNSETTING CARD", x, y);
-    // }
+    if (!c) {
+      console.warn("NOTE: UNSETTING CARD", x, y);
+    }
     // cannot place on gem
     if (this.obstacles?.getGem(x, y)) return false;
     return this.setCard_(x, y, c, dontSet);
@@ -173,8 +173,12 @@ class Board {
     if (!this.inBounds(x, y)) {
       return false;
     }
-    if (!dontSet) this.cardMap[y][x] = c;
+    if (!dontSet) this.cardMap[y][x] = c.copy();
     return true;
+  }
+
+  unsetCard(x: number, y: number) {
+    this.cardMap[y][x] = undefined;
   }
 
   push(
@@ -272,7 +276,7 @@ class Board {
     return v;
   }
 
-  update(ctx: HTMLCanvasElement) {
+  update(ctx: CanvasRenderingContext2D) {
     for (var i = 0; i < this.size; i++) {
       for (var j = 0; j < this.size; j++) {
         let c = this.getCard(i, j);

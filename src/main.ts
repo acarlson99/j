@@ -47,15 +47,15 @@ const beeto = (color, p) =>
   });
 
 function startGame() {
-  for (var i = 1; i < gc.boardSize() - 1; i++) {
-    for (var j = 1; j < gc.boardSize() - 1; j++) {
-      let c = trouppleAcolyte((i + j) % 2 == 0 ? "blue" : "red");
-      if (i % 2 == 0) {
-        c = shieldKnight(c.color);
-      }
-      gc.game.board.setCard(i, j, c);
-    }
-  }
+  // for (var i = 1; i < gc.boardSize() - 1; i++) {
+  //   for (var j = 1; j < gc.boardSize() - 1; j++) {
+  //     let c = trouppleAcolyte((i + j) % 2 == 0 ? "blue" : "red");
+  //     if (i % 2 == 0) {
+  //       c = shieldKnight(c.color);
+  //     }
+  //     gc.game.board.setCard(i, j, c);
+  //   }
+  // }
   gc.interval = setInterval(updateGameArea, 20);
 }
 
@@ -118,15 +118,17 @@ const doEvent = (() => {
   const turnC = ["blue", "red"];
   var cardHeld = [0, 0];
 
-  const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
-  console.log("HOLD", c);
-  if (!c) console.log("CARD NOT FOUND");
-  else gc.ce.setC(c);
-  gc.ce.color = turn == 0 ? "blue" : "red";
+  // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
+  // console.log("HOLD", c);
+  // if (!c) console.log("CARD NOT FOUND");
+  // else gc.ce.setC(c);
+  // gc.ce.color = turn == 0 ? "blue" : "red";
 
   return function (e) {
-    console.log("--------------------");
-    var cursor = gc.cursor;
+    // console.log("--------------------");
+    let p = turn == 0 ? gc.game.p1 : gc.game.p2;
+    let cursor = gc.cursor;
+    let cardHeldPos = cardHeld[turn];
     switch (e.key) {
       case "ArrowUp":
         cursor.move(Direction.Up);
@@ -141,25 +143,50 @@ const doEvent = (() => {
         cursor.move(Direction.Right);
         break;
       case "w":
-        cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard(Direction.Up)) turn++;
+        cursor.holdCard(p.handAt(cardHeldPos));
+        if (cursor.pushHeldCard(Direction.Up)) {
+          console.log("playing card at hand pos:", cardHeldPos);
+          p.play(cardHeldPos);
+          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+          turn++;
+        }
         break;
       case "a":
-        cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard(Direction.Left)) turn++;
+        cursor.holdCard(p.handAt(cardHeldPos));
+        if (cursor.pushHeldCard(Direction.Left)) {
+          console.log("playing card at hand pos:", cardHeldPos);
+          p.play(cardHeldPos);
+          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+          turn++;
+        }
         break;
       case "s":
-        cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard(Direction.Down)) turn++;
+        cursor.holdCard(p.handAt(cardHeldPos));
+        if (cursor.pushHeldCard(Direction.Down)) {
+          console.log("playing card at hand pos:", cardHeldPos);
+          p.play(cardHeldPos);
+          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+          turn++;
+        }
         break;
       case "d":
-        cursor.holdCard(gc.ce.c());
-        if (cursor.pushHeldCard(Direction.Right)) turn++;
+        cursor.holdCard(p.handAt(cardHeldPos));
+        if (cursor.pushHeldCard(Direction.Right)) {
+          console.log("playing card at hand pos:", cardHeldPos);
+          p.play(cardHeldPos);
+          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+          turn++;
+        }
         break;
       case " ":
         // console.log(turn);
-        cursor.holdCard(gc.ce.c());
-        if (cursor.placeHeldCard()) turn++;
+        cursor.holdCard(p.handAt(cardHeldPos));
+        if (cursor.placeHeldCard()) {
+          console.log("playing card at hand pos:", cardHeldPos);
+          p.play(cardHeldPos);
+          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+          turn++;
+        }
         break;
       case "1":
       case "2":
@@ -179,13 +206,17 @@ const doEvent = (() => {
       // // priority = Number(e.key);
     }
     turn = turn % 2;
-    console.log("turn", turn);
-    const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
-    console.log("HOLD", c);
-    if (!c) console.log("CARD NOT FOUND");
-    else gc.ce.setC(c);
-    gc.ce.color = turn == 0 ? "blue" : "red";
-    console.log("clr", gc.ce.color);
+    gc.ce.selectCard(cardHeld[turn], turnC[turn]);
+    p = turn == 0 ? gc.game.p1 : gc.game.p2;
+    console.log("HAND:", p.h.cs);
+    console.log("decksize:", p.d.size());
+    // console.log("turn", turn);
+    // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
+    // console.log("HOLD", c);
+    // if (!c) console.log("CARD NOT FOUND");
+    // else gc.ce.setC(c);
+    // gc.ce.color = turn == 0 ? "blue" : "red";
+    // console.log("clr", gc.ce.color);
   };
 })();
 

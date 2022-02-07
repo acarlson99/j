@@ -15,7 +15,7 @@ class Cursor {
   heldCard: any;
 
   constructor(game: Game, ce: CardEditor) {
-    this.size = game.boardSize();
+    this.size = game?.boardSize();
     this.game = game;
     this.ce = ce;
     this.x = Math.floor(this.size / 2);
@@ -84,7 +84,7 @@ class Cursor {
     // return this.game.pushC(this.x, this.y, this.heldCard);
   }
 
-  update(ctx: HTMLCanvasElement) {
+  update(ctx: CanvasRenderingContext2D) {
     ctx.lineWidth = 10;
     ctx.beginPath();
     ctx.rect(
@@ -96,5 +96,7 @@ class Cursor {
     ctx.stroke();
   }
 }
+
+// class Cursor
 
 export { Cursor };

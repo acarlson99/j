@@ -16,7 +16,7 @@
         - [X] Gems
         - [ ] Cannot place here (must be pushed)
         - [ ] Illegal card pos
-  - [ ] Full Game [0/4]:
+  - [ ] Full Game [0/3]:
     - [ ] Pushing [0/1]:
       - [ ] Special [0/4]:
         - [ ] Slam
@@ -29,7 +29,6 @@
       - [ ] Obstacles [0/2]:
         - [ ] Pitfalls
         - [ ] Rocks
-    - [ ] Extra cool stuff [0/0]:
   - [ ] Polish [0/1]:
-	- [ ] Players [0/1]:
+    - [ ] Players [0/1]:
       - [ ] Powers/characters/abilities
