@@ -7,11 +7,11 @@ import { Card, statDirection } from "./card";
 // import { rock } from "./Card";
 
 enum Direction {
-  None = 1,
-  Up,
-  Down,
-  Left,
-  Right,
+  None = "NONE",
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
 }
 
 const dss = {
@@ -22,9 +22,31 @@ const dss = {
   [Direction.Right]: "r",
 };
 
+const opposites = {
+  [Direction.Up]: [Direction.Down],
+  [Direction.Down]: [Direction.Up],
+  [Direction.Right]: [Direction.Left],
+  [Direction.Left]: [Direction.Right],
+};
+
 const directionToStr = (d: Direction) => dss[d];
 
-export { Direction, directionToStr };
+const strToDirection = (s: string) => {
+  switch (s) {
+    case Direction.Up:
+      return Direction.Up;
+    case Direction.Down:
+      return Direction.Down;
+    case Direction.Left:
+      return Direction.Left;
+    case Direction.Right:
+      return Direction.Right;
+    default:
+      throw "strToDirection invalid string: '" + s + "'";
+  }
+};
+
+export { Direction, opposites, directionToStr, strToDirection };
 
 const directionF = {
   [Direction.Up]: [(x: number) => x, (y: number) => y - 1],
@@ -44,7 +66,7 @@ class Obstacles {
     this.size = size;
     if (numGems === undefined) {
       this.numGems = Math.floor(size / 4) * 2 + 1;
-      console.log(numGems);
+      // console.log(numGems);
     } else {
       this.numGems = numGems;
     }
@@ -97,11 +119,11 @@ class Obstacles {
 }
 
 class Board {
-  size: any;
-  cardMap: any[];
+  size: number;
+  cardMap: Card[][];
   obstacles: Obstacles;
   gameover: boolean;
-  constructor(size) {
+  constructor(size: number, createObstacles = true) {
     this.size = size;
     this.cardMap = new Array(this.size);
     for (let i = 0; i < this.cardMap.length; i++) {
@@ -109,7 +131,7 @@ class Board {
     }
     // obstacles
     // this.cardMap[0][0] = rock();
-    this.obstacles = new Obstacles(size);
+    if (createObstacles) this.obstacles = new Obstacles(size);
     this.gameover = false;
   }
 
@@ -129,12 +151,13 @@ class Board {
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
+    // console.log("this board", this);
     if (this.gameover) return false;
     // if (!c) {
     //   console.warn("NOTE: UNSETTING CARD", x, y);
     // }
     // cannot place on gem
-    if (this.obstacles.getGem(x, y)) return false;
+    if (this.obstacles?.getGem(x, y)) return false;
     return this.setCard_(x, y, c, dontSet);
     // this.cardMap[y][x] = c;
     // return true;
@@ -162,22 +185,22 @@ class Board {
     dontPush = false
   ) {
     if (this.gameover) return false;
-    console.log("PUSHING", x, y, directionToStr(direction));
+    // console.log("PUSHING", x, y, direction);
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
     const ny = yf(y);
-    console.log(x, y);
-    console.log("TO");
-    console.log(nx, ny);
+    // console.log(x, y);
+    // console.log("TO");
+    // console.log(nx, ny);
 
     // find if it can push the next Card
     const nc = this.getCard(nx, ny);
     const c = this.getCard(x, y);
     if (!c) {
       return undefined;
-    } else if (!c.canPush(direction, priority)) {
+    } else if (!c.canBePushed(direction, priority)) {
       // can this Card be pushed in direction
-      console.log("no push");
+      // console.log("cannot be pushed");
       return false;
     }
     if (nc === false) {
@@ -187,13 +210,13 @@ class Board {
       // next to non-empty space
       // attempt to push next Card out of the way
       const cando = this.push(nx, ny, direction, priority, dontPush);
-      console.log("cando", cando);
+      // console.log("cando", cando);
       if (!cando) {
         return false;
       } // cannot push for some reason
     }
     const r = this.setCard_(nx, ny, c, dontPush);
-    console.log("SET:", r);
+    // console.log("SET:", r);
     if (!dontPush) delete this.cardMap[y][x];
     return r;
   }
@@ -206,25 +229,26 @@ class Board {
     // console.log("a", this.gameover);
     if (this.gameover) return false;
     if (direction != Direction.None) {
-      console.log("C:", c);
-      console.log("dir", direction);
+      // console.log("C:", c);
+      // console.log("dir", direction);
       // cannot push in direction
-      console.log("CAN BE PUSHED", c.canPush(direction));
+      // console.log("CAN PUSH", c.canPush(direction));
       const p = statDirection(c.stats, direction)?.v;
-      console.log("priority", p);
-      if (!c.canBePushed(direction, p)) return false;
+      // console.log("priority", p, direction);
+      // if (!c.canBePushed(direction, p)) return false;
       if (p && this.push(x, y, direction, p, dontPush))
         return this.setCard_(x, y, c, dontPush);
       return false;
     } else {
       if (this.getCard(x, y)) return false;
-      console.log("c");
+      // console.log("c");
       return this.setCard(x, y, c, dontPush);
     }
   }
 
   getScore() {
-    const poss = this.obstacles.getGemsPos();
+    const poss = this.obstacles?.getGemsPos();
+    if (!poss) return [0, 0];
     var scoreB = 0;
     var scoreR = 0;
     poss.map(([x, y]) => {
@@ -238,6 +262,7 @@ class Board {
 
   checkWin() {
     // const poss = this.obstacles.getGemsPos();
+    if (!this.obstacles) return undefined;
     const [scoreB, scoreR] = this.getScore();
     if (scoreB + scoreR < this.obstacles.numGems) return undefined;
     // if (scoreB + scoreR < poss.length) return undefined;
@@ -256,7 +281,7 @@ class Board {
         }
       }
     }
-    this.obstacles.update(ctx);
+    this.obstacles?.update(ctx);
   }
 }
 

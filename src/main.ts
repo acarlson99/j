@@ -6,7 +6,7 @@ window.addEventListener("error", function (event) {
 
 import { gc } from "./gameController";
 import { Card } from "./card";
-import { Direction } from "./board";
+import { Direction, Board } from "./board";
 
 const trouppleAcolyte = (color) =>
   new Card(color, "Troupple Acolyte", {
@@ -196,4 +196,6 @@ document.onkeydown = (e) => {
   doEvent(e_);
 };
 
-console.log("A");
+import { cardTest } from "./regressionTest";
+
+cardTest();

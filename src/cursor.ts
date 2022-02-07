@@ -64,7 +64,7 @@ class Cursor {
         winner == 1 ? "p1score" : "p2score"
       ).style.background = "lavender";
     }
-    console.log("truuuuu");
+    console.log("push success");
     return true;
   }
 

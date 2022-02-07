@@ -12,7 +12,7 @@ class Deck {
         this.cs.push(c);
       }
     }
-    console.log("NEW DECK", this.cs);
+    // console.log("NEW DECK", this.cs);
   }
 
   shuffle() {
@@ -51,7 +51,7 @@ function colorDeck(size, color) {
   for (let i = 0; i < size; i++) {
     // a.push(trouppleAcolyte(color));
     let t = trouppleAcolyte(color);
-    console.log("keys", Object.keys(t));
+    // console.log("keys", Object.keys(t));
     Object.keys(t.stats).forEach((i) => {
       // console.log("CUMMMMMM", t, i, t[i]);
       if (t.stats[i].v == 0) delete t.stats[i];

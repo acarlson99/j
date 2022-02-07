@@ -1,6 +1,5 @@
 "use strict";
 
-
 import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { Card } from "./card";
@@ -71,7 +70,7 @@ class Player {
   h: Hand;
   d: Deck;
   constructor(hand, deck) {
-    console.log("DECK", deck);
+    console.log("PLAYER DECK", deck);
     this.h = hand;
     this.d = deck;
   }
@@ -85,7 +84,7 @@ class Player {
   }
 
   handAt(i) {
-    console.log("HAND", this.h);
+    console.log("PLAYER HAND", this.h);
     return this.h.cs[i];
   }
   hand() {
@@ -109,8 +108,8 @@ class Game {
     this.p1 = new Player(new Hand(3), colorDeck(20, "blue"));
     this.p2 = new Player(new Hand(3), colorDeck(20, "red"));
     for (let i = 0; i < 3; i++) {
-      console.log(this.p1.draw());
-      console.log(this.p2.draw());
+      this.p1.draw();
+      this.p2.draw();
     }
     this.board = new Board(size);
     this.boardSize = function () {
@@ -219,6 +218,7 @@ function everyinterval(n) {
 
 var gc: GameController;
 try {
+  console.log("CREATE GLOBAL GAME CONTROLLER");
   gc = new GameController(5);
 } catch (e) {
   console.warn(e);

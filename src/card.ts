@@ -1,7 +1,7 @@
 "use strict";
 
 import { cardWidth } from "./gameController";
-import { Direction, directionToStr } from "./board";
+import { Direction, opposites, directionToStr, strToDirection } from "./board";
 
 function rock() {
   var c = new Card("brown", "rock", {});
@@ -12,11 +12,13 @@ function rock() {
 export { rock };
 
 function statDirection(stats: any, direction: Direction) {
-  console.log(stats, directionToStr(direction));
+  // console.log("in statdirection");
+  // console.log("stats:", stats);
+  // console.log(stats, directionToStr(direction));
   if (!stats) return undefined;
   let ds = directionToStr(direction);
-  console.log("stat direction", ds);
-  console.log(stats[ds]);
+  // console.log("stat direction", ds);
+  // console.log(stats[ds]);
   if (ds in stats) return stats[ds];
   return undefined;
 }
@@ -35,31 +37,32 @@ class Card {
     2: "white",
     3: "maroon",
   };
-  opposites = {
-    [Direction.Left]: Direction.Right,
-    [Direction.Right]: Direction.Left,
-    [Direction.Up]: Direction.Down,
-    [Direction.Down]: Direction.Up,
-  };
 
   constructor(color: string, name: string, stats: any) {
+    // console.log("construct card");
     this.color = color;
     this.name = name;
     this.width = cardWidth;
     // lmao no deep copy method so i do this :shrug:
     this.stats = JSON.parse(JSON.stringify(stats));
+    // console.log("constructed");
   }
 
   canPush(direction: Direction) {
-    console.log("can push");
-    console.log(this.stats, direction);
-    console.log("stat direction", statDirection(this.stats, direction)?.v);
-    return statDirection(this.stats, direction)?.v || 0 > 0;
+    // console.log("in can push");
+    // console.log(opposites, direction);
+    // console.log(this.stats);
+    // console.log("stat direction", statDirection(this.stats, direction)?.v);
+    return (statDirection(this.stats, direction)?.v || 0) > 0;
   }
 
   canBePushed(direction: Direction, priority: number) {
-    const p = statDirection(this.stats, this.opposites[direction])?.v || 0;
-    console.log("cbp", p, priority);
+    // console.log("in can be pushed");
+    // console.log(opposites, direction);
+    // console.log("sd", statDirection(this.stats, opposites[direction]));
+    // console.log("in can be pushed");
+    const p = statDirection(this.stats, opposites[direction])?.v || 0;
+    // console.log("cbp", p, priority);
     // if (this.opposites[direction])
     return p < priority;
   }
