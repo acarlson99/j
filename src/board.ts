@@ -69,6 +69,7 @@ class Obstacles {
   y: number;
   s: string;
   gem: any;
+
   constructor(size: number, numGems = undefined) {
     this.size = size;
     if (numGems === undefined) {
@@ -89,14 +90,11 @@ class Obstacles {
         continue;
       }
 
-      // this.m[y][x] = new Gem(x, y);
       this.setM_(x, y, this.makeObstacle(EObstacleName.gem));
-      //   console.log("GEM", x, y);
     }
-    this.setM_(0, 0, this.makeObstacle(EObstacleName.illegal));
-    this.setM_(0, 1, this.makeObstacle(EObstacleName.noPlace));
-    this.setM_(0, 2, this.makeObstacle(EObstacleName.pitfall));
-    // console.log(this.getGemsPos());
+    // this.setM_(0, 0, this.makeObstacle(EObstacleName.illegal));
+    // this.setM_(0, 1, this.makeObstacle(EObstacleName.noPlace));
+    // this.setM_(0, 2, this.makeObstacle(EObstacleName.pitfall));
   }
 
   setM_(x: number, y: number, o) {
@@ -218,7 +216,10 @@ class Obstacles {
 
   getGemsPos() {
     // this.m.flatMap((a) => console.log(a));
-    return this.m.flat().map((v) => [v.x, v.y]);
+    return this.m
+      .flat()
+      .filter((o) => o.name == EObstacleName.gem)
+      .map((v) => [v.x, v.y]);
   }
 
   gemAt(x: number, y: number) {
@@ -396,11 +397,14 @@ class Board {
     c: Card,
     dontPush = false
   ) {
+    // console.log(x, y, direction, c, dontPush);
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
     // console.log("a", this.gameover);
     if (this.gameover) return false;
+    // console.log("dir", direction, EDirection.None);
     if (direction != EDirection.None) {
+      // console.log("NOT NONE");
       // console.log("C:", c);
       // console.log("dir", direction);
       // cannot push in direction
@@ -412,19 +416,24 @@ class Board {
         return this.setCard_(x, y, c, dontPush);
       return false;
     } else {
-      if (this.getCard(x, y)) return false;
-      // console.log("c");
+      if (this.getCard(x, y)) {
+        // console.log("got a card :/");
+        return false;
+      }
       return this.setCard(x, y, c, dontPush);
     }
   }
 
   // can card `c` be played anywhere legally on `board`
   canBePlayed(c: Card) {
+    // console.log("try to play c", c);
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        Object.keys(EDirection).forEach((d: EDirection) => {
-          if (this.pushC(i, j, d, c, true)) return true;
-        });
+        const keys = Object.keys(EDirection);
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i];
+          if (this.pushC(i, j, EDirection[k], c, true)) return true;
+        }
       }
     }
     return false;

@@ -1,10 +1,10 @@
 * TODO [0/3]:
-  - [-] MVP [3/5]:
+  - [-] MVP [4/5]:
     - [X] Pushing [1/1]:
       - [X] Priority
-    - [-] Winning [1/2]:
+    - [X] Winning [2/2]:
       - [X] Gem win
-      - [ ] Detect no valid move
+      - [X] Detect no valid move
     - [X] Piece editor
     - [X] Players [3/3]:
       - [X] Turns

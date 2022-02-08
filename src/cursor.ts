@@ -50,8 +50,8 @@ class Cursor {
 
   pushHeldCard(direction: EDirection) {
     console.log("cursor push", this.x, this.y, direction);
-    const c = this.game.board.getCard(this.x, this.y);
-    if (!c || !this.heldCard) return false;
+    // const c = this.game.board.getCard(this.x, this.y);
+    // if (!c || !this.heldCard) return false;
     const pushed = this.game.pushC(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) return false;
@@ -68,22 +68,9 @@ class Cursor {
     return true;
   }
 
-  placeHeldCard() {
-    // if (this.game.board.getCard(this.x, this.y) !== undefined) return false;
-    if (!this.heldCard) return false;
-    const r = this.game.pushC(this.x, this.y, EDirection.None, this.heldCard);
-    console.log("PUSH RETURNED:", r);
-
-    // FIXME: this does not belong here
-    const winner = this.game.board.checkWin();
-    if (winner) {
-      document.getElementById(
-        winner == 1 ? "p1score" : "p2score"
-      ).style.background = "lightgreen";
-    }
-    return r;
-    // return this.game.pushC(this.x, this.y, this.heldCard);
-  }
+  // placeHeldCard() {
+  //   return this.pushHeldCard(EDirection.None);
+  // }
 
   update(ctx: CanvasRenderingContext2D) {
     ctx.lineWidth = 10;

@@ -40,13 +40,13 @@ export { Deck };
 
 const trouppleAcolyte = (color) =>
   new Card(color, "Troupple Acolyte", {
-    u: { v: Math.floor(Math.random() * 3) },
-    l: { v: Math.floor(Math.random() * 3) },
-    r: { v: Math.floor(Math.random() * 3) },
-    d: { v: Math.floor(Math.random() * 3) },
+    u: { v: Math.floor(Math.random() * 4) },
+    l: { v: Math.floor(Math.random() * 4) },
+    r: { v: Math.floor(Math.random() * 4) },
+    d: { v: Math.floor(Math.random() * 4) },
   });
 
-function colorDeck(size, color) {
+function colorDeck(size: number, color: string) {
   var a = [];
   for (let i = 0; i < size; i++) {
     // a.push(trouppleAcolyte(color));

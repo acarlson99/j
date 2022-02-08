@@ -181,7 +181,7 @@ const doEvent = (() => {
       case " ":
         // console.log(turn);
         cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.placeHeldCard()) {
+        if (cursor.pushHeldCard(EDirection.None)) {
           console.log("playing card at hand pos:", cardHeldPos);
           p.play(cardHeldPos);
           // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
@@ -210,6 +210,19 @@ const doEvent = (() => {
     p = turn == 0 ? gc.game.p1 : gc.game.p2;
     console.log("HAND:", p.h.cs);
     console.log("decksize:", p.d.size());
+    // check if valid move exists
+    let thing = false;
+    let cs = p.hand();
+    for (let i = 0; i < cs.length; i++) {
+      const c = cs[i];
+      if (gc.game.board.canBePlayed(c)) {
+        console.log("yes");
+        thing = true;
+        break;
+      }
+    }
+    if (!thing) console.log("no possible moves");
+
     // console.log("turn", turn);
     // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
     // console.log("HOLD", c);

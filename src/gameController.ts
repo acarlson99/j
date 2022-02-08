@@ -49,21 +49,23 @@ class CardEditor {
     this.j = c == "blue" ? 0 : 2;
     this.cursor.x = this.j;
     this.cursor.y = this.i;
+    console.log(this.board);
   }
   update() {
+    // this.board = new Board(3, false);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "blueviolet";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     // const c = this.c();
     // c.width = this.canvas.width;
     // c.update(this.ctx, 0, 0);
-    let h1 = gc.game.p1.h.cs;
-    let h2 = gc.game.p2.h.cs;
+    let h1 = gc.game.p1.hand();
+    let h2 = gc.game.p2.hand();
     for (let i = 0; i < 3; i++) {
       if (h1[i]) this.board.setCard(0, i, h1[i]);
       else this.board.unsetCard(0, i);
       if (h2[i]) this.board.setCard(2, i, h2[i]);
-      else this.board.unsetCard(0, i);
+      else this.board.unsetCard(2, i);
     }
     this.board.update(this.ctx);
     this.cursor.update(this.ctx);
@@ -150,8 +152,8 @@ class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.p1 = new Player(new Hand(3), colorDeck(7, "blue"));
-    this.p2 = new Player(new Hand(3), colorDeck(7, "red"));
+    this.p1 = new Player(new Hand(3), colorDeck(15, "blue"));
+    this.p2 = new Player(new Hand(3), colorDeck(15, "red"));
     for (let i = 0; i < 3; i++) {
       this.p1.draw(i);
       this.p2.draw(i);
