@@ -45,9 +45,9 @@ class CardEditor {
   //   this.stats = c_.stats;
   //   this.color = c_.color;
   // }
-  selectCard(i, c) {
+  selectCard(i: number, color: string) {
     this.i = i;
-    this.j = c == "blue" ? 0 : 2;
+    this.j = color == "blue" ? 0 : 2;
     this.cursor.x = this.j;
     this.cursor.y = this.i;
     console.log(this.board);
@@ -131,6 +131,7 @@ class GameController {
   context: CanvasRenderingContext2D;
   ctx: CanvasRenderingContext2D;
   frameNo: number;
+
   constructor(boardSize) {
     this.ce = new CardEditor();
 
@@ -151,12 +152,6 @@ class GameController {
     this.boardSize = function () {
       return this.game.boardSize();
     };
-    // this.cursor = new Cursor(this.boardSize());
-    // this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
-    // this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
-    // this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
-    // this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
-    // console.log("boardsize", this.boardSize());
 
     this.canvas.width = this.boardSize() * cardWidth;
     this.canvas.height = this.boardSize() * cardWidth;
@@ -169,6 +164,7 @@ class GameController {
     this.frameNo = 0;
     console.log("GAEM", this.game);
   }
+
   update() {
     // console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -207,7 +203,7 @@ function everyinterval(n) {
 var gc: GameController;
 try {
   console.log("CREATE GLOBAL GAME CONTROLLER");
-  gc = new GameController(5);
+  gc = new GameController(6);
 } catch (e) {
   console.warn(e);
 }

@@ -61,9 +61,15 @@ enum EObstacleName {
   pitfall = "pitfall",
 }
 
+const obstacleList = [
+  EObstacleName.gem,
+  EObstacleName.illegal,
+  EObstacleName.noPlace,
+  EObstacleName.pitfall,
+];
+
 class Obstacles {
   size: number;
-  numGems: number;
   m: any[];
   x: number;
   y: number;
@@ -73,16 +79,30 @@ class Obstacles {
   constructor(size: number, numGems = undefined) {
     this.size = size;
     if (numGems === undefined) {
-      this.numGems = Math.floor(size / 4) * 2 + 1;
+      numGems = Math.floor(size / 4) * 2 + 1;
       // console.log(numGems);
-    } else {
-      this.numGems = numGems;
     }
     this.m = new Array(this.size);
     for (let i = 0; i < this.size; i++) {
       this.m[i] = new Array(this.size);
     }
-    for (let i = 0; i < this.numGems; i++) {
+    for (let i = 0; i < size; i++) {
+      this.setM_(0, i, this.makeObstacle(EObstacleName.illegal));
+      this.setM_(i, 0, this.makeObstacle(EObstacleName.illegal));
+      this.setM_(i, size - 1, this.makeObstacle(EObstacleName.illegal));
+      this.setM_(size - 1, i, this.makeObstacle(EObstacleName.illegal));
+    }
+    for (let i = 1; i < size - 1; i++) {
+      this.setM_(1, i, this.makeObstacle(EObstacleName.noPlace));
+      this.setM_(i, 1, this.makeObstacle(EObstacleName.noPlace));
+      this.setM_(i, size - 2, this.makeObstacle(EObstacleName.noPlace));
+      this.setM_(size - 2, i, this.makeObstacle(EObstacleName.noPlace));
+    }
+    this.setM_(1, 1, this.makeObstacle(EObstacleName.illegal));
+    this.setM_(1, size - 2, this.makeObstacle(EObstacleName.illegal));
+    this.setM_(size - 2, 1, this.makeObstacle(EObstacleName.illegal));
+    this.setM_(size - 2, size - 2, this.makeObstacle(EObstacleName.illegal));
+    for (let i = 0; i < numGems; i++) {
       const x = Math.floor(Math.random() * this.size);
       const y = Math.floor(Math.random() * this.size);
       if (this.m[y][x]) {
@@ -98,9 +118,24 @@ class Obstacles {
   }
 
   setM_(x: number, y: number, o) {
-    o.x = x;
-    o.y = y;
-    this.m[y][x] = o;
+    if (!o) {
+      delete this.m[y][x];
+    } else {
+      o.x = x;
+      o.y = y;
+      this.m[y][x] = o;
+    }
+  }
+
+  incrementObstacleAt(x: number, y: number) {
+    console.log("incrementing obstacle");
+    let name = this.m[y][x]?.name;
+    if (!name) this.setM_(x, y, this.makeObstacle(obstacleList[0]));
+    let i = obstacleList.indexOf(name);
+    i++;
+    this.setM_(x, y, undefined);
+    if (i === obstacleList.length) return;
+    this.setM_(x, y, this.makeObstacle(obstacleList[i]));
   }
 
   makeObstacle(name: EObstacleName) {
@@ -218,8 +253,12 @@ class Obstacles {
     // this.m.flatMap((a) => console.log(a));
     return this.m
       .flat()
-      .filter((o) => o.name == EObstacleName.gem)
+      .filter((o) => o?.name == EObstacleName.gem)
       .map((v) => [v.x, v.y]);
+  }
+
+  numGems() {
+    return this.getGemsPos().length;
   }
 
   gemAt(x: number, y: number) {
@@ -388,8 +427,7 @@ class Board {
     return r;
   }
 
-  // direction param optional
-  // sans direction this function places instead
+  // place card on board with direction or no direction to set
   pushC(
     x: number,
     y: number,
@@ -401,7 +439,7 @@ class Board {
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
     // console.log("a", this.gameover);
-    if (this.gameover) return false;
+    if (this.gameover || !this.canSet(x, y)) return false;
     // console.log("dir", direction, EDirection.None);
     if (direction != EDirection.None) {
       // console.log("NOT NONE");
@@ -422,6 +460,10 @@ class Board {
       }
       return this.setCard(x, y, c, dontPush);
     }
+  }
+
+  changeObstacleAt(x: number, y: number) {
+    this.obstacles.incrementObstacleAt(x, y);
   }
 
   // can card `c` be played anywhere legally on `board`
@@ -457,7 +499,7 @@ class Board {
     // const poss = this.obstacles.getGemsPos();
     if (!this.obstacles) return undefined;
     const [scoreB, scoreR] = this.getScore();
-    if (scoreB + scoreR < this.obstacles.numGems) return undefined;
+    if (scoreB + scoreR < this.obstacles.numGems()) return undefined;
     // if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
     console.log("WINNER WINNER CHICKEN DINNER", v);

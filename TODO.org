@@ -1,5 +1,5 @@
-* TODO [0/3]:
-  - [-] MVP [4/5]:
+* TODO [1/4]:
+  - [X] MVP [5/5]:
     - [X] Pushing [1/1]:
       - [X] Priority
     - [X] Winning [2/2]:
@@ -10,13 +10,15 @@
       - [X] Turns
       - [X] Deck
       - [X] Hand:
-    - [-] Board [1/2]:
-      - [ ] Configuration
+    - [X] Board [2/2]:
+      - [X] Configuration
       - [X] Obstacles [3/3]:
         - [X] Gems
         - [X] Cannot place here (must be pushed)
         - [X] Illegal card pos
-  - [ ] Full Game [0/3]:
+  - [ ] Deploy
+  - [ ] Full Game [0/4]:
+    - [ ] Multi-screen layout
     - [ ] Pushing [0/1]:
       - [ ] Special [0/4]:
         - [ ] Slam
@@ -29,6 +31,8 @@
       - [ ] Obstacles [0/2]:
         - [ ] Pitfalls
         - [ ] Rocks
-  - [ ] Polish [0/1]:
+  - [ ] Polish [0/3]:
     - [ ] Players [0/1]:
       - [ ] Powers/characters/abilities
+    - [ ] Animations
+    - [ ] Art

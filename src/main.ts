@@ -117,6 +117,7 @@ const doEvent = (() => {
   var turn = 0;
   const turnC = ["blue", "red"];
   var cardHeld = [0, 0];
+  let mapEditor = false;
 
   // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
   // console.log("HOLD", c);
@@ -179,6 +180,12 @@ const doEvent = (() => {
         }
         break;
       case " ":
+        console.log("space bar pressed.  mapeditor set to:", mapEditor);
+        if (mapEditor) {
+          console.log("editing board");
+          cursor.boardEdit();
+          break;
+        }
         // console.log(turn);
         cursor.holdCard(p.handAt(cardHeldPos));
         if (cursor.pushHeldCard(EDirection.None)) {
@@ -188,10 +195,15 @@ const doEvent = (() => {
           turn++;
         }
         break;
+      case "m":
+        mapEditor = !mapEditor;
+        console.log("MAP EDITOR:", mapEditor);
+        break;
       case "1":
       case "2":
       case "3":
         cardHeld[turn] = Number(e.key) - 1;
+        break;
       // case "4":
       //   const udlr = "udlr";
       //   const stats = gc.ce.stats;
