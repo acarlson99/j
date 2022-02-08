@@ -6,7 +6,7 @@ window.addEventListener("error", function (event) {
 
 import { gc } from "./gameController";
 import { Card } from "./card";
-import { Direction, Board } from "./board";
+import { EDirection, Board } from "./board";
 
 const trouppleAcolyte = (color) =>
   new Card(color, "Troupple Acolyte", {
@@ -131,20 +131,20 @@ const doEvent = (() => {
     let cardHeldPos = cardHeld[turn];
     switch (e.key) {
       case "ArrowUp":
-        cursor.move(Direction.Up);
+        cursor.move(EDirection.Up);
         break;
       case "ArrowDown":
-        cursor.move(Direction.Down);
+        cursor.move(EDirection.Down);
         break;
       case "ArrowLeft":
-        cursor.move(Direction.Left);
+        cursor.move(EDirection.Left);
         break;
       case "ArrowRight":
-        cursor.move(Direction.Right);
+        cursor.move(EDirection.Right);
         break;
       case "w":
         cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(Direction.Up)) {
+        if (cursor.pushHeldCard(EDirection.Up)) {
           console.log("playing card at hand pos:", cardHeldPos);
           p.play(cardHeldPos);
           // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
@@ -153,7 +153,7 @@ const doEvent = (() => {
         break;
       case "a":
         cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(Direction.Left)) {
+        if (cursor.pushHeldCard(EDirection.Left)) {
           console.log("playing card at hand pos:", cardHeldPos);
           p.play(cardHeldPos);
           // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
@@ -162,7 +162,7 @@ const doEvent = (() => {
         break;
       case "s":
         cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(Direction.Down)) {
+        if (cursor.pushHeldCard(EDirection.Down)) {
           console.log("playing card at hand pos:", cardHeldPos);
           p.play(cardHeldPos);
           // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
@@ -171,7 +171,7 @@ const doEvent = (() => {
         break;
       case "d":
         cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(Direction.Right)) {
+        if (cursor.pushHeldCard(EDirection.Right)) {
           console.log("playing card at hand pos:", cardHeldPos);
           p.play(cardHeldPos);
           // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");

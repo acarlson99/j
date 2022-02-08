@@ -2,7 +2,7 @@
 
 import { cardWidth, xToCoord, yToCoord } from "./gameController";
 import { clamp } from "./util";
-import { Direction } from "./board";
+import { EDirection } from "./board";
 import { Game, CardEditor } from "./gameController";
 import { Card } from "./card";
 
@@ -23,19 +23,19 @@ class Cursor {
     this.heldCard = undefined;
   }
 
-  move(direction: Direction) {
+  move(direction: EDirection) {
     console.log("MOVE", direction);
     switch (direction) {
-      case Direction.Up:
+      case EDirection.Up:
         this.y -= 1;
         break;
-      case Direction.Down:
+      case EDirection.Down:
         this.y += 1;
         break;
-      case Direction.Left:
+      case EDirection.Left:
         this.x -= 1;
         break;
-      case Direction.Right:
+      case EDirection.Right:
         this.x += 1;
         break;
     }
@@ -48,7 +48,7 @@ class Cursor {
     console.log("HOLDING CARD", this.heldCard);
   }
 
-  pushHeldCard(direction: Direction) {
+  pushHeldCard(direction: EDirection) {
     console.log("cursor push", this.x, this.y, direction);
     const c = this.game.board.getCard(this.x, this.y);
     if (!c || !this.heldCard) return false;
@@ -70,7 +70,8 @@ class Cursor {
 
   placeHeldCard() {
     // if (this.game.board.getCard(this.x, this.y) !== undefined) return false;
-    const r = this.game.pushC(this.x, this.y, Direction.None, this.heldCard);
+    if (!this.heldCard) return false;
+    const r = this.game.pushC(this.x, this.y, EDirection.None, this.heldCard);
     console.log("PUSH RETURNED:", r);
 
     // FIXME: this does not belong here

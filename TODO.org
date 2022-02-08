@@ -4,18 +4,18 @@
       - [X] Priority
     - [-] Winning [1/2]:
       - [X] Gem win
-      - [ ] No valid move win
+      - [ ] Detect no valid move
     - [X] Piece editor
     - [X] Players [3/3]:
       - [X] Turns
       - [X] Deck
       - [X] Hand:
-    - [-] Board [0/2]:
+    - [-] Board [1/2]:
       - [ ] Configuration
-      - [-] Obstacles [1/3]:
+      - [X] Obstacles [3/3]:
         - [X] Gems
-        - [ ] Cannot place here (must be pushed)
-        - [ ] Illegal card pos
+        - [X] Cannot place here (must be pushed)
+        - [X] Illegal card pos
   - [ ] Full Game [0/3]:
     - [ ] Pushing [0/1]:
       - [ ] Special [0/4]:

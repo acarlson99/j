@@ -2,9 +2,9 @@
 
 import { Board } from "./board";
 import { Cursor } from "./cursor";
-import { Card } from "./card";
 import { colorDeck, Deck } from "./deck";
-import { Direction, directionToStr } from "./board";
+import { EDirection, directionToStr } from "./board";
+import { Card, Rock, Unplacable, statDirection } from "./card";
 
 export var cardWidth = 100;
 
@@ -81,7 +81,7 @@ class Hand {
   }
 
   push(i: number, c: Card) {
-    console.log("in push");
+    // console.log("in push");
     if (i >= this.size) return false;
     // return this.cs.push(c);
     console.log("set", i, c);
@@ -142,11 +142,11 @@ class Game {
   p1: Player;
   p2: Player;
   board: Board;
-  boardSize: () => any;
-  push: (x: number, y: number, d: Direction, p: number) => any;
-  pushC: (x: number, y: number, d: Direction, c: Card) => any;
-  canPush: (x: number, y: number, d: Direction, p: number) => any;
-  canPushC: (x: number, y: number, d: Direction, c: Card) => any;
+  boardSize: () => number;
+  push: (x: number, y: number, d: EDirection, p: number) => any;
+  pushC: (x: number, y: number, d: EDirection, c: Card) => any;
+  canPush: (x: number, y: number, d: EDirection, p: number) => any;
+  canPushC: (x: number, y: number, d: EDirection, c: Card) => any;
 
   constructor(size: number) {
     this.size = size;
@@ -160,6 +160,10 @@ class Game {
     this.boardSize = function () {
       return this.board.size;
     };
+    this.board.setCard(1, 1, new Rock());
+    // console.log("set rock:", this.board.setCard(1, 1, new Rock()));
+    console.log(this.board);
+
     this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
     this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
     this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);

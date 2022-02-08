@@ -1,17 +1,17 @@
 "use strict";
 
 import { cardWidth } from "./gameController";
-import { Direction, opposites, directionToStr, strToDirection } from "./board";
+import { EDirection, opposites, directionToStr, strToDirection } from "./board";
 
-function rock() {
-  var c = new Card("brown", "rock", {});
-  c.canBePushed = () => false;
-  return c;
-}
+// function rock() {
+//   var c = new Card("brown", "rock", {});
+//   c.canBePushed = () => false;
+//   return c;
+// }
 
-export { rock };
+// export { rock };
 
-function statDirection(stats: any, direction: Direction) {
+function statDirection(stats: any, direction: EDirection) {
   // console.log("in statdirection");
   // console.log("stats:", stats);
   // console.log(stats, directionToStr(direction));
@@ -48,7 +48,7 @@ class Card {
     // console.log("constructed");
   }
 
-  canPush(direction: Direction) {
+  canPush(direction: EDirection) {
     // console.log("in can push");
     // console.log(opposites, direction);
     // console.log(this.stats);
@@ -56,7 +56,7 @@ class Card {
     return (statDirection(this.stats, direction)?.v || 0) > 0;
   }
 
-  canBePushed(direction: Direction, priority: number) {
+  canBePushed(direction: EDirection, priority: number) {
     // console.log("in can be pushed");
     // console.log(opposites, direction);
     // console.log("sd", statDirection(this.stats, opposites[direction]));
@@ -128,4 +128,39 @@ class Card {
   }
 }
 
-export { Card };
+class Rock extends Card {
+  constructor() {
+    super("brown", "rock", {});
+  }
+
+  canPush(direction: EDirection) {
+    return false;
+  }
+
+  canBePushed(direction: EDirection, priority: number) {
+    return false;
+  }
+
+  copy() {
+    return this.constructor();
+  }
+}
+
+class Unplacable extends Card {
+  constructor() {
+    super("black", "wall", {});
+  }
+
+  canPush(direction: EDirection) {
+    return false;
+  }
+
+  canBePushed(direction: EDirection, priority: number) {
+    return false;
+  }
+
+  copy() {
+    return this.constructor();
+  }
+}
+export { Card, Rock, Unplacable };

@@ -1,15 +1,15 @@
 "use strict";
 
 import { Card } from "./card";
-import { Direction, Board } from "./board";
+import { EDirection, Board } from "./board";
 
 function cardTest() {
   console.log("BEGIN TEST");
   const c = new Card("blue", "test", { l: { v: 1 } });
   const cpush = [
-    { d: Direction.Left, stats: { l: { v: 1 } }, w: true },
-    { d: Direction.Right, stats: { l: { v: 1 } }, w: false },
-    { d: Direction.Right, stats: { r: { v: 2 } }, w: true },
+    { d: EDirection.Left, stats: { l: { v: 1 } }, w: true },
+    { d: EDirection.Right, stats: { l: { v: 1 } }, w: false },
+    { d: EDirection.Right, stats: { r: { v: 2 } }, w: true },
   ];
   for (let i = 0; i < cpush.length; i++) {
     const t = cpush[i];
@@ -21,36 +21,36 @@ function cardTest() {
     }
   }
   const cbp = [
-    { p: { stats: { l: { v: 1 } }, d: Direction.Left, p: 1 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Right, p: 1 }, w: false },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Left, p: 2 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Right, p: 2 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Up, p: 1 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Down, p: 1 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Up, p: 2 }, w: true },
-    { p: { stats: { l: { v: 1 } }, d: Direction.Down, p: 2 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Left, p: 1 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Right, p: 1 }, w: false },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Left, p: 2 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Right, p: 2 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Up, p: 1 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Down, p: 1 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Up, p: 2 }, w: true },
+    { p: { stats: { l: { v: 1 } }, d: EDirection.Down, p: 2 }, w: true },
 
     {
-      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: Direction.Left, p: 1 },
+      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: EDirection.Left, p: 1 },
       w: true,
     },
     {
-      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: Direction.Right, p: 1 },
+      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: EDirection.Right, p: 1 },
       w: false,
     },
     {
-      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: Direction.Up, p: 1 },
+      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: EDirection.Up, p: 1 },
       w: true,
     },
     {
-      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: Direction.Down, p: 1 },
+      p: { stats: { l: { v: 1 }, u: { v: 2 } }, d: EDirection.Down, p: 1 },
       w: false,
     },
 
     {
       p: {
         stats: { l: { v: 1 }, r: { v: 2 }, d: { v: 1 } },
-        d: Direction.Right,
+        d: EDirection.Right,
         p: 2,
       },
       w: true,
@@ -73,7 +73,7 @@ function cardTest() {
       p: {
         pusher: { l: { v: 1 } }, // blue
         pushed: { l: { v: 2 } }, // red
-        d: Direction.Left,
+        d: EDirection.Left,
       },
       boardPoss: [
         { x: 1, y: 1, color: "blue" },
@@ -85,7 +85,7 @@ function cardTest() {
       p: {
         pusher: { l: { v: 1 }, r: { v: 3 } }, // blue
         pushed: { l: { v: 2 }, u: { v: 2 }, d: { v: 2 } }, // red
-        d: Direction.Right,
+        d: EDirection.Right,
       },
       boardPoss: [
         { x: 1, y: 1, color: "blue" },
@@ -97,7 +97,7 @@ function cardTest() {
       p: {
         pusher: { l: { v: 1 } }, // blue
         pushed: { l: { v: 2 }, r: { v: 1 } }, // red
-        d: Direction.Left,
+        d: EDirection.Left,
       },
       boardPoss: [
         { x: 1, y: 1, color: "red" },
