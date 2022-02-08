@@ -370,7 +370,7 @@ class Board {
     }
     const nc = this.getCard(nx, ny);
     // cannot push card into obstacle
-    if (!this.obstacles.isPushable(nx, ny)) {
+    if (this.obstacles && !this.obstacles.isPushable(nx, ny)) {
       return false;
     }
     if (nc !== undefined) {
