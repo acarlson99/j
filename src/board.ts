@@ -3,7 +3,7 @@
 import { xToCoord, yToCoord } from "./gameController";
 // import { cardWidth } from "./gameController";
 import { clamp } from "./util";
-import { Card, Rock, Unplacable, statDirection } from "./card";
+import { Card, statDirection } from "./card";
 
 enum EDirection {
   None = "NONE",
@@ -146,11 +146,12 @@ class Obstacles {
     console.log("creating obstacle");
     const f = function () {
       this.name = name;
-      // this.x = x;
-      // this.y = y;
+
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       this.update = function (context: CanvasRenderingContext2D) {
         console.warn("naughty update");
       };
+      /* eslint-enable @typescript-eslint/no-unused-vars */
     };
 
     const o = new f();

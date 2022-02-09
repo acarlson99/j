@@ -1,7 +1,7 @@
 "use strict";
 
 // import { cardWidth } from "./gameController";
-import { EDirection, opposites, directionToStr, strToDirection } from "./board";
+import { EDirection, opposites, directionToStr } from "./board";
 
 // function rock() {
 //   var c = new Card("brown", "rock", {});
@@ -144,6 +144,7 @@ class Card {
   }
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 class Rock extends Card {
   constructor() {
     super("brown", "rock", {});
@@ -161,22 +162,6 @@ class Rock extends Card {
     return this.constructor();
   }
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-class Unplacable extends Card {
-  constructor() {
-    super("black", "wall", {});
-  }
-
-  canPush(direction: EDirection) {
-    return false;
-  }
-
-  canBePushed(direction: EDirection, priority: number) {
-    return false;
-  }
-
-  copy() {
-    return this.constructor();
-  }
-}
-export { Card, Rock, Unplacable };
+export { Card, Rock };

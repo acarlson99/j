@@ -2,9 +2,9 @@
 
 import { Board } from "./board";
 import { Cursor } from "./cursor";
-import { colorDeck, Deck } from "./deck";
-import { EDirection, directionToStr } from "./board";
-import { Card, Rock, Unplacable, statDirection } from "./card";
+import { colorDeck } from "./deck";
+import { EDirection } from "./board";
+import { Card, Rock } from "./card";
 import { Player, Hand } from "./player";
 
 class CardEditor {
@@ -164,8 +164,8 @@ class GameController {
 
     // this.canvas.width = this.boardSize() * cardWidth;
     // this.canvas.height = this.boardSize() * cardWidth;
-    this.canvas.width = 1000;
-    this.canvas.height = 1000;
+    this.canvas.width = window.innerWidth / 2;
+    this.canvas.height = window.innerHeight;
 
     // this.canvas.width = this.canvas.height;
     // this.cardWidth = this.canvas.width / this.boardSize();
@@ -177,14 +177,23 @@ class GameController {
   }
 
   getCardSize() {
-    return Math.min(this.canvas.width, this.canvas.height) / this.boardSize();
+    // NOTE: using `ceil` instead of `floor` to avoid weird looking margins
+    return Math.ceil(
+      Math.min(this.canvas.width, this.canvas.height) / this.boardSize()
+    );
   }
 
   update() {
-    // console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
+    // dynamic resizing lol
+    this.canvas.width = window.innerWidth / 2;
+    this.canvas.height = window.innerHeight;
+
+    // clear
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "green";
+    // background
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // update
     this.game.update(this.ctx, this.getCardSize());
     this.ce.update();
     this.cursor.update(this.ctx, this.getCardSize());
@@ -209,12 +218,14 @@ export function yToCoord(y, cardWidth) {
   return y * cardWidth;
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 function everyinterval(n) {
   if ((gc.frameNo / n) % 1 == 0) {
     return true;
   }
   return false;
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 let gc: GameController;
 try {

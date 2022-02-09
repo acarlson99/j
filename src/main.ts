@@ -5,46 +5,7 @@ window.addEventListener("error", function (event) {
 });
 
 import { gc } from "./gameController";
-import { Card } from "./card";
-import { EDirection, Board } from "./board";
-
-const trouppleAcolyte = (color) =>
-  new Card(color, "Troupple Acolyte", {
-    l: { v: 1 },
-    r: { v: 2 },
-    d: { v: 1 },
-  });
-const shieldKnight = (color) =>
-  new Card(color, "Shield Knight", {
-    l: {
-      v: 2,
-      wind: true,
-    },
-    r: {
-      v: 2,
-      wind: true,
-    },
-    u: {
-      v: 3,
-      wind: true,
-    },
-  });
-const propellerRat = (color, p) =>
-  new Card(color, "Propeller Rat", {
-    u: { v: p ? p : 1 },
-  });
-const blitzsteed = (color, p) =>
-  new Card(color, "blitzsteed", {
-    l: { v: p ? p : 1 },
-  });
-const blorb = (color, p) =>
-  new Card(color, "blorb", {
-    d: { v: p ? p : 1 },
-  });
-const beeto = (color, p) =>
-  new Card(color, "beeto", {
-    r: { v: p ? p : 1 },
-  });
+import { EDirection } from "./board";
 
 function startGame() {
   // for (var i = 1; i < gc.boardSize() - 1; i++) {
@@ -86,14 +47,6 @@ function updateGameArea() {
 
 // const arrowImg = new Image(cardWidth, cardWidth);
 // arrowImg.src = "http://cdn.onlinewebfonts.com/svg/img_209407.png";
-
-function cardtob(v) {
-  return btoa(JSON.stringify(v));
-}
-
-function btocard(v) {
-  return JSON.parse(atob(v));
-}
 
 startGame();
 
