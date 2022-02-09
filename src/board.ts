@@ -369,7 +369,7 @@ class Board {
     if (!this.obstacles) {
       return true;
     }
-    return this.obstacles.isSettable(x, y);
+    return this.obstacles.isSettable(x, y, false);
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
