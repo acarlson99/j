@@ -57,14 +57,14 @@ const directionF = {
 enum EObstacleName {
   gem = "gem",
   illegal = "illegal",
-  noPlace = "noPlace", // cannot place, must push here
+  graveyard = "graveyard", // cannot place, must push here
   pitfall = "pitfall",
 }
 
 const obstacleList = [
   EObstacleName.gem,
   EObstacleName.illegal,
-  EObstacleName.noPlace,
+  EObstacleName.graveyard,
   EObstacleName.pitfall,
 ];
 
@@ -93,10 +93,10 @@ class Obstacles {
       this.setM_(size - 1, i, this.makeObstacle(EObstacleName.illegal));
     }
     for (let i = 1; i < size - 1; i++) {
-      this.setM_(1, i, this.makeObstacle(EObstacleName.noPlace));
-      this.setM_(i, 1, this.makeObstacle(EObstacleName.noPlace));
-      this.setM_(i, size - 2, this.makeObstacle(EObstacleName.noPlace));
-      this.setM_(size - 2, i, this.makeObstacle(EObstacleName.noPlace));
+      this.setM_(1, i, this.makeObstacle(EObstacleName.graveyard));
+      this.setM_(i, 1, this.makeObstacle(EObstacleName.graveyard));
+      this.setM_(i, size - 2, this.makeObstacle(EObstacleName.graveyard));
+      this.setM_(size - 2, i, this.makeObstacle(EObstacleName.graveyard));
     }
     this.setM_(1, 1, this.makeObstacle(EObstacleName.illegal));
     this.setM_(1, size - 2, this.makeObstacle(EObstacleName.illegal));
@@ -113,7 +113,7 @@ class Obstacles {
       this.setM_(x, y, this.makeObstacle(EObstacleName.gem));
     }
     // this.setM_(0, 0, this.makeObstacle(EObstacleName.illegal));
-    // this.setM_(0, 1, this.makeObstacle(EObstacleName.noPlace));
+    // this.setM_(0, 1, this.makeObstacle(EObstacleName.graveyard));
     // this.setM_(0, 2, this.makeObstacle(EObstacleName.pitfall));
   }
 
@@ -188,7 +188,7 @@ class Obstacles {
         );
       };
       break;
-    case EObstacleName.noPlace:
+    case EObstacleName.graveyard:
       o.update = function (
         context: CanvasRenderingContext2D,
         cardWidth: number
@@ -236,7 +236,7 @@ class Obstacles {
     case EObstacleName.illegal:
       return false;
       break;
-    case EObstacleName.noPlace:
+    case EObstacleName.graveyard:
       return false;
       break;
     case EObstacleName.pitfall:
@@ -257,7 +257,7 @@ class Obstacles {
     case EObstacleName.illegal:
       return false;
       break;
-    case EObstacleName.noPlace:
+    case EObstacleName.graveyard:
       return true;
       break;
     case EObstacleName.pitfall:
