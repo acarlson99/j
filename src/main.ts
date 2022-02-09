@@ -228,11 +228,8 @@ const doEvent = (() => {
     console.log("BEGIN CAN BE PLAYED CHECK");
     for (let i = 0; i < cs.length; i++) {
       const c = cs[i];
-      console.log("try", c);
       const canBePlayed = gc.game.board.canBePlayed(c);
-      console.log("cbp:", canBePlayed);
       if (canBePlayed) {
-        console.log("yes");
         thing = true;
         break;
       }

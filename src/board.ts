@@ -515,7 +515,6 @@ class Board {
         const keys = Object.keys(EDirection);
         for (let ki = 0; ki < keys.length; ki++) {
           const k = keys[ki];
-          console.log(i, j, k);
           if (this.pushC(i, j, EDirection[k], c, true)) {
             return true;
           }
