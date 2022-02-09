@@ -34,7 +34,6 @@ export { statDirection };
 class Card {
   color: string;
   name: string;
-  width: number;
   stats: any;
   colors = {
     1: "black",

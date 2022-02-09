@@ -47,16 +47,16 @@ const trouppleAcolyte = (color) =>
 function colorDeck(size: number, color: string) {
   const a = [];
   for (let i = 0; i < size; i++) {
-    // a.push(trouppleAcolyte(color));
     const t = trouppleAcolyte(color);
-    // console.log("keys", Object.keys(t));
     Object.keys(t.stats).forEach((k) => {
-      // console.log("CUMMMMMM", t, k, t[k]);
       if (t.stats[k].v == 0) {
         delete t.stats[k];
       }
-      // else console.log("no lol", t[i].v);
     });
+    // only 3 arrows, not 4 silly goose
+    if (Object.keys(t.stats).length == 4) {
+      delete t.stats["udlr"[Math.floor(Math.random() * 4)]];
+    }
     a.push(t);
   }
   return new Deck(a);

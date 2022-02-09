@@ -95,8 +95,8 @@ class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.p1 = new Player(new Hand(3), colorDeck(15, "blue"));
-    this.p2 = new Player(new Hand(3), colorDeck(15, "red"));
+    this.p1 = new Player(new Hand(3), colorDeck(3, "blue"));
+    this.p2 = new Player(new Hand(3), colorDeck(3, "red"));
     for (let i = 0; i < 3; i++) {
       this.p1.draw(i);
       this.p2.draw(i);

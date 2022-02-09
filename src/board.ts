@@ -224,13 +224,15 @@ class Obstacles {
     return o;
   }
 
-  isSettable(x: number, y: number) {
+  // card can be played on space (by place or played with push)
+  isSettable(x: number, y: number, withPush: boolean) {
+    withPush = !!withPush;
     const ob = this.m[y][x];
     switch (ob?.name) {
     case undefined:
       return true;
     case EObstacleName.gem:
-      return false;
+      return withPush;
     case EObstacleName.illegal:
       return false;
       break;
@@ -477,7 +479,7 @@ class Board {
     }
     // console.log("dir", direction, EDirection.None);
     if (direction != EDirection.None) {
-      if (this.obstacles && !this.obstacles.isPushable(x, y)) {
+      if (this.obstacles && !this.obstacles.isSettable(x, y, true)) {
         return false;
       }
       // console.log("NOT NONE");
@@ -494,7 +496,7 @@ class Board {
       return false;
     } else {
       if (
-        (this.obstacles && !this.obstacles.isSettable(x, y)) ||
+        (this.obstacles && !this.obstacles.isSettable(x, y, false)) ||
         this.getCard(x, y)
       ) {
         // console.log("got a card :/");
