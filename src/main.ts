@@ -114,9 +114,9 @@ startGame();
 // }
 
 const doEvent = (() => {
-  var turn = 0;
+  let turn = 0;
   const turnC = ["blue", "red"];
-  var cardHeld = [0, 0];
+  const cardHeld = [0, 0];
   let mapEditor = false;
 
   // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
@@ -128,82 +128,82 @@ const doEvent = (() => {
   return function (e) {
     // console.log("--------------------");
     let p = turn == 0 ? gc.game.p1 : gc.game.p2;
-    let cursor = gc.cursor;
-    let cardHeldPos = cardHeld[turn];
+    const cursor = gc.cursor;
+    const cardHeldPos = cardHeld[turn];
     switch (e.key) {
-      case "ArrowUp":
-        cursor.move(EDirection.Up);
+    case "ArrowUp":
+      cursor.move(EDirection.Up);
+      break;
+    case "ArrowDown":
+      cursor.move(EDirection.Down);
+      break;
+    case "ArrowLeft":
+      cursor.move(EDirection.Left);
+      break;
+    case "ArrowRight":
+      cursor.move(EDirection.Right);
+      break;
+    case "w":
+      cursor.holdCard(p.handAt(cardHeldPos));
+      if (cursor.pushHeldCard(EDirection.Up)) {
+        console.log("playing card at hand pos:", cardHeldPos);
+        p.play(cardHeldPos);
+        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+        turn++;
+      }
+      break;
+    case "a":
+      cursor.holdCard(p.handAt(cardHeldPos));
+      if (cursor.pushHeldCard(EDirection.Left)) {
+        console.log("playing card at hand pos:", cardHeldPos);
+        p.play(cardHeldPos);
+        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck")
+        turn++;
+      }
+      break;
+    case "s":
+      cursor.holdCard(p.handAt(cardHeldPos));
+      if (cursor.pushHeldCard(EDirection.Down)) {
+        console.log("playing card at hand pos:", cardHeldPos);
+        p.play(cardHeldPos);
+        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+        turn++;
+      }
+      break;
+    case "d":
+      cursor.holdCard(p.handAt(cardHeldPos));
+      if (cursor.pushHeldCard(EDirection.Right)) {
+        console.log("playing card at hand pos:", cardHeldPos);
+        p.play(cardHeldPos);
+        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+        turn++;
+      }
+      break;
+    case " ":
+      console.log("space bar pressed.  mapeditor set to:", mapEditor);
+      if (mapEditor) {
+        console.log("editing board");
+        cursor.boardEdit();
         break;
-      case "ArrowDown":
-        cursor.move(EDirection.Down);
-        break;
-      case "ArrowLeft":
-        cursor.move(EDirection.Left);
-        break;
-      case "ArrowRight":
-        cursor.move(EDirection.Right);
-        break;
-      case "w":
-        cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(EDirection.Up)) {
-          console.log("playing card at hand pos:", cardHeldPos);
-          p.play(cardHeldPos);
-          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
-          turn++;
-        }
-        break;
-      case "a":
-        cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(EDirection.Left)) {
-          console.log("playing card at hand pos:", cardHeldPos);
-          p.play(cardHeldPos);
-          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
-          turn++;
-        }
-        break;
-      case "s":
-        cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(EDirection.Down)) {
-          console.log("playing card at hand pos:", cardHeldPos);
-          p.play(cardHeldPos);
-          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
-          turn++;
-        }
-        break;
-      case "d":
-        cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(EDirection.Right)) {
-          console.log("playing card at hand pos:", cardHeldPos);
-          p.play(cardHeldPos);
-          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
-          turn++;
-        }
-        break;
-      case " ":
-        console.log("space bar pressed.  mapeditor set to:", mapEditor);
-        if (mapEditor) {
-          console.log("editing board");
-          cursor.boardEdit();
-          break;
-        }
-        // console.log(turn);
-        cursor.holdCard(p.handAt(cardHeldPos));
-        if (cursor.pushHeldCard(EDirection.None)) {
-          console.log("playing card at hand pos:", cardHeldPos);
-          p.play(cardHeldPos);
-          // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
-          turn++;
-        }
-        break;
-      case "m":
-        mapEditor = !mapEditor;
-        console.log("MAP EDITOR:", mapEditor);
-        break;
-      case "1":
-      case "2":
-      case "3":
-        cardHeld[turn] = Number(e.key) - 1;
-        break;
+      }
+      // console.log(turn);
+      cursor.holdCard(p.handAt(cardHeldPos));
+      if (cursor.pushHeldCard(EDirection.None)) {
+        console.log("playing card at hand pos:", cardHeldPos);
+        p.play(cardHeldPos);
+        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
+        turn++;
+      }
+      break;
+    case "m":
+      mapEditor = !mapEditor;
+      console.log("MAP EDITOR:", mapEditor);
+      break;
+    case "1":
+    case "2":
+    case "3":
+      cardHeld[turn] = Number(e.key) - 1;
+      break;
       // case "4":
       //   const udlr = "udlr";
       //   const stats = gc.ce.stats;
@@ -224,16 +224,23 @@ const doEvent = (() => {
     console.log("decksize:", p.d.size());
     // check if valid move exists
     let thing = false;
-    let cs = p.hand();
+    const cs = p.hand();
+    console.log("BEGIN CAN BE PLAYED CHECK");
     for (let i = 0; i < cs.length; i++) {
       const c = cs[i];
-      if (gc.game.board.canBePlayed(c)) {
+      console.log("try", c);
+      const canBePlayed = gc.game.board.canBePlayed(c);
+      console.log("cbp:", canBePlayed);
+      if (canBePlayed) {
         console.log("yes");
         thing = true;
         break;
       }
     }
-    if (!thing) console.log("no possible moves");
+    console.log("END CAN BE PLAYED CHECK");
+    if (!thing) {
+      console.log("no possible moves");
+    }
 
     // console.log("turn", turn);
     // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
@@ -247,7 +254,7 @@ const doEvent = (() => {
 
 document.onkeydown = (e) => {
   console.log(e);
-  let e_ = e || window.event;
+  const e_ = e || window.event;
 
   doEvent(e_);
 };

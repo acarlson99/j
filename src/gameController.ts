@@ -7,8 +7,6 @@ import { EDirection, directionToStr } from "./board";
 import { Card, Rock, Unplacable, statDirection } from "./card";
 import { Player, Hand } from "./player";
 
-export var cardWidth = 100;
-
 class CardEditor {
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
@@ -17,6 +15,8 @@ class CardEditor {
   cursor: Cursor;
   i: number;
   j: number;
+  cardWidth: number;
+
   constructor() {
     // this.canvas = document.createElement("canvas");
     this.i = 0;
@@ -24,8 +24,9 @@ class CardEditor {
     this.canvas = document.getElementById(
       "cardEditCanvas"
     ) as HTMLCanvasElement;
-    this.canvas.width = cardWidth * 3;
-    this.canvas.height = cardWidth * 3;
+    this.cardWidth = 100;
+    this.canvas.width = this.cardWidth * 3;
+    this.canvas.height = this.cardWidth * 3;
     this.context = this.canvas.getContext("2d");
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -60,16 +61,22 @@ class CardEditor {
     // const c = this.c();
     // c.width = this.canvas.width;
     // c.update(this.ctx, 0, 0);
-    let h1 = gc.game.p1.hand();
-    let h2 = gc.game.p2.hand();
+    const h1 = gc.game.p1.hand();
+    const h2 = gc.game.p2.hand();
     for (let i = 0; i < 3; i++) {
-      if (h1[i]) this.board.setCard(0, i, h1[i]);
-      else this.board.unsetCard(0, i);
-      if (h2[i]) this.board.setCard(2, i, h2[i]);
-      else this.board.unsetCard(2, i);
+      if (h1[i]) {
+        this.board.setCard(0, i, h1[i]);
+      } else {
+        this.board.unsetCard(0, i);
+      }
+      if (h2[i]) {
+        this.board.setCard(2, i, h2[i]);
+      } else {
+        this.board.unsetCard(2, i);
+      }
     }
-    this.board.update(this.ctx);
-    this.cursor.update(this.ctx);
+    this.board.update(this.ctx, this.cardWidth);
+    this.cursor.update(this.ctx, this.cardWidth);
   }
 }
 
@@ -109,13 +116,15 @@ class Game {
     console.log("boardsize", this.boardSize());
   }
 
-  update(ctx: CanvasRenderingContext2D) {
-    this.board.update(ctx);
+  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
+    this.board.update(ctx, cardWidth);
     const [b, r] = this.board.getScore();
-    if (b.toString() != document.getElementById("p1score").innerHTML)
+    if (b.toString() != document.getElementById("p1score").innerHTML) {
       document.getElementById("p1score").innerHTML = b.toString();
-    if (r.toString() != document.getElementById("p2score").innerHTML)
+    }
+    if (r.toString() != document.getElementById("p2score").innerHTML) {
       document.getElementById("p2score").innerHTML = r.toString();
+    }
   }
 }
 
@@ -153,11 +162,13 @@ class GameController {
       return this.game.boardSize();
     };
 
-    this.canvas.width = this.boardSize() * cardWidth;
-    this.canvas.height = this.boardSize() * cardWidth;
+    // this.canvas.width = this.boardSize() * cardWidth;
+    // this.canvas.height = this.boardSize() * cardWidth;
+    this.canvas.width = 1000;
+    this.canvas.height = 1000;
 
     // this.canvas.width = this.canvas.height;
-    // cardWidth = this.canvas.width / this.boardSize();
+    // this.cardWidth = this.canvas.width / this.boardSize();
     this.context = this.canvas.getContext("2d");
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -165,14 +176,18 @@ class GameController {
     console.log("GAEM", this.game);
   }
 
+  getCardSize() {
+    return Math.min(this.canvas.width, this.canvas.height) / this.boardSize();
+  }
+
   update() {
     // console.log("CLEARING", 0, 0, this.canvas.width, this.canvas.height);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "green";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.game.update(this.ctx);
+    this.game.update(this.ctx, this.getCardSize());
     this.ce.update();
-    this.cursor.update(this.ctx);
+    this.cursor.update(this.ctx, this.getCardSize());
     // this.board.update(this.ctx);
     // this.cursor.update(this.ctx);
     // this.ce.update();
@@ -186,10 +201,11 @@ class GameController {
 
 export { GameController };
 
-export function xToCoord(x) {
+export function xToCoord(x, cardWidth) {
   return x * cardWidth;
 }
-export function yToCoord(y) {
+
+export function yToCoord(y, cardWidth) {
   return y * cardWidth;
 }
 
@@ -200,12 +216,12 @@ function everyinterval(n) {
   return false;
 }
 
-var gc: GameController;
+let gc: GameController;
 try {
   console.log("CREATE GLOBAL GAME CONTROLLER");
   gc = new GameController(6);
 } catch (e) {
-  console.warn(e);
+  console.warn("UNABLE TO CREATE CONTROLLER:", e);
 }
 
 export { gc };

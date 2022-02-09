@@ -1,19 +1,27 @@
+let DEBUG_MODE = true;
+
 module.exports = {
   env: {
     browser: true,
-    es2020: true,
+    es2021: true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended"],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 11,
+    ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["react"],
+  plugins: ["@typescript-eslint"],
   rules: {
     indent: ["error", 2],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { vars: "local", args: "all" },
+    ],
+
     "linebreak-style": ["error", "unix"],
     quotes: [
       "error",
@@ -24,7 +32,6 @@ module.exports = {
       },
     ],
     semi: ["error", "always"],
-    "react/prop-types": 0,
     "space-infix-ops": ["error", { int32Hint: false }],
     "object-curly-newline": [
       "error",
@@ -36,7 +43,7 @@ module.exports = {
         },
         ObjectPattern: "never",
         ImportDeclaration: "never",
-        ExportDeclaration: "always",
+        ExportDeclaration: "never",
       },
     ],
     "object-property-newline": [
@@ -54,19 +61,12 @@ module.exports = {
       },
     ],
     "no-trailing-spaces": ["error", { ignoreComments: true }],
-    "jsx-quotes": ["error", "prefer-double"],
-    "react/jsx-closing-bracket-location": ["error", "line-aligned"],
-    "react/jsx-curly-brace-presence": ["error", "never"],
-    "react/jsx-no-duplicate-props": ["error", { ignoreCase: true }],
-    "react/jsx-max-props-per-line": [
-      "error",
-      {
-        maximum: 3,
-        when: "always",
-      },
-    ],
-    "react/jsx-first-prop-new-line": ["error", "multiline"],
     "brace-style": "error",
     curly: "error",
+    "comma-spacing": ["error", { before: false, after: true }],
+
+    // DEBUG STUFF.  REMOVE LATER
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
   },
 };

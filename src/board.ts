@@ -1,7 +1,7 @@
 "use strict";
 
 import { xToCoord, yToCoord } from "./gameController";
-import { cardWidth } from "./gameController";
+// import { cardWidth } from "./gameController";
 import { clamp } from "./util";
 import { Card, Rock, Unplacable, statDirection } from "./card";
 
@@ -32,16 +32,16 @@ const directionToStr = (d: EDirection) => dss[d];
 
 const strToDirection = (s: string) => {
   switch (s) {
-    case EDirection.Up:
-      return EDirection.Up;
-    case EDirection.Down:
-      return EDirection.Down;
-    case EDirection.Left:
-      return EDirection.Left;
-    case EDirection.Right:
-      return EDirection.Right;
-    default:
-      throw "strToDirection invalid string: '" + s + "'";
+  case EDirection.Up:
+    return EDirection.Up;
+  case EDirection.Down:
+    return EDirection.Down;
+  case EDirection.Left:
+    return EDirection.Left;
+  case EDirection.Right:
+    return EDirection.Right;
+  default:
+    throw "strToDirection invalid string: '" + s + "'";
   }
 };
 
@@ -129,12 +129,16 @@ class Obstacles {
 
   incrementObstacleAt(x: number, y: number) {
     console.log("incrementing obstacle");
-    let name = this.m[y][x]?.name;
-    if (!name) this.setM_(x, y, this.makeObstacle(obstacleList[0]));
+    const name = this.m[y][x]?.name;
+    if (!name) {
+      this.setM_(x, y, this.makeObstacle(obstacleList[0]));
+    }
     let i = obstacleList.indexOf(name);
     i++;
     this.setM_(x, y, undefined);
-    if (i === obstacleList.length) return;
+    if (i === obstacleList.length) {
+      return;
+    }
     this.setM_(x, y, this.makeObstacle(obstacleList[i]));
   }
 
@@ -151,58 +155,70 @@ class Obstacles {
 
     const o = new f();
     switch (name) {
-      case EObstacleName.gem:
-        o.update = function (context: CanvasRenderingContext2D) {
-          const radius = cardWidth / 3;
-          const centerX = xToCoord(this.x) + cardWidth / 2;
-          const centerY = yToCoord(this.y) + cardWidth / 2;
+    case EObstacleName.gem:
+      o.update = function (
+        context: CanvasRenderingContext2D,
+        cardWidth: number
+      ) {
+        const radius = cardWidth / 3;
+        const centerX = xToCoord(this.x, cardWidth) + cardWidth / 2;
+        const centerY = yToCoord(this.y, cardWidth) + cardWidth / 2;
 
-          context.beginPath();
-          context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-          context.fillStyle = "lavender";
-          context.fill();
-          context.lineWidth = 5;
-          context.strokeStyle = "#003300";
-          context.stroke();
-        };
-        break;
-      case EObstacleName.illegal:
-        o.update = function (context: CanvasRenderingContext2D) {
-          context.fillStyle = "grey";
-          context.fillRect(
-            xToCoord(this.x),
-            yToCoord(this.y),
-            cardWidth,
-            cardWidth
-          );
-        };
-        break;
-      case EObstacleName.noPlace:
-        o.update = function (context: CanvasRenderingContext2D) {
-          context.globalAlpha = 0.75;
-          context.fillStyle = "darkgreen";
-          context.fillRect(
-            xToCoord(this.x),
-            yToCoord(this.y),
-            cardWidth,
-            cardWidth
-          );
-          context.globalAlpha = 1.0;
-        };
-        break;
-      case EObstacleName.pitfall:
-        o.update = function (context: CanvasRenderingContext2D) {
-          context.globalAlpha = 0.5;
-          context.fillStyle = "brown";
-          context.fillRect(
-            xToCoord(this.x),
-            yToCoord(this.y),
-            cardWidth,
-            cardWidth
-          );
-          context.globalAlpha = 1.0;
-        };
-        break;
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = "lavender";
+        context.fill();
+        context.lineWidth = 5;
+        context.strokeStyle = "#003300";
+        context.stroke();
+      };
+      break;
+    case EObstacleName.illegal:
+      o.update = function (
+        context: CanvasRenderingContext2D,
+        cardWidth: number
+      ) {
+        context.fillStyle = "grey";
+        context.fillRect(
+          xToCoord(this.x, cardWidth),
+          yToCoord(this.y, cardWidth),
+          cardWidth,
+          cardWidth
+        );
+      };
+      break;
+    case EObstacleName.noPlace:
+      o.update = function (
+        context: CanvasRenderingContext2D,
+        cardWidth: number
+      ) {
+        context.globalAlpha = 0.75;
+        context.fillStyle = "darkgreen";
+        context.fillRect(
+          xToCoord(this.x, cardWidth),
+          yToCoord(this.y, cardWidth),
+          cardWidth,
+          cardWidth
+        );
+        context.globalAlpha = 1.0;
+      };
+      break;
+    case EObstacleName.pitfall:
+      o.update = function (
+        context: CanvasRenderingContext2D,
+        cardWidth: number
+      ) {
+        context.globalAlpha = 0.5;
+        context.fillStyle = "brown";
+        context.fillRect(
+          xToCoord(this.x, cardWidth),
+          yToCoord(this.y, cardWidth),
+          cardWidth,
+          cardWidth
+        );
+        context.globalAlpha = 1.0;
+      };
+      break;
     }
     return o;
   }
@@ -210,19 +226,19 @@ class Obstacles {
   isSettable(x: number, y: number) {
     const ob = this.m[y][x];
     switch (ob?.name) {
-      case undefined:
-        return true;
-      case EObstacleName.gem:
-        return false;
-      case EObstacleName.illegal:
-        return false;
-        break;
-      case EObstacleName.noPlace:
-        return false;
-        break;
-      case EObstacleName.pitfall:
-        return true;
-        break;
+    case undefined:
+      return true;
+    case EObstacleName.gem:
+      return false;
+    case EObstacleName.illegal:
+      return false;
+      break;
+    case EObstacleName.noPlace:
+      return false;
+      break;
+    case EObstacleName.pitfall:
+      return true;
+      break;
     }
     console.error("fallthrough case");
     return false;
@@ -231,19 +247,19 @@ class Obstacles {
   // check if card can be pushed onto space
   isPushable(x: number, y: number) {
     switch (this.m[y][x]?.name) {
-      case undefined:
-        return true;
-      case EObstacleName.gem:
-        return true;
-      case EObstacleName.illegal:
-        return false;
-        break;
-      case EObstacleName.noPlace:
-        return true;
-        break;
-      case EObstacleName.pitfall:
-        return true;
-        break;
+    case undefined:
+      return true;
+    case EObstacleName.gem:
+      return true;
+    case EObstacleName.illegal:
+      return false;
+      break;
+    case EObstacleName.noPlace:
+      return true;
+      break;
+    case EObstacleName.pitfall:
+      return true;
+      break;
     }
     console.error("fallthrough case");
     return false;
@@ -266,8 +282,8 @@ class Obstacles {
     return g && g.name == EObstacleName.gem;
   }
 
-  update(ctx: CanvasRenderingContext2D) {
-    this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx) : o)));
+  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
+    this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx, cardWidth) : o)));
   }
 }
 
@@ -324,7 +340,9 @@ class Board {
       this.cardMap[i] = new Array(this.size);
     }
     // obstacles
-    if (createObstacles) this.obstacles = new Obstacles(size);
+    if (createObstacles) {
+      this.obstacles = new Obstacles(size);
+    }
     this.gameover = false;
   }
 
@@ -345,18 +363,24 @@ class Board {
   }
 
   canSet(x: number, y: number) {
-    if (!this.obstacles) return true;
+    if (!this.obstacles) {
+      return true;
+    }
     return this.obstacles.isSettable(x, y);
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
     // console.log("this board", this);
-    if (this.gameover) return false;
+    if (this.gameover) {
+      return false;
+    }
     if (!c) {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
     // cannot place on gem
-    if (!this.canSet(x, y)) return false;
+    if (!this.canSet(x, y)) {
+      return false;
+    }
     return this.setCard_(x, y, c, dontSet);
     // this.cardMap[y][x] = c;
     // return true;
@@ -372,7 +396,9 @@ class Board {
     if (!this.inBounds(x, y)) {
       return false;
     }
-    if (!dontSet) this.cardMap[y][x] = c.copy();
+    if (!dontSet) {
+      this.cardMap[y][x] = c.copy();
+    }
     return true;
   }
 
@@ -387,7 +413,9 @@ class Board {
     priority: any,
     dontPush = false
   ) {
-    if (this.gameover) return false;
+    if (this.gameover) {
+      return false;
+    }
     // console.log("PUSHING", x, y, direction);
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
@@ -396,7 +424,9 @@ class Board {
     // console.log("TO");
     // console.log(nx, ny);
 
-    if (!this.inBounds(nx, ny)) return false;
+    if (!this.inBounds(nx, ny)) {
+      return false;
+    }
 
     // find if it can push the next Card
     const c = this.getCard(x, y);
@@ -423,7 +453,9 @@ class Board {
     }
     const r = this.setCard_(nx, ny, c, dontPush);
     // console.log("SET:", r);
-    if (!dontPush) delete this.cardMap[y][x];
+    if (!dontPush) {
+      delete this.cardMap[y][x];
+    }
     return r;
   }
 
@@ -439,9 +471,14 @@ class Board {
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
     // console.log("a", this.gameover);
-    if (this.gameover || !this.canSet(x, y)) return false;
+    if (this.gameover) {
+      return false;
+    }
     // console.log("dir", direction, EDirection.None);
     if (direction != EDirection.None) {
+      if (this.obstacles && !this.obstacles.isPushable(x, y)) {
+        return false;
+      }
       // console.log("NOT NONE");
       // console.log("C:", c);
       // console.log("dir", direction);
@@ -450,11 +487,15 @@ class Board {
       const p = statDirection(c.stats, direction)?.v;
       // console.log("priority", p, direction);
       // if (!c.canBePushed(direction, p)) return false;
-      if (p && this.push(x, y, direction, p, dontPush))
+      if (p && this.push(x, y, direction, p, dontPush)) {
         return this.setCard_(x, y, c, dontPush);
+      }
       return false;
     } else {
-      if (this.getCard(x, y)) {
+      if (
+        (this.obstacles && !this.obstacles.isSettable(x, y)) ||
+        this.getCard(x, y)
+      ) {
         // console.log("got a card :/");
         return false;
       }
@@ -472,9 +513,12 @@ class Board {
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         const keys = Object.keys(EDirection);
-        for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
-          if (this.pushC(i, j, EDirection[k], c, true)) return true;
+        for (let ki = 0; ki < keys.length; ki++) {
+          const k = keys[ki];
+          console.log(i, j, k);
+          if (this.pushC(i, j, EDirection[k], c, true)) {
+            return true;
+          }
         }
       }
     }
@@ -483,23 +527,35 @@ class Board {
 
   getScore() {
     const poss = this.obstacles?.getGemsPos();
-    if (!poss) return [0, 0];
-    var scoreB = 0;
-    var scoreR = 0;
+    if (!poss) {
+      return [0, 0];
+    }
+    let scoreB = 0;
+    let scoreR = 0;
     poss.map(([x, y]) => {
       const c = this.getCard(x, y);
-      if (!c) return;
-      if (c.color == "blue") scoreB++;
-      if (c.color == "red") scoreR++;
+      if (!c) {
+        return;
+      }
+      if (c.color == "blue") {
+        scoreB++;
+      }
+      if (c.color == "red") {
+        scoreR++;
+      }
     });
     return [scoreB, scoreR];
   }
 
   checkWin() {
     // const poss = this.obstacles.getGemsPos();
-    if (!this.obstacles) return undefined;
+    if (!this.obstacles) {
+      return undefined;
+    }
     const [scoreB, scoreR] = this.getScore();
-    if (scoreB + scoreR < this.obstacles.numGems()) return undefined;
+    if (scoreB + scoreR < this.obstacles.numGems()) {
+      return undefined;
+    }
     // if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
     console.log("WINNER WINNER CHICKEN DINNER", v);
@@ -507,16 +563,21 @@ class Board {
     return v;
   }
 
-  update(ctx: CanvasRenderingContext2D) {
-    for (var i = 0; i < this.size; i++) {
-      for (var j = 0; j < this.size; j++) {
-        let c = this.getCard(i, j);
+  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        const c = this.getCard(i, j);
         if (c && c.update) {
-          c.update(ctx, xToCoord(i), yToCoord(j));
+          c.update(
+            ctx,
+            xToCoord(i, cardWidth),
+            yToCoord(j, cardWidth),
+            cardWidth
+          );
         }
       }
     }
-    this.obstacles?.update(ctx);
+    this.obstacles?.update(ctx, cardWidth);
   }
 }
 

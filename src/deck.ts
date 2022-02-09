@@ -5,12 +5,10 @@ import { Card } from "./card";
 class Deck {
   cs: Card[];
   constructor(cs) {
-    this.cs = new Array();
-    for (const k in cs) {
-      if (cs.hasOwnProperty(k)) {
-        const c = cs[k];
-        this.cs.push(c);
-      }
+    this.cs = [];
+    for (let i = 0; i < cs.length; i++) {
+      const c = cs[i];
+      this.cs.push(c);
     }
     // console.log("NEW DECK", this.cs);
   }
@@ -47,14 +45,16 @@ const trouppleAcolyte = (color) =>
   });
 
 function colorDeck(size: number, color: string) {
-  var a = [];
+  const a = [];
   for (let i = 0; i < size; i++) {
     // a.push(trouppleAcolyte(color));
-    let t = trouppleAcolyte(color);
+    const t = trouppleAcolyte(color);
     // console.log("keys", Object.keys(t));
-    Object.keys(t.stats).forEach((i) => {
-      // console.log("CUMMMMMM", t, i, t[i]);
-      if (t.stats[i].v == 0) delete t.stats[i];
+    Object.keys(t.stats).forEach((k) => {
+      // console.log("CUMMMMMM", t, k, t[k]);
+      if (t.stats[k].v == 0) {
+        delete t.stats[k];
+      }
       // else console.log("no lol", t[i].v);
     });
     a.push(t);

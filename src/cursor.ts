@@ -1,6 +1,6 @@
 "use strict";
 
-import { cardWidth, xToCoord, yToCoord } from "./gameController";
+import { xToCoord, yToCoord } from "./gameController";
 import { clamp } from "./util";
 import { EDirection } from "./board";
 import { Game, CardEditor } from "./gameController";
@@ -26,18 +26,18 @@ class Cursor {
   move(direction: EDirection) {
     console.log("MOVE", direction);
     switch (direction) {
-      case EDirection.Up:
-        this.y -= 1;
-        break;
-      case EDirection.Down:
-        this.y += 1;
-        break;
-      case EDirection.Left:
-        this.x -= 1;
-        break;
-      case EDirection.Right:
-        this.x += 1;
-        break;
+    case EDirection.Up:
+      this.y -= 1;
+      break;
+    case EDirection.Down:
+      this.y += 1;
+      break;
+    case EDirection.Left:
+      this.x -= 1;
+      break;
+    case EDirection.Right:
+      this.x += 1;
+      break;
     }
     this.x = clamp(0, this.x, this.size - 1);
     this.y = clamp(0, this.y, this.size - 1);
@@ -54,7 +54,9 @@ class Cursor {
     // if (!c || !this.heldCard) return false;
     const pushed = this.game.pushC(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
-    if (!pushed) return false;
+    if (!pushed) {
+      return false;
+    }
     this.heldCard = undefined;
 
     // FIXME: this does not belong here
@@ -77,12 +79,12 @@ class Cursor {
   //   return this.pushHeldCard(EDirection.None);
   // }
 
-  update(ctx: CanvasRenderingContext2D) {
+  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
     ctx.lineWidth = 10;
     ctx.beginPath();
     ctx.rect(
-      xToCoord(this.x) + ctx.lineWidth / 2,
-      yToCoord(this.y) + ctx.lineWidth / 2,
+      xToCoord(this.x, cardWidth) + ctx.lineWidth / 2,
+      yToCoord(this.y, cardWidth) + ctx.lineWidth / 2,
       cardWidth - ctx.lineWidth,
       cardWidth - ctx.lineWidth
     );
