@@ -4,7 +4,7 @@ import { Card } from "./card";
 
 class Deck {
   cs: Card[];
-  constructor(cs) {
+  constructor(cs: Card[]) {
     this.cs = [];
     for (let i = 0; i < cs.length; i++) {
       const c = cs[i];
@@ -36,7 +36,7 @@ class Deck {
 
 export { Deck };
 
-const trouppleAcolyte = (color) =>
+const trouppleAcolyte = (color: string) =>
   new Card(color, "Troupple Acolyte", {
     u: { v: Math.floor(Math.random() * 4) },
     l: { v: Math.floor(Math.random() * 4) },
