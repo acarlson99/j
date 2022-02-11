@@ -78,7 +78,7 @@ const doEvent = (() => {
   // else gc.ce.setC(c);
   // gc.ce.color = turn == 0 ? "blue" : "red";
 
-  return function (e) {
+  return function (e: KeyboardEvent) {
     // console.log("--------------------");
     let p = turn == 0 ? gc.game.p1 : gc.game.p2;
     const cursor = gc.cursor;

@@ -4,6 +4,7 @@ import { xToCoord, yToCoord } from "./gameController";
 // import { cardWidth } from "./gameController";
 import { clamp } from "./util";
 import { Card, statDirection } from "./card";
+import { Obstacles } from "./obstacles";
 
 enum EDirection {
   None = "NONE",
@@ -52,243 +53,21 @@ const directionF = {
   [EDirection.Down]: [(x: number) => x, (y: number) => y + 1],
   [EDirection.Left]: [(x: number) => x - 1, (y: number) => y],
   [EDirection.Right]: [(x: number) => x + 1, (y: number) => y],
+  [EDirection.None]: undefined,
 };
 
-enum EObstacleName {
-  gem = "gem",
-  illegal = "illegal",
-  graveyard = "graveyard", // cannot place, must push here
-  pitfall = "pitfall",
-}
+// class Obstacle {
+//   name: string;
 
-const obstacleList = [
-  EObstacleName.gem,
-  EObstacleName.illegal,
-  EObstacleName.graveyard,
-  EObstacleName.pitfall,
-];
-
-class Obstacles {
-  size: number;
-  m: any[];
-  x: number;
-  y: number;
-  s: string;
-  gem: any;
-
-  constructor(size: number, numGems = undefined) {
-    this.size = size;
-    if (numGems === undefined) {
-      numGems = Math.floor(size / 4) * 2 + 1;
-      // console.log(numGems);
-    }
-    this.m = new Array(this.size);
-    for (let i = 0; i < this.size; i++) {
-      this.m[i] = new Array(this.size);
-    }
-    for (let i = 0; i < size; i++) {
-      this.setM_(0, i, this.makeObstacle(EObstacleName.illegal));
-      this.setM_(i, 0, this.makeObstacle(EObstacleName.illegal));
-      this.setM_(i, size - 1, this.makeObstacle(EObstacleName.illegal));
-      this.setM_(size - 1, i, this.makeObstacle(EObstacleName.illegal));
-    }
-    for (let i = 1; i < size - 1; i++) {
-      this.setM_(1, i, this.makeObstacle(EObstacleName.graveyard));
-      this.setM_(i, 1, this.makeObstacle(EObstacleName.graveyard));
-      this.setM_(i, size - 2, this.makeObstacle(EObstacleName.graveyard));
-      this.setM_(size - 2, i, this.makeObstacle(EObstacleName.graveyard));
-    }
-    this.setM_(1, 1, this.makeObstacle(EObstacleName.illegal));
-    this.setM_(1, size - 2, this.makeObstacle(EObstacleName.illegal));
-    this.setM_(size - 2, 1, this.makeObstacle(EObstacleName.illegal));
-    this.setM_(size - 2, size - 2, this.makeObstacle(EObstacleName.illegal));
-    for (let i = 0; i < numGems; i++) {
-      const x = Math.floor(Math.random() * this.size);
-      const y = Math.floor(Math.random() * this.size);
-      if (this.m[y][x]) {
-        i--;
-        continue;
-      }
-
-      this.setM_(x, y, this.makeObstacle(EObstacleName.gem));
-    }
-    // this.setM_(0, 0, this.makeObstacle(EObstacleName.illegal));
-    // this.setM_(0, 1, this.makeObstacle(EObstacleName.graveyard));
-    // this.setM_(0, 2, this.makeObstacle(EObstacleName.pitfall));
-  }
-
-  setM_(x: number, y: number, o) {
-    if (!o) {
-      delete this.m[y][x];
-    } else {
-      o.x = x;
-      o.y = y;
-      this.m[y][x] = o;
-    }
-  }
-
-  incrementObstacleAt(x: number, y: number) {
-    console.log("incrementing obstacle");
-    const name = this.m[y][x]?.name;
-    if (!name) {
-      this.setM_(x, y, this.makeObstacle(obstacleList[0]));
-    }
-    let i = obstacleList.indexOf(name);
-    i++;
-    this.setM_(x, y, undefined);
-    if (i === obstacleList.length) {
-      return;
-    }
-    this.setM_(x, y, this.makeObstacle(obstacleList[i]));
-  }
-
-  makeObstacle(name: EObstacleName) {
-    console.log("creating obstacle");
-    const f = function () {
-      this.name = name;
-
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      this.update = function (context: CanvasRenderingContext2D) {
-        console.warn("naughty update");
-      };
-      /* eslint-enable @typescript-eslint/no-unused-vars */
-    };
-
-    const o = new f();
-    switch (name) {
-    case EObstacleName.gem:
-      o.update = function (
-        context: CanvasRenderingContext2D,
-        cardWidth: number
-      ) {
-        const radius = cardWidth / 3;
-        const centerX = xToCoord(this.x, cardWidth) + cardWidth / 2;
-        const centerY = yToCoord(this.y, cardWidth) + cardWidth / 2;
-
-        context.beginPath();
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        context.fillStyle = "lavender";
-        context.fill();
-        context.lineWidth = 5;
-        context.strokeStyle = "#003300";
-        context.stroke();
-      };
-      break;
-    case EObstacleName.illegal:
-      o.update = function (
-        context: CanvasRenderingContext2D,
-        cardWidth: number
-      ) {
-        context.fillStyle = "grey";
-        context.fillRect(
-          xToCoord(this.x, cardWidth),
-          yToCoord(this.y, cardWidth),
-          cardWidth,
-          cardWidth
-        );
-      };
-      break;
-    case EObstacleName.graveyard:
-      o.update = function (
-        context: CanvasRenderingContext2D,
-        cardWidth: number
-      ) {
-        context.globalAlpha = 0.75;
-        context.fillStyle = "darkgreen";
-        context.fillRect(
-          xToCoord(this.x, cardWidth),
-          yToCoord(this.y, cardWidth),
-          cardWidth,
-          cardWidth
-        );
-        context.globalAlpha = 1.0;
-      };
-      break;
-    case EObstacleName.pitfall:
-      o.update = function (
-        context: CanvasRenderingContext2D,
-        cardWidth: number
-      ) {
-        context.globalAlpha = 0.5;
-        context.fillStyle = "brown";
-        context.fillRect(
-          xToCoord(this.x, cardWidth),
-          yToCoord(this.y, cardWidth),
-          cardWidth,
-          cardWidth
-        );
-        context.globalAlpha = 1.0;
-      };
-      break;
-    }
-    return o;
-  }
-
-  // card can be played on space (by place or played with push)
-  isSettable(x: number, y: number, withPush: boolean) {
-    withPush = !!withPush;
-    const ob = this.m[y][x];
-    switch (ob?.name) {
-    case undefined:
-      return true;
-    case EObstacleName.gem:
-      return withPush;
-    case EObstacleName.illegal:
-      return false;
-      break;
-    case EObstacleName.graveyard:
-      return false;
-      break;
-    case EObstacleName.pitfall:
-      return true;
-      break;
-    }
-    console.error("fallthrough case");
-    return false;
-  }
-
-  // check if card can be pushed onto space
-  isPushable(x: number, y: number) {
-    switch (this.m[y][x]?.name) {
-    case undefined:
-      return true;
-    case EObstacleName.gem:
-      return true;
-    case EObstacleName.illegal:
-      return false;
-      break;
-    case EObstacleName.graveyard:
-      return true;
-      break;
-    case EObstacleName.pitfall:
-      return true;
-      break;
-    }
-    console.error("fallthrough case");
-    return false;
-  }
-
-  getGemsPos() {
-    // this.m.flatMap((a) => console.log(a));
-    return this.m
-      .flat()
-      .filter((o) => o?.name == EObstacleName.gem)
-      .map((v) => [v.x, v.y]);
-  }
-
-  numGems() {
-    return this.getGemsPos().length;
-  }
-
-  gemAt(x: number, y: number) {
-    const g = this.m[y][x];
-    return g && g.name == EObstacleName.gem;
-  }
-
-  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
-    this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx, cardWidth) : o)));
-  }
-}
+//   constructor(name: string) {
+//     this.name = name;
+//   }
+//   /* eslint-disable @typescript-eslint/no-unused-vars */
+//   update(context: CanvasRenderingContext2D, cardWidth: number) {
+//     // console.warn("naughty update");
+//   }
+//   /* eslint-enable @typescript-eslint/no-unused-vars */
+// }
 
 // class Gem {
 //   x: number;
@@ -334,7 +113,7 @@ class Obstacles {
 class Board {
   size: number;
   cardMap: Card[][];
-  obstacles: Obstacles;
+  obstacles: Obstacles | undefined;
   gameover: boolean;
   constructor(size: number, createObstacles = true) {
     this.size = size;
@@ -344,7 +123,9 @@ class Board {
     }
     // obstacles
     if (createObstacles) {
-      this.obstacles = new Obstacles(size);
+      this.obstacles = new Obstacles(size, -1);
+    } else {
+      this.obstacles = undefined;
     }
     this.gameover = false;
   }
@@ -406,7 +187,8 @@ class Board {
   }
 
   unsetCard(x: number, y: number) {
-    this.cardMap[y][x] = undefined;
+    // this.cardMap[y][x] = undefined;
+    delete this.cardMap[y][x];
   }
 
   push(
@@ -420,6 +202,9 @@ class Board {
       return false;
     }
     // console.log("PUSHING", x, y, direction);
+    if (direction === EDirection.None) {
+      return false;
+    }
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
     const ny = yf(y);
@@ -507,7 +292,7 @@ class Board {
   }
 
   changeObstacleAt(x: number, y: number) {
-    this.obstacles.incrementObstacleAt(x, y);
+    this.obstacles?.incrementObstacleAt(x, y);
   }
 
   // can card `c` be played anywhere legally on `board`
@@ -515,10 +300,16 @@ class Board {
     // console.log("try to play c", c);
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        const keys = Object.keys(EDirection);
-        for (let ki = 0; ki < keys.length; ki++) {
-          const k = keys[ki];
-          if (this.pushC(i, j, EDirection[k], c, true)) {
+        // const keys = Object.keys(EDirection);
+        const dirs = [
+          EDirection.None,
+          EDirection.Up,
+          EDirection.Down,
+          EDirection.Left,
+          EDirection.Right,
+        ];
+        for (let ki = 0; ki < dirs.length; ki++) {
+          if (this.pushC(i, j, dirs[ki], c, true)) {
             return true;
           }
         }
