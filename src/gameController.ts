@@ -27,7 +27,11 @@ class CardEditor {
     this.cardWidth = 100;
     this.canvas.width = this.cardWidth * 3;
     this.canvas.height = this.cardWidth * 3;
-    this.context = this.canvas.getContext("2d");
+    const context = this.canvas.getContext("2d");
+    if (!context) {
+      throw "CANNOT GET CONTEXT 2D FOR EDITOR";
+    }
+    this.context = context;
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     // document.body.insertBefore("<br>", document.body.childNodes[0]);
@@ -95,8 +99,8 @@ class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.p1 = new Player(new Hand(3), colorDeck(3, "blue"));
-    this.p2 = new Player(new Hand(3), colorDeck(3, "red"));
+    this.p1 = new Player(new Hand(3), colorDeck(10, "blue"));
+    this.p2 = new Player(new Hand(3), colorDeck(10, "red"));
     for (let i = 0; i < 3; i++) {
       this.p1.draw(i);
       this.p2.draw(i);
@@ -119,11 +123,13 @@ class Game {
   update(ctx: CanvasRenderingContext2D, cardWidth: number) {
     this.board.update(ctx, cardWidth);
     const [b, r] = this.board.getScore();
-    if (b.toString() != document.getElementById("p1score").innerHTML) {
-      document.getElementById("p1score").innerHTML = b.toString();
+    const p1s = document.getElementById("p1score");
+    const p2s = document.getElementById("p2score");
+    if (p1s && b.toString() != p1s.innerHTML) {
+      p1s.innerHTML = b.toString();
     }
-    if (r.toString() != document.getElementById("p2score").innerHTML) {
-      document.getElementById("p2score").innerHTML = r.toString();
+    if (p2s && r.toString() != p2s.innerHTML) {
+      p2s.innerHTML = r.toString();
     }
   }
 }
@@ -141,7 +147,7 @@ class GameController {
   ctx: CanvasRenderingContext2D;
   frameNo: number;
 
-  constructor(boardSize) {
+  constructor(boardSize: number) {
     this.ce = new CardEditor();
 
     // this.canvas = document.createElement("canvas");
@@ -169,7 +175,11 @@ class GameController {
 
     // this.canvas.width = this.canvas.height;
     // this.cardWidth = this.canvas.width / this.boardSize();
-    this.context = this.canvas.getContext("2d");
+    const context = this.canvas.getContext("2d");
+    if (!context) {
+      throw "CANVAS GETCONTEXT FAIL";
+    }
+    this.context = context;
     this.ctx = this.context;
     // document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.frameNo = 0;
@@ -210,16 +220,16 @@ class GameController {
 
 export { GameController };
 
-export function xToCoord(x, cardWidth) {
+export function xToCoord(x: number, cardWidth: number) {
   return x * cardWidth;
 }
 
-export function yToCoord(y, cardWidth) {
+export function yToCoord(y: number, cardWidth: number) {
   return y * cardWidth;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-function everyinterval(n) {
+function everyinterval(n: number) {
   if ((gc.frameNo / n) % 1 == 0) {
     return true;
   }
@@ -230,7 +240,7 @@ function everyinterval(n) {
 let gc: GameController;
 try {
   console.log("CREATE GLOBAL GAME CONTROLLER");
-  gc = new GameController(6);
+  gc = new GameController(8);
 } catch (e) {
   console.warn("UNABLE TO CREATE CONTROLLER:", e);
 }

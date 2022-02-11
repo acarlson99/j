@@ -23,10 +23,11 @@ const dss = {
 };
 
 const opposites = {
-  [EDirection.Up]: [EDirection.Down],
-  [EDirection.Down]: [EDirection.Up],
-  [EDirection.Right]: [EDirection.Left],
-  [EDirection.Left]: [EDirection.Right],
+  [EDirection.Up]: EDirection.Down,
+  [EDirection.Down]: EDirection.Up,
+  [EDirection.Right]: EDirection.Left,
+  [EDirection.Left]: EDirection.Right,
+  [EDirection.None]: EDirection.None,
 };
 
 const directionToStr = (d: EDirection) => dss[d];

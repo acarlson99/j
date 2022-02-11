@@ -72,14 +72,7 @@ const doEvent = (() => {
   const cardHeld = [0, 0];
   let mapEditor = false;
 
-  // const c = (turn == 0 ? gc.game.p1 : gc.game.p2).handAt(cardHeld[turn]);
-  // console.log("HOLD", c);
-  // if (!c) console.log("CARD NOT FOUND");
-  // else gc.ce.setC(c);
-  // gc.ce.color = turn == 0 ? "blue" : "red";
-
   return function (e: KeyboardEvent) {
-    // console.log("--------------------");
     let p = turn == 0 ? gc.game.p1 : gc.game.p2;
     const cursor = gc.cursor;
     const cardHeldPos = cardHeld[turn];
@@ -101,7 +94,6 @@ const doEvent = (() => {
       if (cursor.pushHeldCard(EDirection.Up)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
-        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
         turn++;
       }
       break;
@@ -110,7 +102,6 @@ const doEvent = (() => {
       if (cursor.pushHeldCard(EDirection.Left)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
-        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck")
         turn++;
       }
       break;
@@ -119,7 +110,6 @@ const doEvent = (() => {
       if (cursor.pushHeldCard(EDirection.Down)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
-        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
         turn++;
       }
       break;
@@ -128,7 +118,6 @@ const doEvent = (() => {
       if (cursor.pushHeldCard(EDirection.Right)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
-        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
         turn++;
       }
       break;
@@ -139,12 +128,10 @@ const doEvent = (() => {
         cursor.boardEdit();
         break;
       }
-      // console.log(turn);
       cursor.holdCard(p.handAt(cardHeldPos));
       if (cursor.pushHeldCard(EDirection.None)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
-        // if (!p.draw(cardHeldPos)) console.warn("drawing from empty deck");
         turn++;
       }
       break;
@@ -157,18 +144,6 @@ const doEvent = (() => {
     case "3":
       cardHeld[turn] = Number(e.key) - 1;
       break;
-      // case "4":
-      //   const udlr = "udlr";
-      //   const stats = gc.ce.stats;
-      //   const k = udlr[Number(e.key) - 1];
-      //   if (k in stats) {
-      //     stats[k].v += 1;
-      //     if (stats[k].v > 3) delete stats[k];
-      //   } else {
-      //     stats[k] = { v: 1 };
-      //   }
-      //   break;
-      // // priority = Number(e.key);
     }
     turn = turn % 2;
     gc.ce.selectCard(cardHeld[turn], turnC[turn]);
@@ -176,19 +151,19 @@ const doEvent = (() => {
     console.log("HAND:", p.h.cs);
     console.log("decksize:", p.d.size());
     // check if valid move exists
-    let thing = false;
+    let playableMove = false;
     const cs = p.hand();
     console.log("BEGIN CAN BE PLAYED CHECK");
     for (let i = 0; i < cs.length; i++) {
       const c = cs[i];
       const canBePlayed = gc.game.board.canBePlayed(c);
       if (canBePlayed) {
-        thing = true;
+        playableMove = true;
         break;
       }
     }
     console.log("END CAN BE PLAYED CHECK");
-    if (!thing) {
+    if (!playableMove) {
       console.log("no possible moves");
     }
 

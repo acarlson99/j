@@ -2,6 +2,7 @@
 
 // import { cardWidth } from "./gameController";
 import { EDirection, opposites, directionToStr } from "./board";
+import { clamp } from "./util";
 
 // function rock() {
 //   var c = new Card("brown", "rock", {});
@@ -35,11 +36,7 @@ class Card {
   color: string;
   name: string;
   stats: any;
-  colors = {
-    1: "black",
-    2: "white",
-    3: "maroon",
-  };
+  colors = ["black", "white", "maroon"];
 
   constructor(color: string, name: string, stats: any) {
     // console.log("construct card");
@@ -118,7 +115,7 @@ class Card {
       if (!(s.v > 0)) {
         return;
       }
-      const c = this.colors[s.v];
+      const c = this.colors[clamp(0, s.v, 3)];
       ctx.fillStyle = c;
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
     });

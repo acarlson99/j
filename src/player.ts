@@ -29,7 +29,8 @@ class Hand {
       throw "`pop(" + String(i) + ") exceeds size " + String(this.size);
     }
     const c = this.cs[i];
-    this.cs[i] = undefined;
+    // this.cs[i] = undefined;
+    delete this.cs[i];
     return c;
   }
 
@@ -50,7 +51,11 @@ class Player {
   draw(i: number) {
     console.log("drawing into handpos", i);
     if (this.d.size() > 0) {
-      return this.h.push(i, this.d.draw());
+      const c = this.d.draw();
+      if (!c) {
+        return false;
+      }
+      return this.h.push(i, c);
     } else {
       return false;
     }
@@ -69,7 +74,7 @@ class Player {
     return true;
   }
 
-  handAt(i) {
+  handAt(i: number) {
     console.log("PLAYER HAND", this.h);
     return this.h.cs[i];
   }

@@ -8,14 +8,14 @@ import { Card } from "./card";
 
 class Cursor {
   size: number;
-  game: Game;
-  ce: any;
+  game: Game | undefined;
+  ce: CardEditor | undefined;
   x: number;
   y: number;
   heldCard: any;
 
-  constructor(game: Game, ce: CardEditor) {
-    this.size = game?.boardSize();
+  constructor(game: Game | undefined, ce: CardEditor | undefined) {
+    this.size = game?.boardSize() || 0;
     this.game = game;
     this.ce = ce;
     this.x = Math.floor(this.size / 2);
@@ -52,7 +52,7 @@ class Cursor {
     console.log("cursor push", this.x, this.y, direction);
     // const c = this.game.board.getCard(this.x, this.y);
     // if (!c || !this.heldCard) return false;
-    const pushed = this.game.pushC(this.x, this.y, direction, this.heldCard);
+    const pushed = this.game?.pushC(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) {
       return false;
@@ -60,11 +60,14 @@ class Cursor {
     this.heldCard = undefined;
 
     // FIXME: this does not belong here
-    const winner = this.game.board.checkWin();
+    const winner = this.game?.board.checkWin();
     if (winner) {
-      document.getElementById(
+      const winnerScore = document.getElementById(
         winner == 1 ? "p1score" : "p2score"
-      ).style.background = "lavender";
+      );
+      if (winnerScore) {
+        winnerScore.style.background = "lavender";
+      }
     }
     console.log("push success");
     return true;
@@ -72,7 +75,7 @@ class Cursor {
 
   boardEdit() {
     console.log("board edit made");
-    this.game.board.changeObstacleAt(this.x, this.y);
+    this.game?.board.changeObstacleAt(this.x, this.y);
   }
 
   // placeHeldCard() {

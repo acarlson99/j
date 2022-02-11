@@ -2,7 +2,7 @@
 
 import { Card } from "./card";
 
-export function clamp(l, n, u) {
+export function clamp(l: number, n: number, u: number) {
   if (n < l) {
     return l;
   } else if (n > u) {
@@ -13,14 +13,14 @@ export function clamp(l, n, u) {
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-const trouppleAcolyte = (color) =>
+const trouppleAcolyte = (color: string) =>
   new Card(color, "Troupple Acolyte", {
     l: { v: 1 },
     r: { v: 2 },
     d: { v: 1 },
   });
 
-const shieldKnight = (color) =>
+const shieldKnight = (color: string) =>
   new Card(color, "Shield Knight", {
     l: {
       v: 2,
@@ -36,31 +36,31 @@ const shieldKnight = (color) =>
     },
   });
 
-const propellerRat = (color, p) =>
+const propellerRat = (color: string, p: number) =>
   new Card(color, "Propeller Rat", {
     u: { v: p ? p : 1 },
   });
 
-const blitzsteed = (color, p) =>
+const blitzsteed = (color: string, p: number) =>
   new Card(color, "blitzsteed", {
     l: { v: p ? p : 1 },
   });
 
-const blorb = (color, p) =>
+const blorb = (color: string, p: number) =>
   new Card(color, "blorb", {
     d: { v: p ? p : 1 },
   });
 
-const beeto = (color, p) =>
+const beeto = (color: string, p: number) =>
   new Card(color, "beeto", {
     r: { v: p ? p : 1 },
   });
 
-function cardtob(v) {
+function cardtob(v: any) {
   return btoa(JSON.stringify(v));
 }
 
-function btocard(v) {
+function btocard(v: string) {
   return JSON.parse(atob(v));
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
