@@ -43,17 +43,13 @@ class Updater {
     const w = window.innerWidth;
     const h = window.innerHeight;
     const scw = h + (h / this.boardSize) * 3;
-    const sch = w - (w / this.boardSize) * 3;
-    // console.log(w, h, scw);
     if (w >= scw) {
       this.canvas.height = h;
       this.canvas.width = scw;
-      return true;
     } else {
-      // TODO: fix this to avoid weird gap on skinny window
-      this.canvas.height = sch;
+      // TODO: avoid big margin on botton with skinny window
+      this.canvas.height = h;
       this.canvas.width = w;
-      return true;
     }
   }
 
