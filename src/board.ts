@@ -357,7 +357,7 @@ class Board {
   }
 
   update() {
-    Updater.Instance.update(this);
+    Updater.Instance.updateBoard(this);
     for (let i = 0; i < Updater.Instance.boardSize; i++) {
       for (let j = 0; j < Updater.Instance.boardSize; j++) {
         const c = this.getCard(i, j);

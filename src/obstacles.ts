@@ -28,7 +28,7 @@ class Obstacle {
   }
   /* eslint-disable @typescript-eslint/no-unused-vars */
   update() {
-    Updater.Instance.update(this);
+    Updater.Instance.updateObstacle(this.name, this.x, this.y);
     // console.warn("naughty update");
   }
   /* eslint-enable @typescript-eslint/no-unused-vars */

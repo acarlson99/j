@@ -37,7 +37,9 @@
    - [ ] Automate deploy build:
 	 - must take into account that this will be deployed under '/j'
 ** [-] Full Game [0/4]:
- - [ ] Multi-screen layout
+ - [ ] Display:
+   - [ ] Multi-screen layout
+   - [ ] Major graphics refactor, single canvas for whole screen
  - [-] Pushing [0/2]:
    - [ ] Push fail reasons:
 	 - If a push fails, return an explanation of why it is illegal

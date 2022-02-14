@@ -26,7 +26,7 @@ class CEBoard extends Board {
 
 class CECursor extends Cursor {
   update() {
-    Updater.Instance.update(
+    Updater.Instance.updateCursor(
       this,
       Updater.Instance.boardSize + this.y,
       this.x > 0 ? Updater.Instance.boardSize - 1 : 0
@@ -60,7 +60,7 @@ class CardEditor {
     console.log(this.board);
   }
   update() {
-    Updater.Instance.update(this);
+    Updater.Instance.updateCardEditor(this);
     const h1 = gc.game.p1.hand();
     const h2 = gc.game.p2.hand();
     for (let i = 0; i < 3; i++) {
@@ -120,15 +120,7 @@ class Game {
     this.board.update();
     // TODO: draw score
     const [s1, s2] = this.board.getScore();
-    Updater.Instance.update(this, s1, s2);
-    // const [b, r] = this.board.getScore();
-    // const p1s = document.getElementById("p1score");
-    // const p2s = document.getElementById("p2score");
-    // if (p1s && b.toString() != p1s.innerHTML) {
-    //   p1s.innerHTML = b.toString();
-    // }
-    // if (p2s && r.toString() != p2s.innerHTML) {
-    //   p2s.innerHTML = r.toString();
+    Updater.Instance.updateGame(this, s1, s2);
   }
 }
 
@@ -136,20 +128,14 @@ export { Game };
 
 class GameController {
   ce: CardEditor;
-  // canvas: HTMLCanvasElement;
   interval: any;
   game: Game;
   cursor: Cursor;
   boardSize: () => number;
-  // context: CanvasRenderingContext2D;
-  // ctx: CanvasRenderingContext2D;
   frameNo: number;
 
   constructor(boardSize: number) {
     this.ce = new CardEditor();
-
-    // this.canvas = document.createElement("canvas");
-    // this.canvas = document.getElementById("boardCanvas") as HTMLCanvasElement;
     this.interval = undefined;
 
     this.game = new Game(boardSize);
@@ -162,37 +148,13 @@ class GameController {
     console.log("GAEM", this.game);
   }
 
-  // getCardSize() {
-  //   // NOTE: using `ceil` instead of `floor` to avoid weird looking margins
-  //   return Math.ceil(
-  //     Math.min(this.canvas.width, this.canvas.height) / this.boardSize()
-  //   );
-  // }
-
   update() {
-    // dynamic resizing lol
-    // this.canvas.width = window.innerWidth;
-    // this.canvas.height = window.innerHeight;
-
     // clear
-    Updater.Instance.update(this);
-
+    Updater.Instance.updateGameController(this);
     // update
-    // console.log("editor");
     this.ce?.update();
-    // console.log("GAME");
     this.game.update();
-    // console.log("cursor");
     this.cursor.update();
-
-    // this.board.update(this.ctx);
-    // this.cursor.update(this.ctx);
-    // this.ce.update();
-    // const [b, r] = this.board.getScore();
-    // if (b != document.getElementById("p1score").innerHTML)
-    //   document.getElementById("p1score").innerHTML = b;
-    // if (r != document.getElementById("p2score").innerHTML)
-    //   document.getElementById("p2score").innerHTML = r;
   }
 }
 

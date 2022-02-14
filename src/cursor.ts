@@ -83,7 +83,7 @@ class Cursor {
   // }
 
   update() {
-    Updater.Instance.update(this, this.x, this.y);
+    Updater.Instance.updateCursor(this, this.x, this.y);
   }
 }
 

@@ -68,15 +68,7 @@ class Card {
   }
 
   update(x: number, y: number) {
-    Updater.Instance.update(this, x, y);
-    // ctx.fillStyle = this.color;
-    // ctx.fillRect(x, y, cardWidth, cardWidth);
-    // ctx.fillStyle = "black";
-    // if (this.stats) {
-    //   this.drawArrows(ctx, x, y, cardWidth);
-    // } else {
-    //   console.warn("no stats");
-    // }
+    Updater.Instance.updateCard(this, x, y);
   }
   copy() {
     return new Card(this.color, name, this.stats);
