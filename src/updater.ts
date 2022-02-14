@@ -4,7 +4,8 @@ import { Card } from "./card";
 import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { EObstacleName } from "./obstacles";
-import { GameController, CardEditor, Game } from "./gameController";
+import { GameController, Game } from "./gameController";
+import { CardEditor } from "./cardEditor";
 import { clamp } from "./util";
 
 class Updater {
@@ -21,13 +22,13 @@ class Updater {
     }
     this.boardSize = 1;
     this.canvas = document.createElement("canvas");
-    this.updateWH();
     const ctx = this.canvas.getContext("2d");
     if (!ctx) {
       throw "CANVAS GETCONTEXT FAIL";
     }
     this.ctx = ctx;
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    this.updateWH();
   }
 
   public static get Instance() {
@@ -39,8 +40,21 @@ class Updater {
   }
 
   updateWH() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const scw = h + (h / this.boardSize) * 3;
+    const sch = w - (w / this.boardSize) * 3;
+    // console.log(w, h, scw);
+    if (w >= scw) {
+      this.canvas.height = h;
+      this.canvas.width = scw;
+      return true;
+    } else {
+      // TODO: fix this to avoid weird gap on skinny window
+      this.canvas.height = sch;
+      this.canvas.width = w;
+      return true;
+    }
   }
 
   xToCoord(x: number, cardWidth: number) {
@@ -53,9 +67,9 @@ class Updater {
 
   getCardWidth() {
     // NOTE: using `ceil` instead of `floor` to avoid weird looking margins
-    return Math.ceil(
-      Math.min(this.canvas.width, this.canvas.height) /
-        Updater.Instance.boardSize
+    return Math.min(
+      Math.ceil(this.canvas.width / (this.boardSize + 3)),
+      Math.ceil(this.canvas.height / this.boardSize)
     );
   }
 

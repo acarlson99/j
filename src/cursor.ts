@@ -2,7 +2,8 @@
 
 import { clamp } from "./util";
 import { EDirection } from "./board";
-import { Game, CardEditor } from "./gameController";
+import { Game } from "./gameController";
+import { CardEditor } from "./cardEditor";
 import { Card } from "./card";
 import { Updater } from "./updater";
 
