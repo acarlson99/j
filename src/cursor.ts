@@ -1,10 +1,10 @@
 "use strict";
 
-import { xToCoord, yToCoord } from "./gameController";
 import { clamp } from "./util";
 import { EDirection } from "./board";
 import { Game, CardEditor } from "./gameController";
 import { Card } from "./card";
+import { Updater } from "./updater";
 
 class Cursor {
   size: number;
@@ -82,16 +82,8 @@ class Cursor {
   //   return this.pushHeldCard(EDirection.None);
   // }
 
-  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
-    ctx.lineWidth = 10;
-    ctx.beginPath();
-    ctx.rect(
-      xToCoord(this.x, cardWidth) + ctx.lineWidth / 2,
-      yToCoord(this.y, cardWidth) + ctx.lineWidth / 2,
-      cardWidth - ctx.lineWidth,
-      cardWidth - ctx.lineWidth
-    );
-    ctx.stroke();
+  update() {
+    Updater.Instance.update(this, this.x, this.y);
   }
 }
 

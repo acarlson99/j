@@ -1,4 +1,4 @@
-import { xToCoord, yToCoord } from "./gameController";
+import { Updater } from "./updater";
 
 enum EObstacleName {
   gem = "gem",
@@ -14,6 +14,8 @@ const obstacleList = [
   EObstacleName.pitfall,
 ];
 
+export { EObstacleName };
+
 class Obstacle {
   name: EObstacleName;
   x: number;
@@ -25,7 +27,8 @@ class Obstacle {
     this.y = -1;
   }
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  update(context: CanvasRenderingContext2D, cardWidth: number) {
+  update() {
+    Updater.Instance.update(this);
     // console.warn("naughty update");
   }
   /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -36,72 +39,60 @@ function makeObstacle(name: EObstacleName) {
 
   const o = new Obstacle(name);
 
-  switch (name) {
-  case EObstacleName.gem:
-    o.update = function (
-      context: CanvasRenderingContext2D,
-      cardWidth: number
-    ) {
-      const radius = cardWidth / 3;
-      const centerX = xToCoord(this.x, cardWidth) + cardWidth / 2;
-      const centerY = yToCoord(this.y, cardWidth) + cardWidth / 2;
+  // switch (name) {
+  //   case EObstacleName.gem:
+  //     o.update = function () {
+  //       const radius = cardWidth / 3;
+  //       const centerX = xToCoord(this.x, cardWidth) + cardWidth / 2;
+  //       const centerY = yToCoord(this.y, cardWidth) + cardWidth / 2;
 
-      context.beginPath();
-      context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      context.fillStyle = "lavender";
-      context.fill();
-      context.lineWidth = 5;
-      context.strokeStyle = "#003300";
-      context.stroke();
-    };
-    break;
-  case EObstacleName.illegal:
-    o.update = function (
-      context: CanvasRenderingContext2D,
-      cardWidth: number
-    ) {
-      context.fillStyle = "grey";
-      context.fillRect(
-        xToCoord(this.x, cardWidth),
-        yToCoord(this.y, cardWidth),
-        cardWidth,
-        cardWidth
-      );
-    };
-    break;
-  case EObstacleName.graveyard:
-    o.update = function (
-      context: CanvasRenderingContext2D,
-      cardWidth: number
-    ) {
-      context.globalAlpha = 0.75;
-      context.fillStyle = "darkgreen";
-      context.fillRect(
-        xToCoord(this.x, cardWidth),
-        yToCoord(this.y, cardWidth),
-        cardWidth,
-        cardWidth
-      );
-      context.globalAlpha = 1.0;
-    };
-    break;
-  case EObstacleName.pitfall:
-    o.update = function (
-      context: CanvasRenderingContext2D,
-      cardWidth: number
-    ) {
-      context.globalAlpha = 0.5;
-      context.fillStyle = "brown";
-      context.fillRect(
-        xToCoord(this.x, cardWidth),
-        yToCoord(this.y, cardWidth),
-        cardWidth,
-        cardWidth
-      );
-      context.globalAlpha = 1.0;
-    };
-    break;
-  }
+  //       context.beginPath();
+  //       context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+  //       context.fillStyle = "lavender";
+  //       context.fill();
+  //       context.lineWidth = 5;
+  //       context.strokeStyle = "#003300";
+  //       context.stroke();
+  //     };
+  //     break;
+  //   case EObstacleName.illegal:
+  //     o.update = function () {
+  //       context.fillStyle = "grey";
+  //       context.fillRect(
+  //         xToCoord(this.x, cardWidth),
+  //         yToCoord(this.y, cardWidth),
+  //         cardWidth,
+  //         cardWidth
+  //       );
+  //     };
+  //     break;
+  //   case EObstacleName.graveyard:
+  //     o.update = function () {
+  //       context.globalAlpha = 0.75;
+  //       context.fillStyle = "darkgreen";
+  //       context.fillRect(
+  //         xToCoord(this.x, cardWidth),
+  //         yToCoord(this.y, cardWidth),
+  //         cardWidth,
+  //         cardWidth
+  //       );
+  //       context.globalAlpha = 1.0;
+  //     };
+  //     break;
+  //   case EObstacleName.pitfall:
+  //     o.update = function () {
+  //       context.globalAlpha = 0.5;
+  //       context.fillStyle = "brown";
+  //       context.fillRect(
+  //         xToCoord(this.x, cardWidth),
+  //         yToCoord(this.y, cardWidth),
+  //         cardWidth,
+  //         cardWidth
+  //       );
+  //       context.globalAlpha = 1.0;
+  //     };
+  //     break;
+  // }
   return o;
 }
 
@@ -242,9 +233,9 @@ class Obstacles {
     return g && g.name == EObstacleName.gem;
   }
 
-  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
-    this.m.forEach((a) => a.forEach((o) => (o ? o.update(ctx, cardWidth) : o)));
+  update() {
+    this.m.forEach((a) => a.forEach((o) => (o ? o.update() : o)));
   }
 }
 
-export { Obstacles };
+export { Obstacles, Obstacle };

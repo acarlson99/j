@@ -1,10 +1,9 @@
 "use strict";
 
-import { xToCoord, yToCoord } from "./gameController";
-// import { cardWidth } from "./gameController";
 import { clamp } from "./util";
 import { Card, statDirection } from "./card";
 import { Obstacles } from "./obstacles";
+import { Updater } from "./updater";
 
 enum EDirection {
   None = "NONE",
@@ -357,21 +356,18 @@ class Board {
     return v;
   }
 
-  update(ctx: CanvasRenderingContext2D, cardWidth: number) {
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
+  update() {
+    Updater.Instance.update(this);
+    for (let i = 0; i < Updater.Instance.boardSize; i++) {
+      for (let j = 0; j < Updater.Instance.boardSize; j++) {
         const c = this.getCard(i, j);
         if (c && c.update) {
-          c.update(
-            ctx,
-            xToCoord(i, cardWidth),
-            yToCoord(j, cardWidth),
-            cardWidth
-          );
+          c.update(i, j);
         }
       }
     }
-    this.obstacles?.update(ctx, cardWidth);
+
+    this.obstacles?.update();
   }
 }
 

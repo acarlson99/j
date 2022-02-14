@@ -2,7 +2,7 @@
 
 // import { cardWidth } from "./gameController";
 import { EDirection, opposites, directionToStr } from "./board";
-import { clamp } from "./util";
+import { Updater } from "./updater";
 
 // function rock() {
 //   var c = new Card("brown", "rock", {});
@@ -36,7 +36,7 @@ class Card {
   color: string;
   name: string;
   stats: any;
-  colors = ["black", "white", "maroon"];
+  // colors = ["black", "white", "maroon"];
 
   constructor(color: string, name: string, stats: any) {
     // console.log("construct card");
@@ -67,73 +67,16 @@ class Card {
     return p < priority;
   }
 
-  drawArrows(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    cardWidth: number
-  ) {
-    // 1/5 wide/ 3/5 long
-    const border = 2;
-    const margin = cardWidth / 5;
-    const width = cardWidth / 5 - border;
-    ctx.fillStyle = "black";
-    const arrowFuncs = [
-      {
-        d: "l",
-        v: [x + border, y + margin, width, cardWidth - margin * 2],
-      },
-      {
-        d: "r",
-        v: [
-          x + cardWidth - width - border,
-          y + margin,
-          width,
-          cardWidth - margin * 2,
-        ],
-      },
-      {
-        d: "u",
-        v: [x + margin, y + border, cardWidth - margin * 2, width],
-      },
-      {
-        d: "d",
-        v: [
-          x + margin,
-          y + cardWidth - width - border,
-          cardWidth - margin * 2,
-          width,
-        ],
-      },
-    ];
-
-    arrowFuncs.forEach((e) => {
-      if (!(e.d in this.stats)) {
-        return;
-      }
-      const s = this.stats[e.d];
-      if (!(s.v > 0)) {
-        return;
-      }
-      const c = this.colors[clamp(0, s.v, 3)];
-      ctx.fillStyle = c;
-      ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
-    });
-  }
-  update(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    cardWidth: number
-  ) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(x, y, cardWidth, cardWidth);
-    ctx.fillStyle = "black";
-    if (this.stats) {
-      this.drawArrows(ctx, x, y, cardWidth);
-    } else {
-      console.warn("no stats");
-    }
+  update(x: number, y: number) {
+    Updater.Instance.update(this, x, y);
+    // ctx.fillStyle = this.color;
+    // ctx.fillRect(x, y, cardWidth, cardWidth);
+    // ctx.fillStyle = "black";
+    // if (this.stats) {
+    //   this.drawArrows(ctx, x, y, cardWidth);
+    // } else {
+    //   console.warn("no stats");
+    // }
   }
   copy() {
     return new Card(this.color, name, this.stats);

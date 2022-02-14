@@ -6,65 +6,19 @@ window.addEventListener("error", function (event) {
 
 import { gc } from "./gameController";
 import { EDirection } from "./board";
+import { Updater } from "./updater";
 
 function startGame() {
-  // for (var i = 1; i < gc.boardSize() - 1; i++) {
-  //   for (var j = 1; j < gc.boardSize() - 1; j++) {
-  //     let c = trouppleAcolyte((i + j) % 2 == 0 ? "blue" : "red");
-  //     if (i % 2 == 0) {
-  //       c = shieldKnight(c.color);
-  //     }
-  //     gc.game.board.setCard(i, j, c);
-  //   }
-  // }
   gc.interval = setInterval(updateGameArea, 20);
 }
 
 function updateGameArea() {
+  Updater.Instance.updateBoardSize(gc.boardSize());
+  Updater.Instance.updateWH();
   gc.update();
 }
 
-// const cardNames = {
-//   "Cloaked Figure": {
-//     blue:
-//       "https://static.wikia.nocookie.net/shovelknight/images/8/8b/CardCloakedFigure.png",
-//     red:
-//       "https://static.wikia.nocookie.net/shovelknight/images/d/d3/RedCardCloakedFigure.png",
-//   },
-//   "Shovel Knight": {
-//     blue:
-//       "https://static.wikia.nocookie.net/shovelknight/images/e/e5/CardShovelKnight.png",
-//     red:
-//       "https://static.wikia.nocookie.net/shovelknight/images/c/c7/RedCardShovelKnight.png",
-//   },
-//   "Troupple Acolyte": {
-//     blue:
-//       "https://static.wikia.nocookie.net/shovelknight/images/a/a8/CardTrouppleAcolyte.png",
-//     red:
-//       "https://static.wikia.nocookie.net/shovelknight/images/a/a5/RedCardTrouppleAcolyte.png/revision/latest?cb=20200316213347",
-//   },
-// };
-
-// const arrowImg = new Image(cardWidth, cardWidth);
-// arrowImg.src = "http://cdn.onlinewebfonts.com/svg/img_209407.png";
-
 startGame();
-
-// console.log(gc.board.push(6, 6, "l"));
-// console.log(gc.board.push(5, 6, "u"));
-// console.log(gc.board.push(5, 5, "l"));
-// console.log(gc.board.push(4, 5, "u"));
-
-// const keyFuncs = {
-//   ArrowUp: () => cursor.move('u'),
-//   ArrowDown: () => cursor.move('d'),
-//   ArrowLeft: () => cursor.move('l'),
-//   ArrowRight: () => cursor.move('r'),
-//   w: () => cursor.push('u'),
-//   s: () => cursor.push('d'),
-//   a: () => cursor.push('l'),
-//   d: () => cursor.push('r'),
-// }
 
 const doEvent = (() => {
   let turn = 0;
@@ -179,9 +133,9 @@ const doEvent = (() => {
 
 document.onkeydown = (e) => {
   console.log(e);
-  const e_ = e || window.event;
+  // const e_ = e || window.event;
 
-  doEvent(e_);
+  doEvent(e);
 };
 
 import { cardTest } from "./regressionTest";
