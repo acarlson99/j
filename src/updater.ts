@@ -62,10 +62,9 @@ class Updater {
   }
 
   getCardWidth() {
-    // NOTE: using `ceil` instead of `floor` to avoid weird looking margins
     return Math.min(
-      Math.ceil(this.canvas.width / (this.boardSize + 3)),
-      Math.ceil(this.canvas.height / this.boardSize)
+      Math.floor(this.canvas.width / (this.boardSize + 3)),
+      Math.floor(this.canvas.height / this.boardSize)
     );
   }
 

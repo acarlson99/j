@@ -56,59 +56,22 @@ const directionF = {
   [EDirection.None]: undefined,
 };
 
-// class Obstacle {
-//   name: string;
+enum PushErrno {
+  ObstacleInTheWay = "Obstacle in the way {0} {1}",
+  OutOfBounds = "Out of bounds {0} {1}",
+  NoCardAt = "No card at {0} {1}",
+  CardAt = "Card at {0} {1}",
+  CannotPushCard = "Cannot push card at {0} {1} {2} with priority {3} vs {4}",
+  CannotPushIntoObject = "Cannot push into {0} {1}",
+  NotSettable = "Not a settable position {0} {1}",
+  NoArrowPointingInDirection = "No arrow pointing in direction {0}",
+}
 
-//   constructor(name: string) {
-//     this.name = name;
-//   }
-//   /* eslint-disable @typescript-eslint/no-unused-vars */
-//   update(context: CanvasRenderingContext2D, cardWidth: number) {
-//     // console.warn("naughty update");
-//   }
-//   /* eslint-enable @typescript-eslint/no-unused-vars */
-// }
-
-// class Gem {
-//   x: number;
-//   y: number;
-//   name: EObstacleName;
-//   // update: (context: any) => void;
-
-//   constructor(x: number, y: number) {
-//     this.x = x;
-//     this.y = y;
-//     this.name = EObstacleName.gem;
-//   }
-//   update(context) {
-//     const radius = cardWidth / 3;
-//     const centerX = xToCoord(this.x) + cardWidth / 2;
-//     const centerY = yToCoord(this.y) + cardWidth / 2;
-
-//     context.beginPath();
-//     context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-//     context.fillStyle = "lavender";
-//     context.fill();
-//     context.lineWidth = 5;
-//     context.strokeStyle = "#003300";
-//     context.stroke();
-//   }
-// }
-
-// class Illegal {
-//   x: number;
-//   y: number;
-//   name: EObstacleName;
-//   constructor(x: number, y: number) {
-//     this.x = x;
-//     this.y = y;
-//     this.name = EObstacleName.illegal;
-//   }
-//   update(context: CanvasRenderingContext2D) {
-//     context.fillStyle = "grey";
-//     context.fillRect(xToCoord(this.x), yToCoord(this.y), cardWidth, cardWidth);
-//   }
-// }
+class PushError extends Error {
+  constructor(errno: PushErrno, ...args: any) {
+    super(String(errno).format(...args));
+  }
+}
 
 class Board {
   size: number;
@@ -163,6 +126,7 @@ class Board {
     }
     // cannot place on gem
     if (!this.canSet(x, y)) {
+      throw new PushError(PushErrno.ObstacleInTheWay, x, y);
       return false;
     }
     return this.setCard_(x, y, c, dontSet);
@@ -178,6 +142,7 @@ class Board {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
     if (!this.inBounds(x, y)) {
+      throw new PushError(PushErrno.OutOfBounds, x, y);
       return false;
     }
     if (!dontSet) {
@@ -213,21 +178,32 @@ class Board {
     // console.log(nx, ny);
 
     if (!this.inBounds(nx, ny)) {
+      throw new PushError(PushErrno.OutOfBounds, nx, ny);
       return false;
     }
 
     // find if it can push the next Card
     const c = this.getCard(x, y);
     if (!c) {
+      throw new PushError(PushErrno.NoCardAt, x, y);
       return undefined;
     } else if (!c.canBePushed(direction, priority)) {
       // can this Card be pushed in direction
       // console.log("cannot be pushed");
+      throw new PushError(
+        PushErrno.CannotPushCard,
+        x,
+        y,
+        direction,
+        priority,
+        statDirection(c.stats, opposites[direction])?.v
+      );
       return false;
     }
     const nc = this.getCard(nx, ny);
     // cannot push card into obstacle
     if (this.obstacles && !this.obstacles.isPushable(nx, ny)) {
+      throw new PushError(PushErrno.ObstacleInTheWay, nx, ny);
       return false;
     }
     if (nc !== undefined) {
@@ -263,31 +239,47 @@ class Board {
       return false;
     }
     // console.log("dir", direction, EDirection.None);
-    if (direction != EDirection.None) {
-      if (this.obstacles && !this.obstacles.isSettable(x, y, true)) {
+    try {
+      if (direction != EDirection.None) {
+        if (this.obstacles && !this.obstacles.isSettable(x, y, true)) {
+          throw new PushError(PushErrno.NotSettable, x, y);
+          return false;
+        }
+        // console.log("NOT NONE");
+        // console.log("C:", c);
+        // console.log("dir", direction);
+        // cannot push in direction
+        // console.log("CAN PUSH", c.canPush(direction));
+        const p = statDirection(c.stats, direction)?.v;
+        if (!p) {
+          throw new PushError(PushErrno.NoArrowPointingInDirection, direction);
+        }
+        // console.log("priority", p, direction);
+        // if (!c.canBePushed(direction, p)) return false;
+        if (p && this.push(x, y, direction, p, dontPush)) {
+          return this.setCard_(x, y, c, dontPush);
+        }
         return false;
+      } else {
+        if (this.obstacles && !this.obstacles.isSettable(x, y, false)) {
+          throw new PushError(PushErrno.ObstacleInTheWay, x, y);
+        } else if (this.getCard(x, y)) {
+          // console.log("got a card :/");
+          throw new PushError(PushErrno.CardAt, x, y);
+          return false;
+        }
+        return this.setCard(x, y, c, dontPush);
       }
-      // console.log("NOT NONE");
-      // console.log("C:", c);
-      // console.log("dir", direction);
-      // cannot push in direction
-      // console.log("CAN PUSH", c.canPush(direction));
-      const p = statDirection(c.stats, direction)?.v;
-      // console.log("priority", p, direction);
-      // if (!c.canBePushed(direction, p)) return false;
-      if (p && this.push(x, y, direction, p, dontPush)) {
-        return this.setCard_(x, y, c, dontPush);
+    } catch (err) {
+      if (!(err instanceof PushError)) {
+        throw err;
       }
+      if (dontPush) {
+        return false;
+      } // ABSOLUTELY NO IO IF NOT ATTEMPTING A PUSH
+      // TODO: do something with this
+      console.log("caught appropriate error", err);
       return false;
-    } else {
-      if (
-        (this.obstacles && !this.obstacles.isSettable(x, y, false)) ||
-        this.getCard(x, y)
-      ) {
-        // console.log("got a card :/");
-        return false;
-      }
-      return this.setCard(x, y, c, dontPush);
     }
   }
 
@@ -309,8 +301,12 @@ class Board {
           EDirection.Right,
         ];
         for (let ki = 0; ki < dirs.length; ki++) {
-          if (this.pushC(i, j, dirs[ki], c, true)) {
-            return true;
+          try {
+            if (this.pushC(i, j, dirs[ki], c, true)) {
+              return true;
+            }
+          } catch {
+            continue;
           }
         }
       }

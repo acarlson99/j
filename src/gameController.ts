@@ -4,7 +4,7 @@ import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { colorDeck } from "./deck";
 import { EDirection } from "./board";
-import { Card, Rock } from "./card";
+import { Card } from "./card";
 import { Player, Hand } from "./player";
 import { Updater } from "./updater";
 import { CardEditor } from "./cardEditor";
@@ -32,8 +32,6 @@ class Game {
     this.boardSize = function () {
       return this.board.size;
     };
-    this.board.setCard(1, 1, new Rock());
-    // console.log("set rock:", this.board.setCard(1, 1, new Rock()));
     console.log(this.board);
 
     this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
