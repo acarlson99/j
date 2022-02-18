@@ -1,6 +1,6 @@
 "use strict";
 
-import { clamp } from "./util";
+import { clamp, FString } from "./util";
 import { Card, statDirection } from "./card";
 import { Obstacles } from "./obstacles";
 import { Updater } from "./updater";
@@ -21,6 +21,14 @@ const dss = {
   [EDirection.Right]: "r",
 };
 
+const sds = {
+  [dss[EDirection.None]]: EDirection.None,
+  [dss[EDirection.Up]]: EDirection.Up,
+  [dss[EDirection.Down]]: EDirection.Down,
+  [dss[EDirection.Left]]: EDirection.Left,
+  [dss[EDirection.Right]]: EDirection.Right,
+};
+
 const opposites = {
   [EDirection.Up]: EDirection.Down,
   [EDirection.Down]: EDirection.Up,
@@ -33,16 +41,16 @@ const directionToStr = (d: EDirection) => dss[d];
 
 const strToDirection = (s: string) => {
   switch (s) {
-  case EDirection.Up:
-    return EDirection.Up;
-  case EDirection.Down:
-    return EDirection.Down;
-  case EDirection.Left:
-    return EDirection.Left;
-  case EDirection.Right:
-    return EDirection.Right;
-  default:
-    throw "strToDirection invalid string: '" + s + "'";
+    case EDirection.Up:
+      return EDirection.Up;
+    case EDirection.Down:
+      return EDirection.Down;
+    case EDirection.Left:
+      return EDirection.Left;
+    case EDirection.Right:
+      return EDirection.Right;
+    default:
+      throw "strToDirection invalid string: '" + s + "'";
   }
 };
 
@@ -53,7 +61,7 @@ const directionF = {
   [EDirection.Down]: [(x: number) => x, (y: number) => y + 1],
   [EDirection.Left]: [(x: number) => x - 1, (y: number) => y],
   [EDirection.Right]: [(x: number) => x + 1, (y: number) => y],
-  [EDirection.None]: undefined,
+  [EDirection.None]: [(x: number) => x, (y: number) => y],
 };
 
 enum PushErrno {
@@ -68,8 +76,12 @@ enum PushErrno {
 }
 
 class PushError extends Error {
+  errno: PushErrno;
+  args: any;
   constructor(errno: PushErrno, ...args: any) {
-    super(String(errno).format(...args));
+    super(new FString(errno).format(...args));
+    this.errno = errno;
+    this.args = args;
   }
 }
 
@@ -256,10 +268,9 @@ class Board {
         }
         // console.log("priority", p, direction);
         // if (!c.canBePushed(direction, p)) return false;
-        if (p && this.push(x, y, direction, p, dontPush)) {
-          return this.setCard_(x, y, c, dontPush);
-        }
-        return false;
+        if (!(p && this.push(x, y, direction, p, dontPush))) return false;
+        let didSet = this.setCard_(x, y, c, dontPush);
+        if (!didSet) return didSet;
       } else {
         if (this.obstacles && !this.obstacles.isSettable(x, y, false)) {
           throw new PushError(PushErrno.ObstacleInTheWay, x, y);
@@ -268,8 +279,23 @@ class Board {
           throw new PushError(PushErrno.CardAt, x, y);
           return false;
         }
-        return this.setCard(x, y, c, dontPush);
+        let didSet = this.setCard(x, y, c, dontPush);
+        if (!didSet) return didSet;
       }
+      // TODO: this may be broken, fix
+      Object.keys(c.stats).forEach((k) => {
+        if (k in ["u", "d", "l", "r"]) return;
+        if (!c.stats[k].slam) return;
+        let [xf, yf] = directionF[sds[k]];
+        try {
+          this.push(xf(x), yf(y), sds[k], c.stats[k].v, false);
+        } catch (err) {
+          if (!(err instanceof PushError)) {
+            throw err;
+          }
+          // console.log("caught appropriate error in slam", err);
+        }
+      });
     } catch (err) {
       if (!(err instanceof PushError)) {
         throw err;
@@ -281,6 +307,7 @@ class Board {
       console.log("caught appropriate error", err);
       return false;
     }
+    return true;
   }
 
   changeObstacleAt(x: number, y: number) {

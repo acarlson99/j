@@ -12,6 +12,21 @@ export function clamp(l: number, n: number, u: number) {
   }
 }
 
+class FString extends String {
+  constructor(...args: any) {
+    super(...args);
+  }
+  format(...args: any[]) {
+    let a = this.replace("", "");
+    for (const k in args) {
+      a = a.replace("{" + k + "}", args[k]);
+    }
+    return a;
+  }
+}
+
+export { FString };
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const trouppleAcolyte = (color: string) =>
   new Card(color, "Troupple Acolyte", {
@@ -54,6 +69,12 @@ const blorb = (color: string, p: number) =>
 const beeto = (color: string, p: number) =>
   new Card(color, "beeto", {
     r: { v: p ? p : 1 },
+  });
+
+const kingPridemoor = (color: string) =>
+  new Card(color, "King Pridemoor", {
+    u: { v: 2, slam: true },
+    l: { v: 2, slam: true },
   });
 
 function cardtob(v: any) {

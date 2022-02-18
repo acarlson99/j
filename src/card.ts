@@ -12,6 +12,20 @@ import { Updater } from "./updater";
 
 // export { rock };
 
+type DirStat = {
+  v: number;
+  slam?: boolean | undefined;
+};
+
+type CardStat = {
+  l?: DirStat | undefined;
+  r?: DirStat | undefined;
+  u?: DirStat | undefined;
+  d?: DirStat | undefined;
+};
+
+export { DirStat, CardStat };
+
 function statDirection(stats: any, direction: EDirection) {
   // console.log("in statdirection");
   // console.log("stats:", stats);
@@ -71,7 +85,7 @@ class Card {
     Updater.Instance.updateCard(this, x, y);
   }
   copy() {
-    return new Card(this.color, name, this.stats);
+    return new Card(this.color, this.name, this.stats);
   }
 }
 

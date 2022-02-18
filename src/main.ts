@@ -4,14 +4,6 @@ window.addEventListener("error", function (event) {
   console.error(event);
 });
 
-String.prototype.format = function (...args: any[]) {
-  let a = this.replace("", "");
-  for (const k in args) {
-    a = a.replace("{" + k + "}", args[k]);
-  }
-  return a;
-};
-
 import { gc } from "./gameController";
 import { EDirection } from "./board";
 import { Updater } from "./updater";
