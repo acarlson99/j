@@ -293,14 +293,16 @@ function cardTest() {
     }
   }
 
-  var slamTests: Test[] = [
+  const slamTests: Test[] = [
     {
       p: {
         size: 5,
         direction: EDirection.None,
         pushed: [
           {
-            stats: { l: { v: 1 }, u: { v: 1 }, d: { v: 1 } },
+            stats: {
+              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+            },
             x: 3,
             y: 3,
             color: "red",
@@ -310,7 +312,9 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: { v: 1, slam: true },
+            l: {
+              v: 1, slam: true
+            },
           },
           x: 4,
           y: 3,
@@ -327,8 +331,12 @@ function cardTest() {
             name: "test1",
             color: "blue",
           },
-          { x: 2, y: 3, name: "test2", color: "red" },
-          { x: 3, y: 3, name: false },
+          {
+            x: 2, y: 3, name: "test2", color: "red"
+          },
+          {
+            x: 3, y: 3, name: false
+          },
         ],
 
         want: true,
@@ -340,7 +348,9 @@ function cardTest() {
         direction: EDirection.Left,
         pushed: [
           {
-            stats: { l: { v: 1 }, u: { v: 1 }, d: { v: 1 } },
+            stats: {
+              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+            },
             x: 3,
             y: 3,
             color: "red",
@@ -350,7 +360,9 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: { v: 1, slam: true },
+            l: {
+              v: 1, slam: true
+            },
           },
           x: 3,
           y: 3,
@@ -367,8 +379,12 @@ function cardTest() {
             name: "test1",
             color: "blue",
           },
-          { x: 1, y: 3, name: "test2", color: "red" },
-          { x: 2, y: 3, name: false },
+          {
+            x: 1, y: 3, name: "test2", color: "red"
+          },
+          {
+            x: 2, y: 3, name: false
+          },
         ],
 
         want: true,
@@ -380,7 +396,9 @@ function cardTest() {
         direction: EDirection.Left,
         pushed: [
           {
-            stats: { l: { v: 1 }, u: { v: 1 }, d: { v: 1 } },
+            stats: {
+              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+            },
             x: 3,
             y: 3,
             color: "red",
@@ -390,10 +408,18 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: { v: 1, slam: true },
-            r: { v: 1, slam: true },
-            u: { v: 1, slam: true },
-            d: { v: 1, slam: true },
+            l: {
+              v: 1, slam: true
+            },
+            r: {
+              v: 1, slam: true
+            },
+            u: {
+              v: 1, slam: true
+            },
+            d: {
+              v: 1, slam: true
+            },
           },
           x: 3,
           y: 3,
@@ -410,8 +436,12 @@ function cardTest() {
             name: "test1",
             color: "blue",
           },
-          { x: 1, y: 3, name: "test2", color: "red" },
-          { x: 2, y: 3, name: false },
+          {
+            x: 1, y: 3, name: "test2", color: "red"
+          },
+          {
+            x: 2, y: 3, name: false
+          },
         ],
 
         want: true,
@@ -419,6 +449,7 @@ function cardTest() {
     },
   ];
   doTest(slamTests);
+  // TODO: add wind tests
 
   console.log("TESTS DONE");
   return 0;
@@ -428,14 +459,14 @@ function doTest(tests: Test[]) {
   for (let i = 0; i < tests.length; i++) {
     const t = tests[i];
     const params = t.p;
-    let pusher = new Card(
+    const pusher = new Card(
       params.pusher.color,
       params.pusher.name,
       params.pusher.stats
     );
-    let board = new Board(params.size, false);
+    const board = new Board(params.size, false);
     params.pushed.forEach((e) => {
-      let pushed = new Card(e.color, e.name, e.stats);
+      const pushed = new Card(e.color, e.name, e.stats);
       if (!board.setCard(e.x, e.y, pushed)) {
         console.error("regression test in setCard: ", e);
       }
@@ -448,8 +479,8 @@ function doTest(tests: Test[]) {
     );
     let didError = false;
     t.w.board?.forEach((e) => {
-      let [x, y, name, color] = [e.x, e.y, e.name, e.color];
-      let c = board.getCard(x, y);
+      const [x, y, name, color] = [e.x, e.y, e.name, e.color];
+      const c = board.getCard(x, y);
       if (
         c === false ||
         (name !== undefined && (c?.name || false) !== name) ||
@@ -488,9 +519,12 @@ function doTest(tests: Test[]) {
         didError = true;
       }
     });
-    if (didError) console.warn(board);
-    if (got != t.w.want)
+    if (didError) {
+      console.warn(board);
+    }
+    if (got != t.w.want) {
       console.warn("slam test", i, "fail: want:", t.w.want, "got:", got);
+    }
   }
 }
 

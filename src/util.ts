@@ -73,8 +73,12 @@ const beeto = (color: string, p: number) =>
 
 const kingPridemoor = (color: string) =>
   new Card(color, "King Pridemoor", {
-    u: { v: 2, slam: true },
-    l: { v: 2, slam: true },
+    u: {
+      v: 2, slam: true
+    },
+    l: {
+      v: 2, slam: true
+    },
   });
 
 function cardtob(v: any) {

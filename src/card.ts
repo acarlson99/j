@@ -1,7 +1,7 @@
 "use strict";
 
 // import { cardWidth } from "./gameController";
-import { EDirection, opposites, directionToStr } from "./board";
+import { EDirection, opposites } from "./board";
 import { Updater } from "./updater";
 
 // function rock() {
@@ -14,30 +14,35 @@ import { Updater } from "./updater";
 
 type DirStat = {
   v: number;
-  slam?: boolean | undefined;
+  slam?: boolean;
+  wind?: boolean;
 };
 
 type CardStat = {
-  l?: DirStat | undefined;
-  r?: DirStat | undefined;
-  u?: DirStat | undefined;
-  d?: DirStat | undefined;
+  l?: DirStat;
+  r?: DirStat;
+  u?: DirStat;
+  d?: DirStat;
 };
 
 export { DirStat, CardStat };
 
-function statDirection(stats: any, direction: EDirection) {
+function statDirection(stats: CardStat, direction: EDirection) {
   // console.log("in statdirection");
   // console.log("stats:", stats);
   // console.log(stats, directionToStr(direction));
   if (!stats) {
     return undefined;
   }
-  const ds = directionToStr(direction);
-  // console.log("stat direction", ds);
-  // console.log(stats[ds]);
-  if (ds in stats) {
-    return stats[ds];
+  switch (direction) {
+    case EDirection.Up:
+      return stats.u;
+    case EDirection.Down:
+      return stats.d;
+    case EDirection.Left:
+      return stats.l;
+    case EDirection.Right:
+      return stats.r;
   }
   return undefined;
 }
@@ -49,10 +54,10 @@ export { statDirection };
 class Card {
   color: string;
   name: string;
-  stats: any;
+  stats: CardStat;
   // colors = ["black", "white", "maroon"];
 
-  constructor(color: string, name: string, stats: any) {
+  constructor(color: string, name: string, stats: CardStat) {
     // console.log("construct card");
     this.color = color;
     this.name = name;
@@ -81,9 +86,25 @@ class Card {
     return p < priority;
   }
 
+  // be pushed in direction. This is where `swap` would happen
+  bePushed(direction: EDirection) {}
+
+  setColor(c: string) {
+    this.color = c;
+  }
+
+  swapColor() {
+    if (this.color == "blue") this.setColor("red");
+    else if (this.color == "red") this.setColor("blue");
+  }
+
+  // NOTE: send card a msg that a turn ended (for use by 3-arrow countdown,auto)
+  turnEnded() {}
+
   update(x: number, y: number) {
     Updater.Instance.updateCard(this, x, y);
   }
+
   copy() {
     return new Card(this.color, this.name, this.stats);
   }

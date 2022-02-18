@@ -13,6 +13,8 @@ enum EDirection {
   Right = "RIGHT",
 }
 
+declare type EDirectionType = keyof typeof EDirection;
+
 const dss = {
   [EDirection.None]: "X",
   [EDirection.Up]: "u",
@@ -54,7 +56,13 @@ const strToDirection = (s: string) => {
   }
 };
 
-export { EDirection, opposites, directionToStr, strToDirection };
+export {
+  EDirection,
+  EDirectionType,
+  opposites,
+  directionToStr,
+  strToDirection,
+};
 
 const directionF = {
   [EDirection.Up]: [(x: number) => x, (y: number) => y - 1],
@@ -173,7 +181,8 @@ class Board {
     y: number,
     direction: EDirection,
     priority: any,
-    dontPush = false
+    dontPush = false,
+    wind = false
   ) {
     if (this.gameover) {
       return false;
@@ -221,7 +230,7 @@ class Board {
     if (nc !== undefined) {
       // next to non-empty space
       // attempt to push next Card out of the way
-      const cando = this.push(nx, ny, direction, priority, dontPush);
+      const cando = this.push(nx, ny, direction, priority, dontPush, wind);
       // console.log("cando", cando);
       if (!cando) {
         return false;
@@ -231,6 +240,8 @@ class Board {
     // console.log("SET:", r);
     if (!dontPush) {
       delete this.cardMap[y][x];
+      this.cardMap[ny][nx].bePushed(direction);
+      if (wind) this.cardMap[ny][nx].swapColor();
     }
     return r;
   }
@@ -262,15 +273,22 @@ class Board {
         // console.log("dir", direction);
         // cannot push in direction
         // console.log("CAN PUSH", c.canPush(direction));
-        const p = statDirection(c.stats, direction)?.v;
+        const sd = statDirection(c.stats, direction);
+        const p = sd?.v;
         if (!p) {
           throw new PushError(PushErrno.NoArrowPointingInDirection, direction);
         }
         // console.log("priority", p, direction);
         // if (!c.canBePushed(direction, p)) return false;
-        if (!(p && this.push(x, y, direction, p, dontPush))) return false;
-        let didSet = this.setCard_(x, y, c, dontPush);
-        if (!didSet) return didSet;
+        if (
+          !(p && this.push(x, y, direction, p, dontPush, sd?.wind || false))
+        ) {
+          return false;
+        }
+        const didSet = this.setCard_(x, y, c, dontPush);
+        if (!didSet) {
+          return didSet;
+        }
       } else {
         if (this.obstacles && !this.obstacles.isSettable(x, y, false)) {
           throw new PushError(PushErrno.ObstacleInTheWay, x, y);
@@ -279,23 +297,30 @@ class Board {
           throw new PushError(PushErrno.CardAt, x, y);
           return false;
         }
-        let didSet = this.setCard(x, y, c, dontPush);
-        if (!didSet) return didSet;
+        const didSet = this.setCard(x, y, c, dontPush);
+        if (!didSet) {
+          return didSet;
+        }
       }
-      // TODO: this may be broken, fix
-      Object.keys(c.stats).forEach((k) => {
-        if (k in ["u", "d", "l", "r"]) return;
-        if (!c.stats[k].slam) return;
-        let [xf, yf] = directionF[sds[k]];
+      // slam logic
+      for (const k in EDirection) {
+        const dir = EDirection[k as EDirectionType] as EDirection;
+        if (dir == EDirection.None) {
+          continue;
+        }
+        const sdir = statDirection(c.stats, dir);
+        if (!sdir?.slam) {
+          continue;
+        }
+        const [xf, yf] = directionF[dir];
         try {
-          this.push(xf(x), yf(y), sds[k], c.stats[k].v, false);
+          this.push(xf(x), yf(y), dir, sdir.v, dontPush, sdir?.wind || false);
         } catch (err) {
           if (!(err instanceof PushError)) {
             throw err;
           }
-          // console.log("caught appropriate error in slam", err);
         }
-      });
+      }
     } catch (err) {
       if (!(err instanceof PushError)) {
         throw err;

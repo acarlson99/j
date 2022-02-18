@@ -42,6 +42,8 @@ class Hand {
 class Player {
   h: Hand;
   d: Deck;
+  // TODO: add color to player
+
   constructor(hand: Hand, deck: Deck) {
     console.log("PLAYER DECK", deck);
     this.h = hand;
