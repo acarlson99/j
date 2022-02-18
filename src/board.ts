@@ -243,28 +243,39 @@ class Board {
       );
       return false;
     }
-    const nc = this.getCard(nx, ny);
     // cannot push card into obstacle
     if (this.obstacles && !this.obstacles.isPushable(nx, ny)) {
       throw new PushError(PushErrno.ObstacleInTheWay, nx, ny);
       return false;
     }
-    if (nc !== undefined) {
+    const nc = this.getCard(nx, ny);
+    if (nc) {
       // next to non-empty space
       // attempt to push next Card out of the way
-      const cando = this.push(nx, ny, direction, priority, dontPush, wind);
-      // console.log("cando", cando);
-      if (!cando) {
-        return false;
-      } // cannot push for some reason
+      if (
+        statDirection(c.stats, direction)?.bomb &&
+        c.canPush(direction) &&
+        nc.canBePushed(direction, priority)
+      ) {
+        // if pushing in direction of bomb
+        // overwrite next card
+        if (!dontPush) {
+          delete this.cardMap[ny][nx];
+        }
+      } else {
+        // else continue chain
+        const cando = this.push(nx, ny, direction, priority, dontPush, wind);
+        if (!cando) {
+          return false;
+        } // cannot push for some reason
+      }
     }
     const r = this.setCard_(nx, ny, c, dontPush);
-    // console.log("SET:", r);
     if (!dontPush) {
       delete this.cardMap[y][x];
-      this.cardMap[ny][nx].bePushed(direction);
+      this.cardMap[ny][nx]?.bePushed(direction);
       if (wind) {
-        this.cardMap[ny][nx].swapColor();
+        this.cardMap[ny][nx]?.swapColor();
       }
     }
     return r;

@@ -16,6 +16,7 @@ type DirStat = {
   v: number;
   slam?: boolean;
   wind?: boolean;
+  bomb?: boolean;
 };
 
 type CardStat = {
@@ -101,6 +102,7 @@ class Card {
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// TODO: make bomb break rocks
 class Rock extends Card {
   constructor() {
     super("brown", "rock", { dirs: {} });

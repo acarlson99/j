@@ -48,14 +48,14 @@
  - [-] Pushing [1/2]:
    - [X] Push fail reasons:
 	 - If a push fails, return an explanation of why it is illegal
-   - [-] Special [3/7]:
+   - [-] Special [4/7]:
 	 - [X] Slam:
 	   - Slam down after pushing pushing all adjacent cards
 	   - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
 	 - [X] Wind/cascade:
 	   - Swap colors of all cards pushed
 	   - [[https://shovelknight.fandom.com/wiki/Cascade][wiki]]
-	 - [ ] Bomb:
+	 - [X] Bomb:
 	   - Destroy rocks and cards pushed into (respecting priority)
 	   - [[https://shovelknight.fandom.com/wiki/Bomb_Arrow][wiki]]
 	 - [ ] Switch:

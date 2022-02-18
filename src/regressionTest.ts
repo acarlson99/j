@@ -505,6 +505,8 @@ function cardTest() {
   ];
   doTest(slamTests);
   // TODO: add wind tests
+  // TODO: add bomb tests
+  // TODO: add grave tests
 
   console.log("TESTS DONE");
   return 0;
