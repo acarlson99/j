@@ -39,17 +39,17 @@ function cardTest() {
   const cpush = [
     {
       d: EDirection.Left,
-      stats: { l: { v: 1 } },
+      stats: { dirs: { l: { v: 1 } } },
       w: true,
     },
     {
       d: EDirection.Right,
-      stats: { l: { v: 1 } },
+      stats: { dirs: { l: { v: 1 } } },
       w: false,
     },
     {
       d: EDirection.Right,
-      stats: { r: { v: 2 } },
+      stats: { dirs: { r: { v: 2 } } },
       w: true,
     },
   ];
@@ -64,7 +64,7 @@ function cardTest() {
   const cbp = [
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Left,
         p: 1,
       },
@@ -72,7 +72,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Right,
         p: 1,
       },
@@ -80,7 +80,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Left,
         p: 2,
       },
@@ -88,7 +88,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Right,
         p: 2,
       },
@@ -96,7 +96,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Up,
         p: 1,
       },
@@ -104,7 +104,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Down,
         p: 1,
       },
@@ -112,7 +112,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Up,
         p: 2,
       },
@@ -120,7 +120,7 @@ function cardTest() {
     },
     {
       p: {
-        stats: { l: { v: 1 } },
+        stats: { dirs: { l: { v: 1 } } },
         d: EDirection.Down,
         p: 2,
       },
@@ -130,8 +130,10 @@ function cardTest() {
     {
       p: {
         stats: {
-          l: { v: 1 },
-          u: { v: 2 },
+          dirs: {
+            l: { v: 1 },
+            u: { v: 2 },
+          },
         },
         d: EDirection.Left,
         p: 1,
@@ -141,8 +143,10 @@ function cardTest() {
     {
       p: {
         stats: {
-          l: { v: 1 },
-          u: { v: 2 },
+          dirs: {
+            l: { v: 1 },
+            u: { v: 2 },
+          },
         },
         d: EDirection.Right,
         p: 1,
@@ -152,8 +156,10 @@ function cardTest() {
     {
       p: {
         stats: {
-          l: { v: 1 },
-          u: { v: 2 },
+          dirs: {
+            l: { v: 1 },
+            u: { v: 2 },
+          },
         },
         d: EDirection.Up,
         p: 1,
@@ -163,8 +169,10 @@ function cardTest() {
     {
       p: {
         stats: {
-          l: { v: 1 },
-          u: { v: 2 },
+          dirs: {
+            l: { v: 1 },
+            u: { v: 2 },
+          },
         },
         d: EDirection.Down,
         p: 1,
@@ -175,9 +183,11 @@ function cardTest() {
     {
       p: {
         stats: {
-          l: { v: 1 },
-          r: { v: 2 },
-          d: { v: 1 },
+          dirs: {
+            l: { v: 1 },
+            r: { v: 2 },
+            d: { v: 1 },
+          },
         },
         d: EDirection.Right,
         p: 2,
@@ -200,8 +210,8 @@ function cardTest() {
   const cardPushes = [
     {
       p: {
-        pusher: { l: { v: 1 } }, // blue
-        pushed: { l: { v: 2 } }, // red
+        pusher: { dirs: { l: { v: 1 } } }, // blue
+        pushed: { dirs: { l: { v: 2 } } }, // red
         d: EDirection.Left,
       },
       boardPoss: [
@@ -221,13 +231,17 @@ function cardTest() {
     {
       p: {
         pusher: {
-          l: { v: 1 },
-          r: { v: 3 },
+          dirs: {
+            l: { v: 1 },
+            r: { v: 3 },
+          },
         }, // blue
         pushed: {
-          l: { v: 2 },
-          u: { v: 2 },
-          d: { v: 2 },
+          dirs: {
+            l: { v: 2 },
+            u: { v: 2 },
+            d: { v: 2 },
+          },
         }, // red
         d: EDirection.Right,
       },
@@ -247,10 +261,12 @@ function cardTest() {
     },
     {
       p: {
-        pusher: { l: { v: 1 } }, // blue
+        pusher: { dirs: { l: { v: 1 } } }, // blue
         pushed: {
-          l: { v: 2 },
-          r: { v: 1 },
+          dirs: {
+            l: { v: 2 },
+            r: { v: 1 },
+          },
         }, // red
         d: EDirection.Left,
       },
@@ -301,7 +317,11 @@ function cardTest() {
         pushed: [
           {
             stats: {
-              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
             },
             x: 3,
             y: 3,
@@ -312,8 +332,11 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: {
-              v: 1, slam: true
+            dirs: {
+              l: {
+                v: 1,
+                slam: true,
+              },
             },
           },
           x: 4,
@@ -332,10 +355,15 @@ function cardTest() {
             color: "blue",
           },
           {
-            x: 2, y: 3, name: "test2", color: "red"
+            x: 2,
+            y: 3,
+            name: "test2",
+            color: "red",
           },
           {
-            x: 3, y: 3, name: false
+            x: 3,
+            y: 3,
+            name: false,
           },
         ],
 
@@ -349,7 +377,11 @@ function cardTest() {
         pushed: [
           {
             stats: {
-              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
             },
             x: 3,
             y: 3,
@@ -360,8 +392,11 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: {
-              v: 1, slam: true
+            dirs: {
+              l: {
+                v: 1,
+                slam: true,
+              },
             },
           },
           x: 3,
@@ -380,10 +415,15 @@ function cardTest() {
             color: "blue",
           },
           {
-            x: 1, y: 3, name: "test2", color: "red"
+            x: 1,
+            y: 3,
+            name: "test2",
+            color: "red",
           },
           {
-            x: 2, y: 3, name: false
+            x: 2,
+            y: 3,
+            name: false,
           },
         ],
 
@@ -397,7 +437,11 @@ function cardTest() {
         pushed: [
           {
             stats: {
-              l: { v: 1 }, u: { v: 1 }, d: { v: 1 }
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
             },
             x: 3,
             y: 3,
@@ -408,17 +452,23 @@ function cardTest() {
 
         pusher: {
           stats: {
-            l: {
-              v: 1, slam: true
-            },
-            r: {
-              v: 1, slam: true
-            },
-            u: {
-              v: 1, slam: true
-            },
-            d: {
-              v: 1, slam: true
+            dirs: {
+              l: {
+                v: 1,
+                slam: true,
+              },
+              r: {
+                v: 1,
+                slam: true,
+              },
+              u: {
+                v: 1,
+                slam: true,
+              },
+              d: {
+                v: 1,
+                slam: true,
+              },
             },
           },
           x: 3,
@@ -437,10 +487,15 @@ function cardTest() {
             color: "blue",
           },
           {
-            x: 1, y: 3, name: "test2", color: "red"
+            x: 1,
+            y: 3,
+            name: "test2",
+            color: "red",
           },
           {
-            x: 2, y: 3, name: false
+            x: 2,
+            y: 3,
+            name: false,
           },
         ],
 

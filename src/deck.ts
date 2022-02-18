@@ -38,24 +38,34 @@ export { Deck };
 
 const trouppleAcolyte = (color: string) =>
   new Card(color, "Troupple Acolyte", {
-    u: { v: Math.floor(Math.random() * 4) },
-    l: { v: Math.floor(Math.random() * 4) },
-    r: { v: Math.floor(Math.random() * 4) },
-    d: { v: Math.floor(Math.random() * 4) },
+    dirs: {
+      u: {
+        v: Math.floor(Math.random() * 4),
+      },
+      l: {
+        v: Math.floor(Math.random() * 4),
+      },
+      r: {
+        v: Math.floor(Math.random() * 4),
+      },
+      d: {
+        v: Math.floor(Math.random() * 4),
+      },
+    },
   });
 
 function colorDeck(size: number, color: string) {
   const a = [];
   for (let i = 0; i < size; i++) {
     const t = trouppleAcolyte(color);
-    Object.keys(t.stats).forEach((k) => {
-      if (t.stats[k].v == 0) {
-        delete t.stats[k];
+    Object.keys(t.stats.dirs).forEach((k) => {
+      if (t.stats.dirs[k].v == 0) {
+        delete t.stats.dirs[k];
       }
     });
     // only 3 arrows, not 4 silly goose
-    if (Object.keys(t.stats).length == 4) {
-      delete t.stats["udlr"[Math.floor(Math.random() * 4)]];
+    if (Object.keys(t.stats.dirs).length == 4) {
+      delete t.stats.dirs["udlr"[Math.floor(Math.random() * 4)]];
     }
     a.push(t);
   }

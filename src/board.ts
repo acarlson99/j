@@ -15,6 +15,7 @@ enum EDirection {
 
 declare type EDirectionType = keyof typeof EDirection;
 
+// direction->strings
 const dss = {
   [EDirection.None]: "X",
   [EDirection.Up]: "u",
@@ -23,6 +24,7 @@ const dss = {
   [EDirection.Right]: "r",
 };
 
+// string->directions
 const sds = {
   [dss[EDirection.None]]: EDirection.None,
   [dss[EDirection.Up]]: EDirection.Up,
@@ -30,6 +32,8 @@ const sds = {
   [dss[EDirection.Left]]: EDirection.Left,
   [dss[EDirection.Right]]: EDirection.Right,
 };
+
+export { dss, sds };
 
 const opposites = {
   [EDirection.Up]: EDirection.Down,

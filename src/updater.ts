@@ -1,7 +1,7 @@
 "use strict";
 
-import { Card } from "./card";
-import { Board } from "./board";
+import { Card, CardStat, statDirection } from "./card";
+import { Board, sds } from "./board";
 import { Cursor } from "./cursor";
 import { EObstacleName } from "./obstacles";
 import { GameController, Game } from "./gameController";
@@ -122,7 +122,7 @@ class Updater {
     }
   }
 
-  drawCardArrows(x: number, y: number, cardWidth: number, stats: any) {
+  drawCardArrows(x: number, y: number, cardWidth: number, stats: CardStat) {
     // 1/5 wide/ 3/5 long
     const border = 2;
     const margin = cardWidth / 5;
@@ -160,11 +160,8 @@ class Updater {
 
     // console.log("stats", stats);
     arrowFuncs.forEach((e) => {
-      if (!(e.d in stats)) {
-        return;
-      }
-      const s = stats[e.d];
-      if (!(s.v > 0)) {
+      const s = statDirection(stats, sds[e.d]);
+      if (!s || s?.v < 0) {
         return;
       }
       const c = this.colors[clamp(0, s.v - 1, 3)];

@@ -19,10 +19,8 @@ type DirStat = {
 };
 
 type CardStat = {
-  l?: DirStat;
-  r?: DirStat;
-  u?: DirStat;
-  d?: DirStat;
+  dirs: { l?: DirStat; r?: DirStat; u?: DirStat; d?: DirStat };
+  graveyard?: boolean;
 };
 
 export { DirStat, CardStat };
@@ -36,13 +34,13 @@ function statDirection(stats: CardStat, direction: EDirection) {
   }
   switch (direction) {
   case EDirection.Up:
-    return stats.u;
+    return stats.dirs.u;
   case EDirection.Down:
-    return stats.d;
+    return stats.dirs.d;
   case EDirection.Left:
-    return stats.l;
+    return stats.dirs.l;
   case EDirection.Right:
-    return stats.r;
+    return stats.dirs.r;
   }
   return undefined;
 }
@@ -58,31 +56,18 @@ class Card {
   // colors = ["black", "white", "maroon"];
 
   constructor(color: string, name: string, stats: CardStat) {
-    // console.log("construct card");
     this.color = color;
     this.name = name;
-    // this.width = cardWidth;
     // lmao no deep copy method so i do this :shrug:
     this.stats = JSON.parse(JSON.stringify(stats));
-    // console.log("constructed");
   }
 
   canPush(direction: EDirection) {
-    // console.log("in can push");
-    // console.log(opposites, direction);
-    // console.log(this.stats);
-    // console.log("stat direction", statDirection(this.stats, direction)?.v);
     return (statDirection(this.stats, direction)?.v || 0) > 0;
   }
 
   canBePushed(direction: EDirection, priority: number) {
-    // console.log("in can be pushed");
-    // console.log(opposites, direction);
-    // console.log("sd", statDirection(this.stats, opposites[direction]));
-    // console.log("in can be pushed");
     const p = statDirection(this.stats, opposites[direction])?.v || 0;
-    // console.log("cbp", p, priority);
-    // if (this.opposites[direction])
     return p < priority;
   }
 
@@ -118,7 +103,7 @@ class Card {
 /* eslint-disable @typescript-eslint/no-unused-vars */
 class Rock extends Card {
   constructor() {
-    super("brown", "rock", {});
+    super("brown", "rock", { dirs: {} });
   }
 
   canPush(direction: EDirection) {
