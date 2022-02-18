@@ -173,7 +173,7 @@ class Obstacles {
   }
 
   // card can be played on space (by place or played with push)
-  isSettable(x: number, y: number, withPush: boolean) {
+  isSettable(x: number, y: number, withPush: boolean, graveyard: boolean) {
     withPush = !!withPush;
     const ob = this.m[y][x];
     switch (ob?.name) {
@@ -185,7 +185,7 @@ class Obstacles {
       return false;
       break;
     case EObstacleName.graveyard:
-      return false;
+      return graveyard;
       break;
     case EObstacleName.pitfall:
       return true;

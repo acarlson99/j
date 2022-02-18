@@ -139,7 +139,7 @@ class Board {
     if (!this.obstacles) {
       return true;
     }
-    return this.obstacles.isSettable(x, y, false);
+    return this.obstacles.isSettable(x, y, false, c.stats.graveyard || false);
   }
 
   // can i play a card pushing x,y
@@ -148,7 +148,14 @@ class Board {
     if (!this.obstacles) {
       return true;
     }
-    return this.obstacles.isSettable(x, y, true);
+    const c_ = this.getCard(x, y) || undefined;
+    return this.obstacles.isSettable(
+      x,
+      y,
+      true,
+      // this card has grave OR being played on grave card
+      c.stats.graveyard || c_?.stats?.graveyard || false
+    );
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
