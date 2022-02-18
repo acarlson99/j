@@ -43,7 +43,6 @@ module.exports = {
         },
         ObjectPattern: "never",
         ImportDeclaration: "never",
-        ExportDeclaration: "never",
       },
     ],
     "object-property-newline": [

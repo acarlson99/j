@@ -76,7 +76,7 @@ enum PushErrno {
   ObstacleInTheWay = "Obstacle in the way {0} {1}",
   OutOfBounds = "Out of bounds {0} {1}",
   NoCardAt = "No card at {0} {1}",
-  CardAt = "Card at {0} {1}",
+  UnexpectedCardAt = "Unexpected card at {0} {1}",
   CannotPushCard = "Cannot push card at {0} {1} {2} with priority {3} vs {4}",
   CannotPushIntoObject = "Cannot push into {0} {1}",
   NotSettable = "Not a settable position {0} {1}",
@@ -131,7 +131,7 @@ class Board {
 
   // can i set a card in x,y pos
   // TODO: graveyard check
-  canSet(x: number, y: number, c: Card) {
+  isSettablePos(x: number, y: number, c: Card) {
     if (!this.obstacles) {
       return true;
     }
@@ -140,7 +140,7 @@ class Board {
 
   // can i play a card pushing x,y
   // TODO: graveyard check
-  canPush(x: number, y: number, c: Card) {
+  isPushablePos(x: number, y: number, c: Card) {
     if (!this.obstacles) {
       return true;
     }
@@ -156,8 +156,8 @@ class Board {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
     // cannot place on gem
-    if (!this.canSet(x, y, c)) {
-      throw new PushError(PushErrno.ObstacleInTheWay, x, y);
+    if (!this.isSettablePos(x, y, c)) {
+      throw new PushError(PushErrno.NotSettable, x, y);
       return false;
     }
     return this.setCard_(x, y, c, dontSet);
@@ -276,8 +276,18 @@ class Board {
     }
     // console.log("dir", direction, EDirection.None);
     try {
-      if (direction != EDirection.None) {
-        if (!this.canPush(x, y, c)) {
+      if (direction == EDirection.None) {
+        if (!this.isSettablePos(x, y, c)) {
+          throw new PushError(PushErrno.NotSettable, x, y);
+        } else if (this.getCard(x, y)) {
+          throw new PushError(PushErrno.UnexpectedCardAt, x, y);
+        }
+        const didSet = this.setCard(x, y, c, dontPush);
+        if (!didSet) {
+          return didSet;
+        }
+      } else {
+        if (!this.isPushablePos(x, y, c)) {
           throw new PushError(PushErrno.ObstacleInTheWay, x, y);
           return false;
         }
@@ -285,7 +295,7 @@ class Board {
         // console.log("C:", c);
         // console.log("dir", direction);
         // cannot push in direction
-        // console.log("CAN PUSH", c.canPush(direction));
+        // console.log("CAN PUSH", c.isPushablePos(direction));
         const sd = statDirection(c.stats, direction);
         const p = sd?.v;
         if (!p) {
@@ -299,18 +309,6 @@ class Board {
           return false;
         }
         const didSet = this.setCard_(x, y, c, dontPush);
-        if (!didSet) {
-          return didSet;
-        }
-      } else {
-        if (!this.canSet(x, y, c)) {
-          throw new PushError(PushErrno.NotSettable, x, y);
-        } else if (this.getCard(x, y)) {
-          // console.log("got a card :/");
-          throw new PushError(PushErrno.CardAt, x, y);
-          return false;
-        }
-        const didSet = this.setCard(x, y, c, dontPush);
         if (!didSet) {
           return didSet;
         }
