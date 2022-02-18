@@ -43,16 +43,16 @@ const directionToStr = (d: EDirection) => dss[d];
 
 const strToDirection = (s: string) => {
   switch (s) {
-    case EDirection.Up:
-      return EDirection.Up;
-    case EDirection.Down:
-      return EDirection.Down;
-    case EDirection.Left:
-      return EDirection.Left;
-    case EDirection.Right:
-      return EDirection.Right;
-    default:
-      throw "strToDirection invalid string: '" + s + "'";
+  case EDirection.Up:
+    return EDirection.Up;
+  case EDirection.Down:
+    return EDirection.Down;
+  case EDirection.Left:
+    return EDirection.Left;
+  case EDirection.Right:
+    return EDirection.Right;
+  default:
+    throw "strToDirection invalid string: '" + s + "'";
   }
 };
 
@@ -129,11 +129,22 @@ class Board {
     return undefined;
   }
 
-  canSet(x: number, y: number) {
+  // can i set a card in x,y pos
+  // TODO: graveyard check
+  canSet(x: number, y: number, c: Card) {
     if (!this.obstacles) {
       return true;
     }
     return this.obstacles.isSettable(x, y, false);
+  }
+
+  // can i play a card pushing x,y
+  // TODO: graveyard check
+  canPush(x: number, y: number, c: Card) {
+    if (!this.obstacles) {
+      return true;
+    }
+    return this.obstacles.isSettable(x, y, true);
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
@@ -145,7 +156,7 @@ class Board {
       console.warn("NOTE: UNSETTING CARD", x, y);
     }
     // cannot place on gem
-    if (!this.canSet(x, y)) {
+    if (!this.canSet(x, y, c)) {
       throw new PushError(PushErrno.ObstacleInTheWay, x, y);
       return false;
     }
@@ -241,7 +252,9 @@ class Board {
     if (!dontPush) {
       delete this.cardMap[y][x];
       this.cardMap[ny][nx].bePushed(direction);
-      if (wind) this.cardMap[ny][nx].swapColor();
+      if (wind) {
+        this.cardMap[ny][nx].swapColor();
+      }
     }
     return r;
   }
@@ -264,8 +277,8 @@ class Board {
     // console.log("dir", direction, EDirection.None);
     try {
       if (direction != EDirection.None) {
-        if (this.obstacles && !this.obstacles.isSettable(x, y, true)) {
-          throw new PushError(PushErrno.NotSettable, x, y);
+        if (!this.canPush(x, y, c)) {
+          throw new PushError(PushErrno.ObstacleInTheWay, x, y);
           return false;
         }
         // console.log("NOT NONE");
@@ -290,8 +303,8 @@ class Board {
           return didSet;
         }
       } else {
-        if (this.obstacles && !this.obstacles.isSettable(x, y, false)) {
-          throw new PushError(PushErrno.ObstacleInTheWay, x, y);
+        if (!this.canSet(x, y, c)) {
+          throw new PushError(PushErrno.NotSettable, x, y);
         } else if (this.getCard(x, y)) {
           // console.log("got a card :/");
           throw new PushError(PushErrno.CardAt, x, y);

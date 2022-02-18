@@ -35,14 +35,14 @@ function statDirection(stats: CardStat, direction: EDirection) {
     return undefined;
   }
   switch (direction) {
-    case EDirection.Up:
-      return stats.u;
-    case EDirection.Down:
-      return stats.d;
-    case EDirection.Left:
-      return stats.l;
-    case EDirection.Right:
-      return stats.r;
+  case EDirection.Up:
+    return stats.u;
+  case EDirection.Down:
+    return stats.d;
+  case EDirection.Left:
+    return stats.l;
+  case EDirection.Right:
+    return stats.r;
   }
   return undefined;
 }
@@ -86,20 +86,25 @@ class Card {
     return p < priority;
   }
 
-  // be pushed in direction. This is where `swap` would happen
-  bePushed(direction: EDirection) {}
-
   setColor(c: string) {
     this.color = c;
   }
 
   swapColor() {
-    if (this.color == "blue") this.setColor("red");
-    else if (this.color == "red") this.setColor("blue");
+    if (this.color == "blue") {
+      this.setColor("red");
+    } else if (this.color == "red") {
+      this.setColor("blue");
+    }
   }
+
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  // be pushed in direction. This is where `swap` would happen
+  bePushed(direction: EDirection) {}
 
   // NOTE: send card a msg that a turn ended (for use by 3-arrow countdown,auto)
   turnEnded() {}
+  /* eslint-enable @typescript-eslint/no-empty-function */
 
   update(x: number, y: number) {
     Updater.Instance.updateCard(this, x, y);
