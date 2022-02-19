@@ -38,17 +38,17 @@
    - [X] Deploy
    - [X] Automate deploy build:
 	 - must take into account that this will be deployed under '/j'
-** Full Game [0/4]:
+** Full Game [1/4]:
  - [-] Display [2/5]:
    - [ ] Multi-screen layout
    - [X] Major graphics refactor, single canvas for whole screen
    - [X] Dynamic resizing
    - [ ] Display push fail reason
    - [ ] Show special arrows (slam,wind,grave,etc)
- - [-] Pushing [1/2]:
+ - [X] Pushing [2/2]:
    - [X] Push fail reasons:
 	 - If a push fails, return an explanation of why it is illegal
-   - [-] Special [6/7]:
+   - [X] Special [7/7]:
 	 - [X] Slam:
 	   - Slam down after pushing pushing all adjacent cards
 	   - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
@@ -61,7 +61,7 @@
 	 - [X] Switch:
 	   - Swap u/d or l/r (or both) when pushed
 	   - [[https://shovelknight.fandom.com/wiki/Switch][wiki]]
-	 - [ ] Auto move/conveyor:
+	 - [X] Auto move/conveyor:
 	   - Auto move in a direction at end of turn
 	   - [[https://shovelknight.fandom.com/wiki/Conveyor_Arrow][wiki]]
 	 - [X] Grave:
