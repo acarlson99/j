@@ -16,6 +16,7 @@ module.exports = {
     indent: ["error", 2],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
+    "no-empty": ["warn"],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",

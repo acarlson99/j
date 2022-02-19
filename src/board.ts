@@ -179,6 +179,7 @@ class Board {
   // unsafe, private function
   // will just slap that bad boy down
   // will not check for gem intersection
+  // NOTE: places card object, does not create a copy
   setCard_(x: number, y: number, c: any, dontSet = false) {
     if (!c) {
       console.warn("NOTE: UNSETTING CARD", x, y);
@@ -188,7 +189,7 @@ class Board {
       return false;
     }
     if (!dontSet) {
-      this.cardMap[y][x] = c.copy();
+      this.cardMap[y][x] = c;
     }
     return true;
   }
@@ -198,7 +199,8 @@ class Board {
     delete this.cardMap[y][x];
   }
 
-  push(
+  // NOTE: this WILL NOT check if the first card pushed has an opposite arrow
+  private push(
     x: number,
     y: number,
     direction: EDirection,
@@ -230,18 +232,6 @@ class Board {
     if (!c) {
       throw new PushError(PushErrno.NoCardAt, x, y);
       return undefined;
-    } else if (!c.canBePushed(direction, priority)) {
-      // can this Card be pushed in direction
-      // console.log("cannot be pushed");
-      throw new PushError(
-        PushErrno.CannotPushCard,
-        x,
-        y,
-        direction,
-        priority,
-        statDirection(c.stats, opposites[direction])?.v
-      );
-      return false;
     }
     // cannot push card into obstacle
     if (this.obstacles && !this.obstacles.isPushable(nx, ny)) {
@@ -270,7 +260,7 @@ class Board {
         } // cannot push for some reason
       }
     }
-    const r = this.setCard_(nx, ny, c, dontPush);
+    this.setCard_(nx, ny, c, dontPush);
     if (!dontPush) {
       delete this.cardMap[y][x];
       this.cardMap[ny][nx]?.bePushed(direction);
@@ -278,7 +268,7 @@ class Board {
         this.cardMap[ny][nx]?.swapColor();
       }
     }
-    return r;
+    return [nx, ny];
   }
 
   // place card on board with direction or no direction to set
@@ -325,6 +315,24 @@ class Board {
         }
         // console.log("priority", p, direction);
         // if (!c.canBePushed(direction, p)) return false;
+        const nc = this.getCard(x, y);
+        if (!nc) {
+          throw new PushError(PushErrno.NoCardAt, x, y);
+        }
+        if (!nc.canBePushed(direction, p)) {
+          // can this Card be pushed in direction
+          // console.log("cannot be pushed");
+          throw new PushError(
+            PushErrno.CannotPushCard,
+            x,
+            y,
+            direction,
+            p,
+            statDirection(c.stats, opposites[direction])?.v
+          );
+          return false;
+        }
+
         if (
           !(p && this.push(x, y, direction, p, dontPush, sd?.wind || false))
         ) {
@@ -375,9 +383,39 @@ class Board {
     this.cardMap.flat().forEach((c) => {
       c.modifierCheck();
     });
-    this.cardMap.flat().forEach((c) => {
-      c.autoCheck();
-    });
+    // this.cardMap.flat().forEach((c) => {
+    //   c.autoCheck();
+    // });
+    // console.log("END OF TURN");
+    // console.log(this.cardMap.flat());
+    for (let y = 0; y < this.cardMap.length; y++) {
+      const row = this.cardMap[y];
+      for (let x = 0; x < row.length; x++) {
+        const c = this.getCard(x, y);
+        if (!c) {
+          continue;
+        }
+        const ads = c.autoDirsToPush();
+        let [nx, ny] = [x, y];
+        ads?.forEach((dir) => {
+          try {
+            const r = this.push(
+              nx,
+              ny,
+              dir,
+              statDirection(c.stats, dir)?.v,
+              false,
+              false
+            );
+            if (r) {
+              [nx, ny] = r;
+            }
+          } finally {
+          }
+        });
+      }
+    }
+    // console.log(this.cardMap.flat());
   }
 
   changeObstacleAt(x: number, y: number) {

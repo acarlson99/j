@@ -76,7 +76,7 @@ class Card {
     this.name = name;
     // lmao no deep copy method so i do this :shrug:
     this.stats = JSON.parse(JSON.stringify(stats));
-    this.turnsInPlay = 0;
+    this.turnsInPlay = -1;
   }
 
   canPush(direction: EDirection) {
@@ -122,7 +122,7 @@ class Card {
 
   // for deleting 3-arrow after 3 turns
   modifierCheck() {
-    if (this.turnsInPlay > 3 * 2 - 1) {
+    if (this.turnsInPlay > 3 * 2) {
       cardStatDirs.forEach((ds) => {
         const sd = statDirection(this.stats, sds[ds]);
         if (sd?.v == 3) {
@@ -132,17 +132,22 @@ class Card {
     }
   }
 
-  autoCheck() {
-    if (this.turnsInPlay > 1 && this.turnsInPlay % 2 == 0) {
-      return;
-    }
+  autoDirs() {
+    const ads: EDirection[] = [];
     cardStatDirs.forEach((ds) => {
       if (statDirection(this.stats, sds[ds])?.auto) {
-        console.log("TODO: auto push", ds);
+        ads.push(sds[ds]);
       }
     });
+    return ads;
   }
 
+  autoDirsToPush() {
+    if (this.turnsInPlay < 1 || this.turnsInPlay % 2 == 1) {
+      return [];
+    }
+    return this.autoDirs();
+  }
   /* eslint-enable @typescript-eslint/no-empty-function */
 
   update(x: number, y: number) {
@@ -150,7 +155,9 @@ class Card {
   }
 
   copy() {
-    return new Card(this.color, this.name, this.stats);
+    const c = new Card(this.color, this.name, this.stats);
+    c.turnsInPlay = this.turnsInPlay;
+    return c;
   }
 }
 

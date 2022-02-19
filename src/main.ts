@@ -105,8 +105,8 @@ const doEvent = (() => {
       break;
     }
     turn = turn % 2;
-    gc.ce.selectCard(cardHeld[turn], turnC[turn]);
     p = turn == 0 ? gc.game.p1 : gc.game.p2;
+    gc.ce.selectCard(cardHeld[turn], turnC[turn]);
     console.log("HAND:", p.h.cs);
     console.log("decksize:", p.d.size());
     // check if valid move exists
