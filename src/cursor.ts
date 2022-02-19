@@ -49,11 +49,11 @@ class Cursor {
     console.log("HOLDING CARD", this.heldCard);
   }
 
-  pushHeldCard(direction: EDirection) {
+  playHeldCard(direction: EDirection) {
     console.log("cursor push", this.x, this.y, direction);
     // const c = this.game.board.getCard(this.x, this.y);
     // if (!c || !this.heldCard) return false;
-    const pushed = this.game?.pushC(this.x, this.y, direction, this.heldCard);
+    const pushed = this.game?.playCard(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) {
       return false;
@@ -80,7 +80,7 @@ class Cursor {
   }
 
   // placeHeldCard() {
-  //   return this.pushHeldCard(EDirection.None);
+  //   return this.playHeldCard(EDirection.None);
   // }
 
   update() {

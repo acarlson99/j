@@ -45,7 +45,7 @@ const doEvent = (() => {
       break;
     case "w":
       cursor.holdCard(p.handAt(cardHeldPos));
-      if (cursor.pushHeldCard(EDirection.Up)) {
+      if (cursor.playHeldCard(EDirection.Up)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
@@ -54,7 +54,7 @@ const doEvent = (() => {
       break;
     case "a":
       cursor.holdCard(p.handAt(cardHeldPos));
-      if (cursor.pushHeldCard(EDirection.Left)) {
+      if (cursor.playHeldCard(EDirection.Left)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
@@ -63,7 +63,7 @@ const doEvent = (() => {
       break;
     case "s":
       cursor.holdCard(p.handAt(cardHeldPos));
-      if (cursor.pushHeldCard(EDirection.Down)) {
+      if (cursor.playHeldCard(EDirection.Down)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
@@ -72,7 +72,7 @@ const doEvent = (() => {
       break;
     case "d":
       cursor.holdCard(p.handAt(cardHeldPos));
-      if (cursor.pushHeldCard(EDirection.Right)) {
+      if (cursor.playHeldCard(EDirection.Right)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
@@ -87,7 +87,7 @@ const doEvent = (() => {
         break;
       }
       cursor.holdCard(p.handAt(cardHeldPos));
-      if (cursor.pushHeldCard(EDirection.None)) {
+      if (cursor.playHeldCard(EDirection.None)) {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;

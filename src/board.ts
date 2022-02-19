@@ -272,17 +272,15 @@ class Board {
   }
 
   // place card on board with direction or no direction to set
-  pushC(
+  playCard(
     x: number,
     y: number,
     direction: EDirection,
     c: Card,
     dontPush = false
   ) {
-    // console.log(x, y, direction, c, dontPush);
     // FIXME: make different functions to interface with internal push func
     // bc you WILL DEFINITELY forget about the `dontPush` param and pull out all your hair
-    // console.log("a", this.gameover);
     if (this.gameover) {
       return false;
     }
@@ -437,7 +435,7 @@ class Board {
         ];
         for (let ki = 0; ki < dirs.length; ki++) {
           try {
-            if (this.pushC(i, j, dirs[ki], c, true)) {
+            if (this.playCard(i, j, dirs[ki], c, true)) {
               return true;
             }
           } catch {

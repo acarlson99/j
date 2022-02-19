@@ -291,7 +291,7 @@ function cardTest() {
       console.error("regression test in setCard, returned", wasSet);
     }
     // console.log(board);
-    const got = board.pushC(1, 1, t.p.d, pusher);
+    const got = board.playCard(1, 1, t.p.d, pusher);
     // console.log("cardPushes", got, t.w);
     // console.log(board);
     if (got !== t.w) {
@@ -528,7 +528,7 @@ function doTest(tests: Test[]) {
         console.error("regression test in setCard: ", e);
       }
     });
-    const got = board.pushC(
+    const got = board.playCard(
       params.pusher.x,
       params.pusher.y,
       params.direction,
