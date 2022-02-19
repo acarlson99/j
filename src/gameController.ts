@@ -15,10 +15,9 @@ class Game {
   p2: Player;
   board: Board;
   boardSize: () => number;
-  push: (x: number, y: number, d: EDirection, p: number) => any;
   pushC: (x: number, y: number, d: EDirection, c: Card) => any;
-  canPush: (x: number, y: number, d: EDirection, p: number) => any;
   canPushC: (x: number, y: number, d: EDirection, c: Card) => any;
+  endTurn: () => void;
 
   constructor(size: number) {
     this.size = size;
@@ -34,10 +33,9 @@ class Game {
     };
     console.log(this.board);
 
-    this.push = (x, y, d, p) => this.board.push(x, y, d, p, false);
     this.pushC = (x, y, d, c) => this.board.pushC(x, y, d, c, false);
-    this.canPush = (x, y, d, p) => this.board.push(x, y, d, p, true);
     this.canPushC = (x, y, d, c) => this.board.pushC(x, y, d, c, true);
+    this.endTurn = () => this.board.turnEnded();
     console.log("boardsize", this.boardSize());
   }
 

@@ -49,6 +49,7 @@ const doEvent = (() => {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
+        gc.game.endTurn();
       }
       break;
     case "a":
@@ -57,6 +58,7 @@ const doEvent = (() => {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
+        gc.game.endTurn();
       }
       break;
     case "s":
@@ -65,6 +67,7 @@ const doEvent = (() => {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
+        gc.game.endTurn();
       }
       break;
     case "d":
@@ -73,6 +76,7 @@ const doEvent = (() => {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
+        gc.game.endTurn();
       }
       break;
     case " ":
@@ -87,6 +91,7 @@ const doEvent = (() => {
         console.log("playing card at hand pos:", cardHeldPos);
         p.play(cardHeldPos);
         turn++;
+        gc.game.endTurn();
       }
       break;
     case "m":

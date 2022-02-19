@@ -368,6 +368,18 @@ class Board {
     return true;
   }
 
+  turnEnded() {
+    this.cardMap.flat().forEach((c) => {
+      c.tickModifierTimer();
+    });
+    this.cardMap.flat().forEach((c) => {
+      c.modifierCheck();
+    });
+    this.cardMap.flat().forEach((c) => {
+      c.autoCheck();
+    });
+  }
+
   changeObstacleAt(x: number, y: number) {
     this.obstacles?.incrementObstacleAt(x, y);
   }
