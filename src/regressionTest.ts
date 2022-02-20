@@ -197,10 +197,7 @@ function cardTest() {
   ];
   for (let i = 0; i < cbp.length; i++) {
     const t = cbp[i];
-    // console.log("t:", t);
-    // console.log(t.p.stats);
     const c = new Card("blue", "test", t.p.stats);
-    // console.log("RUN TEST c:", c);
     const got = c.canBePushed(t.p.d, t.p.p);
     if (t.w !== got) {
       console.warn("canbepushed test fail: want:", t.w, "got:", got);
@@ -285,15 +282,11 @@ function cardTest() {
     const pusher = new Card("blue", "test1", t.p.pusher);
     const pushed = new Card("red", "test2", t.p.pushed);
     const board = new Board(3, false);
-    // console.log("board", board);
     const wasSet = board.setCard(1, 1, pushed);
     if (!wasSet) {
       console.error("regression test in setCard, returned", wasSet);
     }
-    // console.log(board);
     const got = board.playCard(1, 1, t.p.d, pusher);
-    // console.log("cardPushes", got, t.w);
-    // console.log(board);
     if (got !== t.w) {
       console.warn("cardPush test", i, "fail: want:", t.w, "got:", got);
     }

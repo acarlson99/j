@@ -12,15 +12,10 @@ class Hand {
   }
 
   push(i: number, c: Card) {
-    // console.log("in push");
     if (i >= this.size) {
       return false;
     }
-    // return this.cs.push(c);
-    console.log("set", i, c);
-    console.log(this.cs);
     this.cs[i] = c;
-    console.log(this.cs);
     return true;
   }
 
@@ -47,7 +42,6 @@ class Player {
   static colors: string[] = ["blue", "red"];
 
   constructor(hand: Hand, deck: Deck, id: number) {
-    console.log("PLAYER DECK", deck);
     this.h = hand;
     this.d = deck;
     this.color = Player.colors[id];
@@ -55,7 +49,6 @@ class Player {
   }
 
   draw(i: number) {
-    console.log("drawing into handpos", i);
     if (this.d.size() > 0) {
       const c = this.d.draw();
       if (!c) {
@@ -81,7 +74,6 @@ class Player {
   }
 
   handAt(i: number) {
-    console.log("PLAYER HAND", this.h);
     return this.h.cs[i];
   }
 

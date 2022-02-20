@@ -1,6 +1,6 @@
 "use strict";
 
-import { Card } from "./card";
+import { Card, cardStatDirs } from "./card";
 
 class Deck {
   cs: Card[];
@@ -10,7 +10,6 @@ class Deck {
       const c = cs[i];
       this.cs.push(c);
     }
-    // console.log("NEW DECK", this.cs);
   }
 
   shuffle() {
@@ -58,14 +57,14 @@ function colorDeck(size: number, color: string) {
   const a = [];
   for (let i = 0; i < size; i++) {
     const t = trouppleAcolyte(color);
-    Object.keys(t.stats.dirs).forEach((k) => {
+    cardStatDirs.forEach((k) => {
       if (t.stats.dirs[k].v == 0) {
         delete t.stats.dirs[k];
       }
     });
     // only 3 arrows, not 4 silly goose
-    if (Object.keys(t.stats.dirs).length == 4) {
-      delete t.stats.dirs["udlr"[Math.floor(Math.random() * 4)]];
+    if (cardStatDirs.length == 4) {
+      delete t.stats.dirs[cardStatDirs[Math.floor(Math.random() * 4)]];
     }
     a.push(t);
   }

@@ -158,7 +158,6 @@ class Updater {
       },
     ];
 
-    // console.log("stats", stats);
     arrowFuncs.forEach((e) => {
       const s = statDirection(stats, sds[e.d]);
       if (!s || s?.v < 0) {

@@ -52,7 +52,6 @@ class Obstacles implements ISerializable<Obstacles> {
     this.size = size;
     if (numGems === undefined || numGems < 0) {
       numGems = Math.floor(size / 4) * 2 + 1;
-      // console.log(numGems);
     }
     this.m = new Array(this.size);
     for (let i = 0; i < this.size; i++) {
@@ -184,7 +183,6 @@ class Obstacles implements ISerializable<Obstacles> {
   }
 
   getGemsPos() {
-    // this.m.flatMap((a) => console.log(a));
     return this.m
       .flat()
       .filter((o: Obstacle) => o?.name == EObstacleName.gem)

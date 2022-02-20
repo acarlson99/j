@@ -194,7 +194,6 @@ class Board implements ISerializable<Board> {
   }
 
   setCard(x: number, y: number, c: Card, dontSet = false) {
-    // console.log("this board", this);
     if (this.gameover) {
       return false;
     }
@@ -207,8 +206,6 @@ class Board implements ISerializable<Board> {
       return false;
     }
     return this.setCard_(x, y, c, dontSet);
-    // this.cardMap[y][x] = c;
-    // return true;
   }
 
   // unsafe, private function
@@ -246,16 +243,12 @@ class Board implements ISerializable<Board> {
     if (this.gameover) {
       return false;
     }
-    // console.log("PUSHING", x, y, direction);
     if (direction === EDirection.None) {
       return false;
     }
     const [xf, yf] = directionF[direction];
     const nx = xf(x);
     const ny = yf(y);
-    // console.log(x, y);
-    // console.log("TO");
-    // console.log(nx, ny);
 
     if (!this.inBounds(nx, ny)) {
       throw new PushError(PushErrno.OutOfBounds, nx, ny);
@@ -319,7 +312,6 @@ class Board implements ISerializable<Board> {
     if (this.gameover) {
       return false;
     }
-    // console.log("dir", direction, EDirection.None);
     try {
       if (direction == EDirection.None) {
         if (!this.isSettablePos(x, y, c)) {
@@ -336,17 +328,12 @@ class Board implements ISerializable<Board> {
           throw new PushError(PushErrno.ObstacleInTheWay, x, y);
           return false;
         }
-        // console.log("NOT NONE");
-        // console.log("C:", c);
-        // console.log("dir", direction);
         // cannot push in direction
-        // console.log("CAN PUSH", c.isPushablePos(direction));
         const sd = statDirection(c.stats, direction);
         const p = sd?.v;
         if (!p) {
           throw new PushError(PushErrno.NoArrowPointingInDirection, direction);
         }
-        // console.log("priority", p, direction);
         // if (!c.canBePushed(direction, p)) return false;
         const nc = this.getCard(x, y);
         if (!nc) {
@@ -354,7 +341,6 @@ class Board implements ISerializable<Board> {
         }
         if (!nc.canBePushed(direction, p)) {
           // can this Card be pushed in direction
-          // console.log("cannot be pushed");
           throw new PushError(
             PushErrno.CannotPushCard,
             x,
@@ -416,11 +402,6 @@ class Board implements ISerializable<Board> {
     this.cardMap.flat().forEach((c) => {
       c.modifierCheck();
     });
-    // this.cardMap.flat().forEach((c) => {
-    //   c.autoCheck();
-    // });
-    // console.log("END OF TURN");
-    // console.log(this.cardMap.flat());
     for (let y = 0; y < this.cardMap.length; y++) {
       const row = this.cardMap[y];
       for (let x = 0; x < row.length; x++) {
@@ -448,7 +429,6 @@ class Board implements ISerializable<Board> {
         });
       }
     }
-    // console.log(this.cardMap.flat());
   }
 
   changeObstacleAt(x: number, y: number) {
@@ -457,7 +437,6 @@ class Board implements ISerializable<Board> {
 
   // can card `c` be played anywhere legally on `board`
   canBePlayed(c: Card) {
-    // console.log("try to play c", c);
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         // const keys = Object.keys(EDirection);

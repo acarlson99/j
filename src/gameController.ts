@@ -85,7 +85,7 @@ class GameController {
       return this.game.boardSize();
     };
     this.frameNo = 0;
-    console.log("GAEM", this.game);
+    console.log("game", this.game);
 
     this.handleEvent = (() => {
       const handPosArr = [0, 0];
@@ -178,14 +178,6 @@ class GameController {
         if (!playableMove) {
           console.log("no possible moves");
         }
-
-        // console.log("playerIdx", playerIdx);
-        // const c = (playerIdx == 0 ? this.game.p1 : this.game.p2).handAt(handPosArr[playerIdx]);
-        // console.log("HOLD", c);
-        // if (!c) console.log("CARD NOT FOUND");
-        // else this.ce.setC(c);
-        // this.ce.color = playerIdx == 0 ? "blue" : "red";
-        // console.log("clr", this.ce.color);
       };
     })();
   }

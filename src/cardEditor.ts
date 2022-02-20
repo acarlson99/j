@@ -55,7 +55,6 @@ class CardEditor {
     this.j = color == "blue" ? 0 : 2;
     this.cursor.x = this.j;
     this.cursor.y = this.i;
-    console.log(this.board);
   }
   update() {
     Updater.Instance.updateCardEditor(this);

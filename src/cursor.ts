@@ -75,7 +75,6 @@ class Cursor {
   }
 
   boardEdit() {
-    console.log("board edit made");
     this.game?.board.changeObstacleAt(this.x, this.y);
   }
 
