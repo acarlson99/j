@@ -5,6 +5,11 @@ import { Card, statDirection } from "./card";
 import { Obstacles } from "./obstacles";
 import { Updater } from "./updater";
 import ISerializable from "./ISerializable";
+import "regenerator-runtime/runtime.js";
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 enum EDirection {
   None = "NONE",
@@ -236,7 +241,7 @@ class Board implements ISerializable<Board> {
     x: number,
     y: number,
     direction: EDirection,
-    priority: any,
+    priority: number,
     dontPush = false,
     wind = false
   ) {
@@ -295,6 +300,7 @@ class Board implements ISerializable<Board> {
       if (wind) {
         this.cardMap[ny][nx]?.swapColor();
       }
+      this.obstacles?.cardPlaced(this, nx, ny);
     }
     return [nx, ny];
   }
@@ -362,22 +368,27 @@ class Board implements ISerializable<Board> {
           return didSet;
         }
       }
-      // slam logic
-      for (const k in EDirection) {
-        const dir = EDirection[k as EDirectionType] as EDirection;
-        if (dir == EDirection.None) {
-          continue;
-        }
-        const sdir = statDirection(c.stats, dir);
-        if (!sdir?.slam) {
-          continue;
-        }
-        const [xf, yf] = directionF[dir];
-        try {
-          this.push(xf(x), yf(y), dir, sdir.v, dontPush, sdir?.wind || false);
-        } catch (err) {
-          if (!(err instanceof PushError)) {
-            throw err;
+      if (!dontPush) {
+        this.obstacles?.cardPlaced(this, x, y);
+      }
+      if (this.getCard(x, y)) {
+        // slam logic
+        for (const k in EDirection) {
+          const dir = EDirection[k as EDirectionType] as EDirection;
+          if (dir == EDirection.None) {
+            continue;
+          }
+          const sdir = statDirection(c.stats, dir);
+          if (!sdir?.slam) {
+            continue;
+          }
+          const [xf, yf] = directionF[dir];
+          try {
+            this.push(xf(x), yf(y), dir, sdir.v, dontPush, sdir?.wind || false);
+          } catch (err) {
+            if (!(err instanceof PushError)) {
+              throw err;
+            }
           }
         }
       }
@@ -395,13 +406,15 @@ class Board implements ISerializable<Board> {
     return true;
   }
 
-  turnEnded() {
+  async turnEnded() {
     this.cardMap.flat().forEach((c) => {
       c.tickModifierTimer();
     });
     this.cardMap.flat().forEach((c) => {
       c.modifierCheck();
     });
+    // TODO: find a better way of doing this than adding coords to a set
+    const ignorePoss = new Set();
     for (let y = 0; y < this.cardMap.length; y++) {
       const row = this.cardMap[y];
       for (let x = 0; x < row.length; x++) {
@@ -411,24 +424,33 @@ class Board implements ISerializable<Board> {
         }
         const ads = c.autoDirsToPush();
         let [nx, ny] = [x, y];
-        ads?.forEach((dir) => {
+        if (ignorePoss.has(nx * this.size + ny)) {
+          console.log("SKIPPING:", nx, ny);
+          continue;
+        }
+        for (let di = 0; di < ads.length; di++) {
+          if (!this.getCard(nx, ny)) {
+            continue;
+          } // fell into pitfall or smth
+          const dir = ads[di];
           try {
-            const r = this.push(
-              nx,
-              ny,
-              dir,
-              statDirection(c.stats, dir)?.v,
-              false,
-              false
-            );
+            const sd = statDirection(c.stats, dir);
+            if (!sd) {
+              continue;
+            }
+            const r = this.push(nx, ny, dir, sd.v, false, false);
             if (r) {
               [nx, ny] = r;
             }
-          } finally {
-          }
-        });
+            await sleep(1000);
+          } catch {}
+        }
+        if (this.getCard(nx, ny)) {
+          ignorePoss.add(nx * this.size + ny);
+        }
       }
     }
+    console.log("-------------- TURN END CHECK DONE");
   }
 
   changeObstacleAt(x: number, y: number) {

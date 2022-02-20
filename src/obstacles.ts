@@ -1,5 +1,6 @@
 import { Updater } from "./updater";
 import ISerializable from "./ISerializable";
+import { Board } from "./board";
 
 enum EObstacleName {
   gem = "gem",
@@ -64,10 +65,10 @@ class Obstacles implements ISerializable<Obstacles> {
       this.setM_(size - 1, i, makeObstacle(EObstacleName.illegal));
     }
     for (let i = 1; i < size - 1; i++) {
-      this.setM_(1, i, makeObstacle(EObstacleName.graveyard));
-      this.setM_(i, 1, makeObstacle(EObstacleName.graveyard));
-      this.setM_(i, size - 2, makeObstacle(EObstacleName.graveyard));
-      this.setM_(size - 2, i, makeObstacle(EObstacleName.graveyard));
+      this.setM_(1, i, makeObstacle(EObstacleName.pitfall));
+      this.setM_(i, 1, makeObstacle(EObstacleName.pitfall));
+      this.setM_(i, size - 2, makeObstacle(EObstacleName.pitfall));
+      this.setM_(size - 2, i, makeObstacle(EObstacleName.pitfall));
     }
     this.setM_(1, 1, makeObstacle(EObstacleName.illegal));
     this.setM_(1, size - 2, makeObstacle(EObstacleName.illegal));
@@ -106,6 +107,23 @@ class Obstacles implements ISerializable<Obstacles> {
     }
 
     return this;
+  }
+
+  endOfTurnCheck(board: Board) {
+    // this.m.flat().forEach((ob) => {
+    //   if (ob.name == EObstacleName.pitfall && board.getCard(ob.x, ob.y)) {
+    //     board.unsetCard(ob.x, ob.y);
+    //     delete this.m[ob.y][ob.x];
+    //   }
+    // });
+  }
+
+  cardPlaced(board: Board, x: number, y: number) {
+    if (this.m[y][x]?.name == EObstacleName.pitfall) {
+      console.log("KILL", x, y);
+      board.unsetCard(x, y);
+      delete this.m[y][x];
+    }
   }
 
   setM_(x: number, y: number, o: Obstacle) {

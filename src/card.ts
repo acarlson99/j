@@ -20,7 +20,7 @@ type CardStat = {
 
 export { DirStat, CardStat };
 
-export const cardStatDirs = ["u", "d", "l", "r"];
+export const cardStatDirs = ["u", "l", "d", "r"];
 
 function statDirection(stats: CardStat, direction: EDirection) {
   if (!stats) {
