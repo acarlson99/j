@@ -42,12 +42,14 @@ class Hand {
 class Player {
   h: Hand;
   d: Deck;
+  color: string;
   // TODO: add color to player
 
-  constructor(hand: Hand, deck: Deck) {
+  constructor(hand: Hand, deck: Deck, color: string) {
     console.log("PLAYER DECK", deck);
     this.h = hand;
     this.d = deck;
+    this.color = color;
   }
 
   draw(i: number) {
