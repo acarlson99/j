@@ -11,7 +11,7 @@ import { clamp } from "./util";
 class Updater {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  colors = ["black", "white", "maroon"];
+  colors = ["grey", "black", "white", "maroon"];
 
   private static _instance: Updater;
   boardSize: number;
@@ -164,7 +164,7 @@ class Updater {
       if (!s || s?.v < 0) {
         return;
       }
-      const c = this.colors[clamp(0, s.v - 1, 3)];
+      const c = this.colors[clamp(0, s.v, 3)];
       ctx.fillStyle = c;
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
     });

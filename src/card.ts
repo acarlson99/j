@@ -126,7 +126,7 @@ class Card {
       cardStatDirs.forEach((ds) => {
         const sd = statDirection(this.stats, sds[ds]);
         if (sd?.v == 3) {
-          setStatDirection(this.stats, sds[ds], undefined);
+          sd.v = 0;
         }
       });
     }
