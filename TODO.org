@@ -29,15 +29,15 @@
  - [X] Board [2/2]:
    - [X] Configuration
    - [X] Obstacles [3/3]:
-	 - [X] Gems
-	 - [X] Cannot place here (must be pushed)
-	   - Graveyard
-	 - [X] Illegal card pos (out of bounds)
+     - [X] Gems
+     - [X] Cannot place here (must be pushed)
+       - Graveyard
+     - [X] Illegal card pos (out of bounds)
 ** Deploy [1/1]:
  - [X] Github pages:
    - [X] Deploy
    - [X] Automate deploy build:
-	 - must take into account that this will be deployed under '/j'
+     - must take into account that this will be deployed under '/j'
 ** Full Game [1/4]:
  - [-] Display [2/5]:
    - [ ] Multi-screen layout
@@ -47,42 +47,44 @@
    - [ ] Show special arrows (slam,wind,grave,etc)
  - [X] Pushing [2/2]:
    - [X] Push fail reasons:
-	 - If a push fails, return an explanation of why it is illegal
+     - If a push fails, return an explanation of why it is illegal
    - [X] Special [7/7]:
-	 - [X] Slam:
-	   - Slam down after pushing pushing all adjacent cards
-	   - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
-	 - [X] Wind/cascade:
-	   - Swap colors of all cards pushed
-	   - [[https://shovelknight.fandom.com/wiki/Cascade][wiki]]
-	 - [X] Bomb:
-	   - Destroy rocks and cards pushed into (respecting priority)
-	   - [[https://shovelknight.fandom.com/wiki/Bomb_Arrow][wiki]]
-	 - [X] Switch:
-	   - Swap u/d or l/r (or both) when pushed
-	   - [[https://shovelknight.fandom.com/wiki/Switch][wiki]]
-	 - [X] Auto move/conveyor:
-	   - Auto move in a direction at end of turn
-	   - [[https://shovelknight.fandom.com/wiki/Conveyor_Arrow][wiki]]
-	 - [X] Grave:
-	   - Can be played in graveyard spaces
-	   - ALSO allows cards to be placed on graveyard spaces if pushing grave card
-	   - [[https://shovelknight.fandom.com/wiki/Grave][wiki]]
-	 - [X] Priorities:
-	   - [X] Standard
-	   - [X] Double:
-		 - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
-	   - [X] Count (remove priority 3 arrows after 3 turns):
-		 - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
+     - [X] Slam:
+       - Slam down after pushing pushing all adjacent cards
+       - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
+     - [X] Wind/cascade:
+       - Swap colors of all cards pushed
+       - [[https://shovelknight.fandom.com/wiki/Cascade][wiki]]
+     - [X] Bomb:
+       - Destroy rocks and cards pushed into (respecting priority)
+       - [[https://shovelknight.fandom.com/wiki/Bomb_Arrow][wiki]]
+     - [X] Switch:
+       - Swap u/d or l/r (or both) when pushed
+       - [[https://shovelknight.fandom.com/wiki/Switch][wiki]]
+     - [X] Auto move/conveyor:
+       - Auto move in a direction at end of turn
+       - [[https://shovelknight.fandom.com/wiki/Conveyor_Arrow][wiki]]
+     - [X] Grave:
+       - Can be played in graveyard spaces
+       - ALSO allows cards to be placed on graveyard spaces if pushing grave card
+       - [[https://shovelknight.fandom.com/wiki/Grave][wiki]]
+     - [X] Priorities:
+       - [X] Standard
+       - [X] Double:
+         - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
+       - [X] Count (remove priority 3 arrows after 3 turns):
+         - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
  - [ ] Players [0/1]:
    - [ ] Deck/hand/turn/score display
  - [ ] Board [0/1]:
    - [ ] Obstacles [0/2]:
-	 - [ ] Pitfalls
-	 - [ ] Rocks
-** Polish [0/4]:
- - [ ] Players [0/1]:
+     - [ ] Pitfalls
+     - [ ] Rocks
+** Polish [0/5]:
+ - [ ] Players [0/2]:
    - [ ] Powers/characters/abilities
+   - [ ] More than 2 players
+ - [ ] Story/campaign mode
  - [ ] Animations
  - [ ] Move preview
  - [ ] Art

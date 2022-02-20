@@ -117,6 +117,35 @@ class Board {
     this.gameover = false;
   }
 
+  deepcopy() {
+    return new Board(this.size, false).deserialize(JSON.stringify(this));
+  }
+
+  deserialize(input: string) {
+    const obj = JSON.parse(input);
+    this.size = obj.size;
+    this.gameover = obj.gameover;
+    this.cardMap = new Array(this.size);
+    for (let i = 0; i < this.size; i++) {
+      this.cardMap[i] = new Array(this.size);
+      for (let j = 0; j < this.size; j++) {
+        const c = obj.cardMap[i][j] as Card;
+        if (c) {
+          this.setCard_(j, i, new Card(c.color, c.name, c.stats));
+        } else {
+          this.unsetCard(j, i);
+        }
+      }
+    }
+
+    this.obstacles = obj.obstacles
+      ? new Obstacles(obj.obstacles.size, 0).deserialize(
+        JSON.stringify(obj.obstacles)
+      )
+      : undefined;
+    return this;
+  }
+
   inBounds(x: number, y: number) {
     return x >= 0 && y >= 0 && x < this.size && y < this.size;
   }

@@ -4,6 +4,7 @@ import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { Updater } from "./updater";
 import { gc } from "./gameController";
+import { Player } from "./player";
 
 class CEBoard extends Board {
   update() {
@@ -58,8 +59,7 @@ class CardEditor {
   }
   update() {
     Updater.Instance.updateCardEditor(this);
-    const h1 = gc.game.p1.hand();
-    const h2 = gc.game.p2.hand();
+    const [h1, h2, rest] = gc.game.players.map((p: Player) => p.hand());
     for (let i = 0; i < 3; i++) {
       if (h1[i]) {
         this.board.setCard(0, i, h1[i]);

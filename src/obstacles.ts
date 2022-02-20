@@ -32,74 +32,20 @@ class Obstacle {
     // console.warn("naughty update");
   }
   /* eslint-enable @typescript-eslint/no-unused-vars */
+  copy() {
+    const o = new Obstacle(this.name);
+    o.x = this.x;
+    o.y = this.y;
+  }
 }
 
 function makeObstacle(name: EObstacleName) {
-  console.log("creating obstacle");
-
-  const o = new Obstacle(name);
-
-  // switch (name) {
-  //   case EObstacleName.gem:
-  //     o.update = function () {
-  //       const radius = cardWidth / 3;
-  //       const centerX = xToCoord(this.x, cardWidth) + cardWidth / 2;
-  //       const centerY = yToCoord(this.y, cardWidth) + cardWidth / 2;
-
-  //       context.beginPath();
-  //       context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-  //       context.fillStyle = "lavender";
-  //       context.fill();
-  //       context.lineWidth = 5;
-  //       context.strokeStyle = "#003300";
-  //       context.stroke();
-  //     };
-  //     break;
-  //   case EObstacleName.illegal:
-  //     o.update = function () {
-  //       context.fillStyle = "grey";
-  //       context.fillRect(
-  //         xToCoord(this.x, cardWidth),
-  //         yToCoord(this.y, cardWidth),
-  //         cardWidth,
-  //         cardWidth
-  //       );
-  //     };
-  //     break;
-  //   case EObstacleName.graveyard:
-  //     o.update = function () {
-  //       context.globalAlpha = 0.75;
-  //       context.fillStyle = "darkgreen";
-  //       context.fillRect(
-  //         xToCoord(this.x, cardWidth),
-  //         yToCoord(this.y, cardWidth),
-  //         cardWidth,
-  //         cardWidth
-  //       );
-  //       context.globalAlpha = 1.0;
-  //     };
-  //     break;
-  //   case EObstacleName.pitfall:
-  //     o.update = function () {
-  //       context.globalAlpha = 0.5;
-  //       context.fillStyle = "brown";
-  //       context.fillRect(
-  //         xToCoord(this.x, cardWidth),
-  //         yToCoord(this.y, cardWidth),
-  //         cardWidth,
-  //         cardWidth
-  //       );
-  //       context.globalAlpha = 1.0;
-  //     };
-  //     break;
-  // }
-  return o;
+  return new Obstacle(name);
 }
 
 class Obstacles {
   size: number;
   m: Obstacle[][];
-  gem: any;
 
   constructor(size: number, numGems: number) {
     this.size = size;
@@ -137,9 +83,26 @@ class Obstacles {
 
       this.setM_(x, y, makeObstacle(EObstacleName.gem));
     }
-    // this.setM_(0, 0, makeObstacle(EObstacleName.illegal));
-    // this.setM_(0, 1, makeObstacle(EObstacleName.graveyard));
-    // this.setM_(0, 2, makeObstacle(EObstacleName.pitfall));
+  }
+
+  deserialize(input: string) {
+    const obj = JSON.parse(input);
+    this.size = obj.size;
+    this.m = new Array(this.size);
+    for (let i = 0; i < this.size; i++) {
+      this.m[i] = new Array(this.size);
+      for (let j = 0; j < this.size; j++) {
+        console.log("CUM");
+        const obcp = obj.m[i][j];
+        if (obcp) {
+          this.setM_(j, i, new Obstacle(obcp.name));
+        } else {
+          this.unsetM_(j, i);
+        }
+      }
+    }
+
+    return this;
   }
 
   setM_(x: number, y: number, o: Obstacle) {

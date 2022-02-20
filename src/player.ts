@@ -43,13 +43,15 @@ class Player {
   h: Hand;
   d: Deck;
   color: string;
-  // TODO: add color to player
+  id: number;
+  static colors: string[] = ["blue", "red"];
 
-  constructor(hand: Hand, deck: Deck, color: string) {
+  constructor(hand: Hand, deck: Deck, id: number) {
     console.log("PLAYER DECK", deck);
     this.h = hand;
     this.d = deck;
-    this.color = color;
+    this.color = Player.colors[id];
+    this.id = id;
   }
 
   draw(i: number) {
