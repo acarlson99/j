@@ -19,10 +19,6 @@ class Game {
   size: number;
   players: Player[] = [];
   board: Board;
-  boardSize: () => number;
-  playCard: (x: number, y: number, d: EDirection, c: Card) => any;
-  canPlayCard: (x: number, y: number, d: EDirection, c: Card) => any;
-  endTurn: () => void;
   turnCount = 0;
 
   constructor(size: number) {
@@ -39,18 +35,23 @@ class Game {
       });
     }
     this.board = new Board(size);
-    this.boardSize = function () {
-      return this.board.size;
-    };
-    console.log(this.board);
+  }
 
-    this.playCard = (x, y, d, c) => this.board.playCard(x, y, d, c, false);
-    this.canPlayCard = (x, y, d, c) => this.board.playCard(x, y, d, c, true);
-    this.endTurn = () => {
-      this.turnCount++;
-      this.board.turnEnded();
-    };
-    console.log("boardsize", this.boardSize());
+  boardSize() {
+    return this.board.size;
+  }
+
+  playCard(x: number, y: number, d: EDirection, c: Card) {
+    return this.board.playCard(x, y, d, c, false);
+  }
+
+  canPlayCard(x: number, y: number, d: EDirection, c: Card) {
+    return this.board.playCard(x, y, d, c, true);
+  }
+
+  endTurn() {
+    this.turnCount++;
+    this.board.turnEnded();
   }
 
   update() {
@@ -97,61 +98,61 @@ class GameController {
 
         const _playHeldCard = (dir: EDirection) => {
           switch (this.gameScreenType) {
-            case EScreenType.Game:
-              cursor.holdCard(currentPlayer.handAt(handPos));
-              if (cursor.playHeldCard(dir)) {
-                // cursor.holdCard(currentPlayer.handAt(handPos));
-                console.log("playing card at hand pos:", handPos);
-                currentPlayer.play(handPos);
-                this.game.endTurn();
-              }
-              break;
-            case EScreenType.Map:
-              console.log("editing board");
-              cursor.boardEdit();
-              break;
+          case EScreenType.Game:
+            cursor.holdCard(currentPlayer.handAt(handPos));
+            if (cursor.playHeldCard(dir)) {
+              // cursor.holdCard(currentPlayer.handAt(handPos));
+              console.log("playing card at hand pos:", handPos);
+              currentPlayer.play(handPos);
+              this.game.endTurn();
+            }
+            break;
+          case EScreenType.Map:
+            console.log("editing board");
+            cursor.boardEdit();
+            break;
           }
         };
         switch (e.key) {
-          case "ArrowUp":
-          case "ArrowDown":
-          case "ArrowLeft":
-          case "ArrowRight":
-            cursor.move(
-              {
-                ArrowUp: EDirection.Up,
-                ArrowDown: EDirection.Down,
-                ArrowLeft: EDirection.Left,
-                ArrowRight: EDirection.Right,
-              }[e.key]
-            );
-            break;
-          case "w":
-          case "a":
-          case "s":
-          case "d":
-          case " ":
-            _playHeldCard(
-              {
-                w: EDirection.Up,
-                a: EDirection.Left,
-                s: EDirection.Down,
-                d: EDirection.Right,
-                " ": EDirection.None,
-              }[e.key]
-            );
-            break;
-          case "m":
-            this.gameScreenType += 1;
-            if (this.gameScreenType >= EScreenType.__LENGTH) {
-              this.gameScreenType = 0;
-            }
-            break;
-          case "1":
-          case "2":
-          case "3":
-            handPosArr[playerIdx] = Number(e.key) - 1;
-            break;
+        case "ArrowUp":
+        case "ArrowDown":
+        case "ArrowLeft":
+        case "ArrowRight":
+          cursor.move(
+            {
+              ArrowUp: EDirection.Up,
+              ArrowDown: EDirection.Down,
+              ArrowLeft: EDirection.Left,
+              ArrowRight: EDirection.Right,
+            }[e.key]
+          );
+          break;
+        case "w":
+        case "a":
+        case "s":
+        case "d":
+        case " ":
+          _playHeldCard(
+            {
+              w: EDirection.Up,
+              a: EDirection.Left,
+              s: EDirection.Down,
+              d: EDirection.Right,
+              " ": EDirection.None,
+            }[e.key]
+          );
+          break;
+        case "m":
+          this.gameScreenType += 1;
+          if (this.gameScreenType >= EScreenType.__LENGTH) {
+            this.gameScreenType = 0;
+          }
+          break;
+        case "1":
+        case "2":
+        case "3":
+          handPosArr[playerIdx] = Number(e.key) - 1;
+          break;
         }
         playerIdx = this.game.turnCount % 2;
         currentPlayer = this.game.players[playerIdx % 2];

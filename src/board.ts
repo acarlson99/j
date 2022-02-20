@@ -4,6 +4,7 @@ import { clamp, FString } from "./util";
 import { Card, statDirection } from "./card";
 import { Obstacles } from "./obstacles";
 import { Updater } from "./updater";
+import ISerializable from "./ISerializable";
 
 enum EDirection {
   None = "NONE",
@@ -97,11 +98,12 @@ class PushError extends Error {
   }
 }
 
-class Board {
+class Board implements ISerializable<Board> {
   size: number;
   cardMap: Card[][];
   obstacles: Obstacles | undefined;
   gameover: boolean;
+
   constructor(size: number, createObstacles = true) {
     this.size = size;
     this.cardMap = new Array(this.size);
@@ -118,7 +120,11 @@ class Board {
   }
 
   deepcopy() {
-    return new Board(this.size, false).deserialize(JSON.stringify(this));
+    return new Board(this.size, false).deserialize(this.serialize());
+  }
+
+  serialize(): string {
+    return JSON.stringify(this);
   }
 
   deserialize(input: string) {

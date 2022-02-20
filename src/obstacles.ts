@@ -1,4 +1,5 @@
 import { Updater } from "./updater";
+import ISerializable from "./ISerializable";
 
 enum EObstacleName {
   gem = "gem",
@@ -43,7 +44,7 @@ function makeObstacle(name: EObstacleName) {
   return new Obstacle(name);
 }
 
-class Obstacles {
+class Obstacles implements ISerializable<Obstacles> {
   size: number;
   m: Obstacle[][];
 
@@ -85,6 +86,10 @@ class Obstacles {
     }
   }
 
+  serialize(): string {
+    return JSON.stringify(this);
+  }
+
   deserialize(input: string) {
     const obj = JSON.parse(input);
     this.size = obj.size;
@@ -92,7 +97,6 @@ class Obstacles {
     for (let i = 0; i < this.size; i++) {
       this.m[i] = new Array(this.size);
       for (let j = 0; j < this.size; j++) {
-        console.log("CUM");
         const obcp = obj.m[i][j];
         if (obcp) {
           this.setM_(j, i, new Obstacle(obcp.name));
