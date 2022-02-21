@@ -65,10 +65,10 @@ class Obstacles implements ISerializable<Obstacles> {
       this.setM_(size - 1, i, makeObstacle(EObstacleName.illegal));
     }
     for (let i = 1; i < size - 1; i++) {
-      this.setM_(1, i, makeObstacle(EObstacleName.pitfall));
-      this.setM_(i, 1, makeObstacle(EObstacleName.pitfall));
-      this.setM_(i, size - 2, makeObstacle(EObstacleName.pitfall));
-      this.setM_(size - 2, i, makeObstacle(EObstacleName.pitfall));
+      this.setM_(1, i, makeObstacle(EObstacleName.graveyard));
+      this.setM_(i, 1, makeObstacle(EObstacleName.graveyard));
+      this.setM_(i, size - 2, makeObstacle(EObstacleName.graveyard));
+      this.setM_(size - 2, i, makeObstacle(EObstacleName.graveyard));
     }
     this.setM_(1, 1, makeObstacle(EObstacleName.illegal));
     this.setM_(1, size - 2, makeObstacle(EObstacleName.illegal));

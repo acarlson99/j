@@ -1,6 +1,7 @@
 "use strict";
 
-import { Card, cardStatDirs } from "./card";
+import { Card, cardStatDirs, statDirection, setStatDirection } from "./card";
+import { sds } from "./board";
 
 class Deck {
   cs: Card[];
@@ -58,13 +59,14 @@ function colorDeck(size: number, color: string) {
   for (let i = 0; i < size; i++) {
     const t = trouppleAcolyte(color);
     cardStatDirs.forEach((k) => {
-      if (t.stats.dirs[k].v == 0) {
-        delete t.stats.dirs[k];
+      if (statDirection(t.stats, sds[k])?.v == 0) {
+        setStatDirection(t.stats, sds[k], undefined);
       }
     });
     // only 3 arrows, not 4 silly goose
     if (cardStatDirs.length == 4) {
-      delete t.stats.dirs[cardStatDirs[Math.floor(Math.random() * 4)]];
+      let randDir = sds[cardStatDirs[Math.floor(Math.random() * 4)]];
+      setStatDirection(t.stats, randDir, undefined);
     }
     a.push(t);
   }
