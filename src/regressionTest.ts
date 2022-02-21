@@ -227,6 +227,21 @@ function cardTest() {
     },
     {
       p: {
+        pusher: { dirs: { l: { v: 1 } } }, // blue
+        pushed: { dirs: { l: { v: 2 } } }, // red
+        d: EDirection.None,
+      },
+      boardPoss: [
+        {
+          x: 1,
+          y: 1,
+          color: "red",
+        },
+      ],
+      w: false,
+    },
+    {
+      p: {
         pusher: {
           dirs: {
             l: { v: 1 },
@@ -536,7 +551,157 @@ function cardTest() {
             name: false,
           },
         ],
+        want: true,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
+            },
+            x: 1,
+            y: 1,
+            color: "red",
+            name: "r1",
+          },
+        ],
 
+        direction: EDirection.None,
+        pusher: {
+          stats: {
+            dirs: {
+              l: {
+                v: 1,
+                slam: true,
+              },
+              r: {
+                v: 1,
+                slam: true,
+              },
+              u: {
+                v: 1,
+                slam: true,
+              },
+              d: {
+                v: 1,
+                slam: true,
+              },
+            },
+          },
+          x: 2,
+          y: 1,
+          color: "blue",
+          name: "b1",
+        },
+      },
+
+      w: {
+        board: [
+          {
+            x: 2,
+            y: 1,
+            color: "blue",
+            name: "b1",
+          },
+          {
+            x: 0,
+            y: 1,
+            color: "red",
+            name: "r1",
+          },
+        ],
+        want: true,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
+            },
+            x: 1,
+            y: 1,
+            color: "red",
+            name: "r1",
+          },
+          {
+            stats: {
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
+            },
+            x: 0,
+            y: 1,
+            color: "red",
+            name: "r2",
+          },
+        ],
+
+        direction: EDirection.None,
+        pusher: {
+          stats: {
+            dirs: {
+              l: {
+                v: 1,
+                slam: true,
+              },
+              r: {
+                v: 1,
+                slam: true,
+              },
+              u: {
+                v: 1,
+                slam: true,
+              },
+              d: {
+                v: 1,
+                slam: true,
+              },
+            },
+          },
+          x: 2,
+          y: 1,
+          color: "blue",
+          name: "b1",
+        },
+      },
+
+      w: {
+        board: [
+          {
+            x: 2,
+            y: 1,
+            color: "blue",
+            name: "b1",
+          },
+          {
+            x: 1,
+            y: 1,
+            color: "red",
+            name: "r1",
+          },
+          {
+            x: 0,
+            y: 1,
+            color: "red",
+            name: "r2",
+          },
+        ],
         want: true,
       },
     },
@@ -750,7 +915,8 @@ function cardTest() {
             stats: {
               dirs: {
                 r: {
-                  v: 1, bomb: true
+                  v: 1,
+                  bomb: true,
                 },
               },
             },
@@ -817,7 +983,8 @@ function cardTest() {
             stats: {
               dirs: {
                 r: {
-                  v: 1, bomb: true
+                  v: 1,
+                  bomb: true,
                 },
               },
             },
@@ -843,6 +1010,57 @@ function cardTest() {
             dirs: {
               r: {
                 v: 2,
+              },
+            },
+          },
+          x: 0,
+          y: 0,
+          color: "blue",
+          name: "b1",
+        },
+      },
+      w: {
+        board: [],
+        want: false,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Right,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                r: {
+                  v: 1,
+                  bomb: true,
+                },
+              },
+            },
+            x: 0,
+            y: 0,
+            color: "red",
+            name: "r1",
+          },
+          {
+            stats: {
+              dirs: {
+                l: { v: 2 },
+              },
+            },
+            x: 1,
+            y: 0,
+            color: "red",
+            name: "r2",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              r: {
+                v: 2,
+                bomb: true,
               },
             },
           },

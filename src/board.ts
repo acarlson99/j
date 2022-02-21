@@ -108,6 +108,7 @@ class Board implements ISerializable<Board> {
   cardMap: Card[][];
   obstacles: Obstacles | undefined;
   gameover: boolean;
+  lastPushError?: PushError;
 
   constructor(size: number, createObstacles = true) {
     this.size = size;
@@ -341,16 +342,15 @@ class Board implements ISerializable<Board> {
           throw new PushError(PushErrno.ObstacleInTheWay, x, y);
           return false;
         }
-        // cannot push in direction
-        const sd = statDirection(c.stats, direction);
-        const p = sd?.v;
-        if (!p) {
-          throw new PushError(PushErrno.NoArrowPointingInDirection, direction);
-        }
-        // if (!c.canBePushed(direction, p)) return false;
         const nc = this.getCard(x, y);
         if (!nc) {
           throw new PushError(PushErrno.NoCardAt, x, y);
+        }
+        const sd = statDirection(c.stats, direction);
+        const p = sd?.v;
+        if (!p) {
+          // cannot push in direction
+          throw new PushError(PushErrno.NoArrowPointingInDirection, direction);
         }
         if (!nc.canBePushed(direction, p)) {
           // can this Card be pushed in direction
@@ -405,11 +405,12 @@ class Board implements ISerializable<Board> {
       }
       if (dontPush) {
         return false;
-      } // ABSOLUTELY NO IO IF NOT ATTEMPTING A PUSH
-      // TODO: do something with this
-      console.log("caught appropriate error", err);
+      }
+      // console.log("caught appropriate error", err);
+      this.lastPushError = err;
       return false;
     }
+    this.lastPushError = undefined;
     return true;
   }
 

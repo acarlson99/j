@@ -65,7 +65,7 @@ function colorDeck(size: number, color: string) {
     });
     // only 3 arrows, not 4 silly goose
     if (cardStatDirs.length == 4) {
-      let randDir = sds[cardStatDirs[Math.floor(Math.random() * 4)]];
+      const randDir = sds[cardStatDirs[Math.floor(Math.random() * 4)]];
       setStatDirection(t.stats, randDir, undefined);
     }
     a.push(t);

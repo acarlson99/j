@@ -51,6 +51,7 @@ class Cursor {
     const pushed = game.playCard(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) {
+      console.log(game.board.lastPushError);
       return false;
     }
     this.heldCard = undefined;
