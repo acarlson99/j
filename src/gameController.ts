@@ -79,7 +79,7 @@ class GameController {
     this.interval = undefined;
 
     this.game = new Game(boardSize);
-    this.cursor = new Cursor(this.game, this.ce);
+    this.cursor = new Cursor(boardSize);
 
     this.boardSize = function () {
       return this.game.boardSize();
@@ -100,7 +100,7 @@ class GameController {
           switch (this.gameScreenType) {
           case EScreenType.Game:
             cursor.holdCard(currentPlayer.handAt(handPos));
-            if (cursor.playHeldCard(dir)) {
+            if (cursor.playHeldCard(dir, this.game)) {
               // cursor.holdCard(currentPlayer.handAt(handPos));
               console.log("playing card at hand pos:", handPos);
               currentPlayer.play(handPos);
@@ -109,7 +109,7 @@ class GameController {
             break;
           case EScreenType.Map:
             console.log("editing board");
-            cursor.boardEdit();
+            cursor.boardEdit(this.game.board);
             break;
           }
         };
@@ -153,6 +153,8 @@ class GameController {
         case "3":
           handPosArr[playerIdx] = Number(e.key) - 1;
           break;
+        case "r":
+          this.game = new Game(this.boardSize());
         }
         playerIdx = this.game.turnCount % 2;
         currentPlayer = this.game.players[playerIdx % 2];

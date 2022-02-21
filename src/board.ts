@@ -5,11 +5,11 @@ import { Card, statDirection } from "./card";
 import { Obstacles } from "./obstacles";
 import { Updater } from "./updater";
 import ISerializable from "./ISerializable";
-import "regenerator-runtime/runtime.js";
+// import "regenerator-runtime/runtime.js";
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function sleep(ms: number) {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
 
 enum EDirection {
   None = "NONE",
@@ -273,24 +273,31 @@ class Board implements ISerializable<Board> {
     }
     const nc = this.getCard(nx, ny);
     if (nc) {
-      // next to non-empty space
-      // attempt to push next Card out of the way
-      if (
-        statDirection(c.stats, direction)?.bomb &&
-        c.canPush(direction) &&
-        nc.canBePushed(direction, priority)
-      ) {
-        // if pushing in direction of bomb
-        // overwrite next card
-        if (!dontPush) {
-          delete this.cardMap[ny][nx];
+      if (nc.canBePushed(direction, priority)) {
+        // next to non-empty space
+        // attempt to push next Card out of the way
+        if (statDirection(c.stats, direction)?.bomb) {
+          // if pushing in direction of bomb
+          // overwrite next card
+          if (!dontPush) {
+            delete this.cardMap[ny][nx];
+          }
+        } else {
+          // else continue chain
+          const cando = this.push(nx, ny, direction, priority, dontPush, wind);
+          if (!cando) {
+            return false;
+          } // cannot push for some reason
         }
       } else {
-        // else continue chain
-        const cando = this.push(nx, ny, direction, priority, dontPush, wind);
-        if (!cando) {
-          return false;
-        } // cannot push for some reason
+        throw new PushError(
+          PushErrno.CannotPushCard,
+          x,
+          y,
+          direction,
+          priority,
+          statDirection(nc.stats, opposites[direction])?.v
+        );
       }
     }
     this.setCard_(nx, ny, c, dontPush);
@@ -406,7 +413,7 @@ class Board implements ISerializable<Board> {
     return true;
   }
 
-  async turnEnded() {
+  turnEnded() {
     this.cardMap.flat().forEach((c) => {
       c.tickModifierTimer();
     });
@@ -442,7 +449,7 @@ class Board implements ISerializable<Board> {
             if (r) {
               [nx, ny] = r;
             }
-            await sleep(1000);
+            // await sleep(1000);
           } catch {}
         }
         if (this.getCard(nx, ny)) {
@@ -517,7 +524,8 @@ class Board implements ISerializable<Board> {
     // if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
     console.log("WINNER WINNER CHICKEN DINNER", v);
-    this.gameover = true;
+    // TODO: readd gameover
+    // this.gameover = true;
     return v;
   }
 

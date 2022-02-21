@@ -9,7 +9,18 @@
 * Rules
   For now see [[https://shovelknight.fandom.com/wiki/Joustus#Rules][here]] for rules.  Will populate this section when rules differ substantially
 
-  Card arrow colors: black < white < red
+  Card arrow colors: grey < black < white < red
+
+** Controls
+
+|--------------------+---------------------------|
+| space              | play card                 |
+| wasd               | play card pushing uldr    |
+| up down left right | move cursor               |
+| 123                | select card 1,2,3 in hand |
+| m                  | map edit                  |
+| r                  | reset board               |
+|--------------------+---------------------------|
 
 * Progress
   :PROPERTIES:
@@ -38,14 +49,14 @@
    - [X] Deploy
    - [X] Automate deploy build:
      - must take into account that this will be deployed under '/j'
-** Full Game [1/4]:
+** Full Game [0/4]:
  - [-] Display [2/5]:
    - [ ] Multi-screen layout
    - [X] Major graphics refactor, single canvas for whole screen
    - [X] Dynamic resizing
    - [ ] Display push fail reason
    - [ ] Show special arrows (slam,wind,grave,etc)
- - [X] Pushing [2/2]:
+ - [-] Pushing [2/3]:
    - [X] Push fail reasons:
      - If a push fails, return an explanation of why it is illegal
    - [X] Special [7/7]:
@@ -74,11 +85,12 @@
          - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
        - [X] Count (remove priority 3 arrows after 3 turns):
          - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
+   - [ ] Tests
  - [ ] Players [0/1]:
    - [ ] Deck/hand/turn/score display
- - [ ] Board [0/1]:
-   - [ ] Obstacles [0/2]:
-     - [ ] Pitfalls
+ - [-] Board [0/1]:
+   - [-] Obstacles [1/2]:
+     - [X] Pitfalls
      - [ ] Rocks
 ** Polish [0/5]:
  - [ ] Players [0/2]:

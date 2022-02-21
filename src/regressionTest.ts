@@ -302,6 +302,51 @@ function cardTest() {
     }
   }
 
+  const tests: Test[] = [
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Right,
+        pushed: [
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 0,
+            y: 0,
+            color: "red",
+            name: "r1",
+          },
+          {
+            stats: {
+              dirs: {
+                l: { v: 2 },
+              },
+            },
+            x: 1,
+            y: 0,
+            color: "red",
+            name: "r2",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              r: { v: 2 },
+            },
+          },
+          x: 0,
+          y: 0,
+          color: "blue",
+          name: "b1",
+        },
+      },
+      w: {
+        board: [],
+        want: false,
+      },
+    },
+  ];
   const slamTests: Test[] = [
     {
       p: {
@@ -496,16 +541,337 @@ function cardTest() {
       },
     },
   ];
-  doTest(slamTests);
-  // TODO: add wind tests
-  // TODO: add bomb tests
+  const windTests: Test[] = [
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Left,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                l: { v: 1 },
+                u: { v: 1 },
+                d: { v: 1 },
+              },
+            },
+            x: 3,
+            y: 3,
+            color: "red",
+            name: "test2",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              l: {
+                v: 1,
+                wind: true,
+              },
+            },
+          },
+          x: 3,
+          y: 3,
+          color: "blue",
+          name: "test1",
+        },
+      },
+      w: {
+        board: [
+          {
+            x: 3,
+            y: 3,
+            name: "test1",
+            color: "blue",
+          },
+          {
+            x: 2,
+            y: 3,
+            name: "test2",
+            color: "blue",
+          },
+          {
+            x: 1,
+            y: 3,
+            name: false,
+          },
+        ],
+        want: true,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Left,
+        pushed: [
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 1,
+            y: 1,
+            color: "red",
+            name: "test2",
+          },
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 0,
+            y: 1,
+            color: "red",
+            name: "test3",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              l: {
+                v: 1,
+                wind: true,
+              },
+            },
+          },
+          x: 1,
+          y: 1,
+          color: "blue",
+          name: "test1",
+        },
+      },
+      w: {
+        board: [
+          {
+            x: 1,
+            y: 1,
+            name: "test2",
+            color: "red",
+          },
+          {
+            x: 0,
+            y: 1,
+            color: "red",
+            name: "test3",
+          },
+          {
+            x: 1,
+            y: 3,
+            name: false,
+          },
+        ],
+        want: false,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Left,
+        pushed: [
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 1,
+            y: 1,
+            color: "red",
+            name: "test2",
+          },
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 2,
+            y: 1,
+            color: "red",
+            name: "test3",
+          },
+          {
+            stats: {
+              dirs: {},
+            },
+            x: 3,
+            y: 1,
+            color: "blue",
+            name: "test4",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              l: {
+                v: 1,
+                wind: true,
+              },
+            },
+          },
+          x: 3,
+          y: 1,
+          color: "blue",
+          name: "test1",
+        },
+      },
+      w: {
+        board: [
+          {
+            x: 3,
+            y: 1,
+            color: "blue",
+            name: "test1",
+          },
+          {
+            x: 0,
+            y: 1,
+            color: "blue",
+            name: "test2",
+          },
+          {
+            x: 1,
+            y: 1,
+            color: "blue",
+            name: "test3",
+          },
+          {
+            x: 2,
+            y: 1,
+            color: "red",
+            name: "test4",
+          },
+        ],
+        want: true,
+      },
+    },
+  ];
+  const bombTests: Test[] = [
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Right,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                r: {
+                  v: 1, bomb: true
+                },
+              },
+            },
+            x: 0,
+            y: 0,
+            color: "red",
+            name: "r1",
+          },
+          {
+            stats: {
+              dirs: {
+                l: { v: 2 },
+              },
+            },
+            x: 1,
+            y: 0,
+            color: "red",
+            name: "r2",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              r: {
+                v: 3,
+              },
+            },
+          },
+          x: 0,
+          y: 0,
+          color: "blue",
+          name: "b1",
+        },
+      },
+      w: {
+        board: [
+          {
+            x: 0,
+            y: 0,
+            color: "blue",
+            name: "b1",
+          },
+          {
+            x: 1,
+            y: 0,
+            color: "red",
+            name: "r1",
+          },
+          {
+            x: 2,
+            y: 0,
+            color: false,
+          },
+        ],
+        want: true,
+      },
+    },
+    {
+      p: {
+        size: 5,
+        direction: EDirection.Right,
+        pushed: [
+          {
+            stats: {
+              dirs: {
+                r: {
+                  v: 1, bomb: true
+                },
+              },
+            },
+            x: 0,
+            y: 0,
+            color: "red",
+            name: "r1",
+          },
+          {
+            stats: {
+              dirs: {
+                l: { v: 2 },
+              },
+            },
+            x: 1,
+            y: 0,
+            color: "red",
+            name: "r2",
+          },
+        ],
+        pusher: {
+          stats: {
+            dirs: {
+              r: {
+                v: 2,
+              },
+            },
+          },
+          x: 0,
+          y: 0,
+          color: "blue",
+          name: "b1",
+        },
+      },
+      w: {
+        board: [],
+        want: false,
+      },
+    },
+  ];
+  console.log("BEGIN THE GOOD TEST");
+  doTest("tests", tests);
+  doTest("slamTests", slamTests);
+  // wind tests
+  doTest("windTests", windTests);
+  // bomb tests
+  doTest("bombTests", bombTests);
   // TODO: add grave tests
 
   console.log("TESTS DONE");
   return 0;
 }
 
-function doTest(tests: Test[]) {
+function doTest(testName: string, tests: Test[]) {
   for (let i = 0; i < tests.length; i++) {
     const t = tests[i];
     const params = t.p;
@@ -556,7 +922,7 @@ function doTest(tests: Test[]) {
           sb += "color: " + c?.color;
         }
         console.warn(
-          "slam test",
+          testName,
           i,
           "card out of place at",
           x,
@@ -573,7 +939,7 @@ function doTest(tests: Test[]) {
       console.warn(board);
     }
     if (got != t.w.want) {
-      console.warn("slam test", i, "fail: want:", t.w.want, "got:", got);
+      console.warn(testName, i, "fail: want:", t.w.want, "got:", got);
     }
   }
 }

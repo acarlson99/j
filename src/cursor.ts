@@ -1,24 +1,19 @@
 "use strict";
 
 import { clamp } from "./util";
-import { EDirection } from "./board";
+import { EDirection, Board } from "./board";
 import { Game } from "./gameController";
-import { CardEditor } from "./cardEditor";
 import { Card } from "./card";
 import { Updater } from "./updater";
 
 class Cursor {
   size: number;
-  game: Game | undefined;
-  ce: CardEditor | undefined;
   x: number;
   y: number;
   heldCard: any;
 
-  constructor(game: Game | undefined, ce: CardEditor | undefined) {
-    this.size = game?.boardSize() || 0;
-    this.game = game;
-    this.ce = ce;
+  constructor(size: number) {
+    this.size = size;
     this.x = Math.floor(this.size / 2);
     this.y = Math.floor(this.size / 2);
     this.heldCard = undefined;
@@ -49,11 +44,11 @@ class Cursor {
     console.log("HOLDING CARD", this.heldCard);
   }
 
-  playHeldCard(direction: EDirection) {
+  playHeldCard(direction: EDirection, game: Game) {
     console.log("cursor push", this.x, this.y, direction);
     // const c = this.game.board.getCard(this.x, this.y);
     // if (!c || !this.heldCard) return false;
-    const pushed = this.game?.playCard(this.x, this.y, direction, this.heldCard);
+    const pushed = game.playCard(this.x, this.y, direction, this.heldCard);
     console.log("PUSH RETURNED:", pushed);
     if (!pushed) {
       return false;
@@ -61,7 +56,7 @@ class Cursor {
     this.heldCard = undefined;
 
     // FIXME: this does not belong here
-    const winner = this.game?.board.checkWin();
+    const winner = game.board.checkWin();
     if (winner) {
       const winnerScore = document.getElementById(
         winner == 1 ? "p1score" : "p2score"
@@ -74,8 +69,8 @@ class Cursor {
     return true;
   }
 
-  boardEdit() {
-    this.game?.board.changeObstacleAt(this.x, this.y);
+  boardEdit(board: Board) {
+    board.changeObstacleAt(this.x, this.y);
   }
 
   // placeHeldCard() {

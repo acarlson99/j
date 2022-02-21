@@ -46,7 +46,7 @@ class CardEditor {
     this.j = 0;
     this.cardWidth = 100;
     this.board = new CEBoard(3, false);
-    this.cursor = new CECursor(undefined, undefined); //FIXME: dont break lmao
+    this.cursor = new CECursor(0); //FIXME: dont break lmao
     this.cursor.x = this.i;
     this.cursor.y = this.j;
   }
