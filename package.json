@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./node_modules/parcel-bundler/bin/cli serve ./src/index.html --port 8080",
     "build": "node ./node_modules/parcel-bundler/bin/cli build ./src/index.html --no-content-hash --no-source-maps --out-dir ./dist/",
-    "build-deploy": "node ./node_modules/parcel-bundler/bin/cli build ./src/index.html --no-content-hash --public-url '/j/' --no-source-maps --out-dir ./dist/",
+    "build-deploy": "node ./node_modules/parcel-bundler/bin/cli build ./src/index.html --no-content-hash --public-url '/j/' --no-source-maps --out-dir ./docs/",
     "drylint": "node ./node_modules/eslint/bin/eslint . --ext .ts",
     "lint": "node ./node_modules/eslint/bin/eslint . --ext .ts --fix"
   },

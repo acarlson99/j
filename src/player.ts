@@ -29,6 +29,10 @@ class Hand {
     return c;
   }
 
+  clear() {
+    this.cs = [];
+  }
+
   shift() {
     this.cs = this.cs.filter((c) => c);
   }
@@ -57,6 +61,12 @@ class Player {
       return this.h.push(i, c);
     } else {
       return false;
+    }
+  }
+
+  drawHand() {
+    for (let i = 0; i < this.h.size; i++) {
+      this.draw(i);
     }
   }
 

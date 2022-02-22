@@ -198,12 +198,13 @@ class Updater {
     ctx.stroke();
   }
 
-  updateGameController(v: GameController) {
+  updateGameController(v: GameController, color = "green") {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    ctx.fillStyle = "green";
+    ctx.fillStyle = color;
     // background
     ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    document.body.style.backgroundColor = color;
   }
 
   updateGame(v: Game, s1: number, s2: number) {

@@ -2,8 +2,9 @@
 
 import { Card, cardStatDirs, statDirection, setStatDirection } from "./card";
 import { sds } from "./board";
+import ISerializable from "./ISerializable";
 
-class Deck {
+class Deck implements ISerializable<Deck> {
   cs: Card[];
   constructor(cs: Card[]) {
     this.cs = [];
@@ -32,6 +33,22 @@ class Deck {
   copy() {
     return new Deck([...this.cs]);
   }
+
+  serialize() {
+    return JSON.stringify(this);
+  }
+
+  deserialize(text: string) {
+    const obj = JSON.parse(text);
+    if (!obj.cs) {
+      return this;
+    }
+    this.cs = [];
+    obj.cs.forEach((c: Card) => {
+      this.cs.push(new Card(c.color, c.name, c.stats));
+    });
+    return this;
+  }
 }
 
 export { Deck };
@@ -52,6 +69,7 @@ const trouppleAcolyte = (color: string) =>
         v: Math.floor(Math.random() * 4),
       },
     },
+    graveyard: color == "blue",
   });
 
 function colorDeck(size: number, color: string) {
