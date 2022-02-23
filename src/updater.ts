@@ -233,13 +233,35 @@ class Updater {
   drawMenu(m: Menu) {
     for (let i = 0; i < m.menuItems.length; i++) {
       const s = m.menuItems[i];
-      if (i == m.arrowPos) {
-        this.ctx.fillStyle = "red";
-      } else {
-        this.ctx.fillStyle = "black";
+      this.ctx.fillStyle = "black";
+      let height = 75;
+      this.ctx.font = String(height) + "px Arial";
+      while (
+        height > 10 &&
+        m.menuItems
+          .map((s) => this.ctx.measureText("> " + s + " <").width)
+          .reduce((a, b) => Math.max(a, b)) > this.canvas.width
+      ) {
+        // TODO: not this; this is bad
+        height--;
+        this.ctx.font = String(height) + "px Courier";
       }
-      this.ctx.font = "30px Arial";
-      this.ctx.fillText(s, this.canvas.width / 2 - s.length / 2, (i + 1) * 50);
+      const metrics = this.ctx.measureText(s);
+      if (i != m.arrowPos) {
+        this.ctx.fillText(
+          s,
+          this.canvas.width / 2 - metrics.width / 2,
+          (i + 1) * height * 1.5
+        );
+      } else {
+        this.ctx.fillText(
+          "> " + s + " <",
+          this.canvas.width / 2 -
+            metrics.width / 2 -
+            this.ctx.measureText("> ").width,
+          (i + 1) * height * 1.5
+        );
+      }
     }
   }
 }
