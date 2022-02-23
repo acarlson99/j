@@ -4,17 +4,16 @@ window.addEventListener("error", function (event) {
   console.error(event);
 });
 
-import { gc } from "./gameController";
+import { controller } from "./controller";
 import { Updater } from "./updater";
 
 function startGame() {
-  gc.interval = setInterval(updateGameArea, 20);
+  controller.interval = setInterval(updateGameArea, 20);
 }
 
 function updateGameArea() {
-  Updater.Instance.updateBoardSize(gc.boardSize());
   Updater.Instance.updateWH();
-  gc.update();
+  controller.update();
 }
 
 startGame();
@@ -22,7 +21,7 @@ startGame();
 document.onkeydown = (e) => {
   console.log(e);
 
-  gc.handleEvent(e);
+  controller.handleEvent(e);
 };
 
 import { cardTest } from "./regressionTest";

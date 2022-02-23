@@ -4,9 +4,10 @@ import { Card, CardStat, statDirection } from "./card";
 import { Board, sds } from "./board";
 import { Cursor } from "./cursor";
 import { EObstacleName } from "./obstacles";
-import { GameController, Game, Menu } from "./gameController";
+import { GameController, Game } from "./gameController";
 import { CardEditor } from "./cardEditor";
 import { clamp } from "./util";
+import { Menu } from "./controller";
 
 class Updater {
   canvas: HTMLCanvasElement;
@@ -239,8 +240,8 @@ class Updater {
       while (
         height > 10 &&
         m.menuItems
-          .map((s) => this.ctx.measureText("> " + s + " <").width)
-          .reduce((a, b) => Math.max(a, b)) > this.canvas.width
+          .map((st: string) => this.ctx.measureText("> " + st + " <").width)
+          .reduce((a: number, b: number) => Math.max(a, b)) > this.canvas.width
       ) {
         // TODO: not this; this is bad
         height--;

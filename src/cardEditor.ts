@@ -3,7 +3,6 @@
 import { Board } from "./board";
 import { Cursor } from "./cursor";
 import { Updater } from "./updater";
-import { gc } from "./gameController";
 import { Player } from "./player";
 
 class CEBoard extends Board {
@@ -34,6 +33,7 @@ class CECursor extends Cursor {
 
 export { CEBoard, CECursor };
 
+// TODO: move this functionality to player hand or something
 class CardEditor {
   board: CEBoard;
   cursor: CECursor;
@@ -56,9 +56,9 @@ class CardEditor {
     this.cursor.x = this.j;
     this.cursor.y = this.i;
   }
-  update() {
+  update(players: Player[]) {
     Updater.Instance.updateCardEditor(this);
-    const [h1, h2, rest] = gc.game.players.map((p: Player) => p.hand());
+    const [h1, h2, rest] = players.map((p: Player) => p.hand());
     for (let i = 0; i < 3; i++) {
       if (h1[i]) {
         this.board.setCard(0, i, h1[i]);
