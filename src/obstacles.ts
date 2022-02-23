@@ -109,6 +109,7 @@ class Obstacles implements ISerializable<Obstacles> {
     return this;
   }
 
+  // TODO: this
   endOfTurnCheck(board: Board) {
     // this.m.flat().forEach((ob) => {
     //   if (ob.name == EObstacleName.pitfall && board.getCard(ob.x, ob.y)) {

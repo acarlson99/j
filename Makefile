@@ -21,6 +21,7 @@ ${BUILD_DOC_DIR}index.html: ${ORG_HTML} ${BUILD_DOC_DIR}
 ${BUILD_DOC_DIR}style.css: style.css ${BUILD_DOC_DIR}
 	cp $< $@
 
+# utility
 j:
 	ln -s ${BUILD_DIR} j
 
@@ -40,6 +41,7 @@ zip:
 	${RM} j.zip
 	${MAKE} j.zip
 
+# testing
 .PHONY: serve
 serve:
 	php -S localhost:9090
@@ -51,3 +53,7 @@ start:
 .PHONY: run
 run:
 	npm start
+
+.PHONY: lint
+lint:
+	npm run lint

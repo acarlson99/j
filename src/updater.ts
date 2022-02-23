@@ -4,7 +4,7 @@ import { Card, CardStat, statDirection } from "./card";
 import { Board, sds } from "./board";
 import { Cursor } from "./cursor";
 import { EObstacleName } from "./obstacles";
-import { GameController, Game } from "./gameController";
+import { GameController, Game, Menu } from "./gameController";
 import { CardEditor } from "./cardEditor";
 import { clamp } from "./util";
 
@@ -225,9 +225,23 @@ class Updater {
   }
 
   /* eslint-disable @typescript-eslint/no-empty-function */
+  // TODO: something here
   updateCardEditor(v: CardEditor) {}
   updateBoard(v: Board) {}
   /* eslint-enable @typescript-eslint/no-empty-function */
+
+  drawMenu(m: Menu) {
+    for (let i = 0; i < m.menuItems.length; i++) {
+      const s = m.menuItems[i];
+      if (i == m.arrowPos) {
+        this.ctx.fillStyle = "red";
+      } else {
+        this.ctx.fillStyle = "black";
+      }
+      this.ctx.font = "30px Arial";
+      this.ctx.fillText(s, this.canvas.width / 2 - s.length / 2, (i + 1) * 50);
+    }
+  }
 }
 
 export { Updater };
