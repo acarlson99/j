@@ -5,7 +5,6 @@ import { Board, sds } from "./board";
 import { Cursor } from "./cursor";
 import { EObstacleName } from "./obstacles";
 import { GameController, Game } from "./gameController";
-import { CardEditor } from "./cardEditor";
 import { clamp } from "./util";
 import { Menu } from "./controller";
 
@@ -185,7 +184,7 @@ class Updater {
     }
   }
 
-  updateCursor(v: Cursor, x: number, y: number) {
+  drawCursor(x: number, y: number) {
     const ctx = this.ctx;
     const cardWidth = this.getCardWidth();
     ctx.lineWidth = 10;
@@ -197,6 +196,10 @@ class Updater {
       cardWidth - ctx.lineWidth
     );
     ctx.stroke();
+  }
+
+  updateCursor(v: Cursor, x: number, y: number) {
+    this.drawCursor(x, y);
   }
 
   updateGameController(v: GameController, color = "green") {
@@ -227,7 +230,6 @@ class Updater {
 
   /* eslint-disable @typescript-eslint/no-empty-function */
   // TODO: something here
-  updateCardEditor(v: CardEditor) {}
   updateBoard(v: Board) {}
   /* eslint-enable @typescript-eslint/no-empty-function */
 

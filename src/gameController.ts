@@ -7,7 +7,6 @@ import { EDirection } from "./board";
 import { Card } from "./card";
 import { Player, Hand } from "./player";
 import { Updater } from "./updater";
-import { CardEditor } from "./cardEditor";
 import { EScreenType } from "./controller";
 
 class Game {
@@ -49,27 +48,33 @@ class Game {
 
   update() {
     this.board.update();
-    // TODO: draw score
+    this.players.forEach((p) => p.update());
     const [s1, s2] = this.board.getScore();
     Updater.Instance.updateGame(this, s1, s2);
   }
 }
 
 class GameController {
-  ce: CardEditor;
   game: Game;
   cursor: Cursor;
   handPosArr = [0, 0];
   mapEdit = false;
 
   constructor(size: number) {
-    this.ce = new CardEditor();
     this.game = new Game(size);
     this.cursor = new Cursor(size);
   }
 
+  getPlayer() {
+    return this.game.turnCount % 2;
+  }
+
+  getPlayerHandPos() {
+    return this.handPosArr[this.getPlayer()];
+  }
+
   handleEvent(e: KeyboardEvent) {
-    let playerIdx = this.game.turnCount % 2;
+    let playerIdx = this.getPlayer();
     let currentPlayer = this.game.players[playerIdx];
     const cursor = this.cursor;
     const handPos = this.handPosArr[playerIdx];
@@ -149,7 +154,6 @@ class GameController {
     console.log("current player deck", btoa(currentPlayer.d.serialize()));
     playerIdx = this.game.turnCount % 2;
     currentPlayer = this.game.players[playerIdx % 2];
-    this.ce.selectCard(this.handPosArr[playerIdx], currentPlayer.color);
     if (!e) {
       return;
     }
@@ -175,10 +179,17 @@ class GameController {
 
   update() {
     Updater.Instance.updateBoardSize(this.game.boardSize());
-    Updater.Instance.updateGameController(this);
-    this.ce.update(this.game.players);
+    Updater.Instance.updateGameController(
+      this,
+      this.mapEdit ? "purple" : undefined
+    );
     this.game.update();
     this.cursor.update();
+    // cursor over cards in hand
+    Updater.Instance.drawCursor(
+      Updater.Instance.boardSize + this.getPlayerHandPos(),
+      this.getPlayer() == 0 ? 0 : Updater.Instance.boardSize - 1
+    );
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { Deck } from "./deck";
 import { Card } from "./card";
+import { Updater } from "./updater";
 
 class Hand {
   size: number;
@@ -35,6 +36,18 @@ class Hand {
 
   shift() {
     this.cs = this.cs.filter((c) => c);
+  }
+
+  update(topOrBottom: boolean) {
+    for (let i = 0; i < this.cs.length; i++) {
+      if (!this.cs[i]) {
+        continue;
+      }
+      this.cs[i].update(
+        Updater.Instance.boardSize + i,
+        topOrBottom ? 0 : Updater.Instance.boardSize - 1
+      );
+    }
   }
 }
 
@@ -89,6 +102,10 @@ class Player {
 
   hand() {
     return [...this.h.cs];
+  }
+
+  update() {
+    this.h.update(this.id == 0);
   }
 }
 

@@ -175,7 +175,6 @@ class Board implements ISerializable<Board> {
   }
 
   // can i set a card in x,y pos
-  // TODO: graveyard check
   isSettablePos(x: number, y: number, c: Card) {
     if (!this.obstacles) {
       return true;
@@ -184,7 +183,6 @@ class Board implements ISerializable<Board> {
   }
 
   // can i play a card pushing x,y
-  // TODO: graveyard check
   isPushablePos(x: number, y: number, c: Card) {
     if (!this.obstacles) {
       return true;
