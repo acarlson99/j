@@ -1,3 +1,5 @@
+"use strict";
+
 import { Updater } from "./updater";
 import ISerializable from "./ISerializable";
 import { Board } from "./board";

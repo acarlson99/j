@@ -1,3 +1,5 @@
+"use strict";
+
 import { GameController } from "./gameController";
 import { Updater } from "./updater";
 
