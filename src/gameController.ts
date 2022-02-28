@@ -84,14 +84,7 @@ class GameController implements IController {
     case "ArrowDown":
     case "ArrowLeft":
     case "ArrowRight":
-      cursor.move(
-        {
-          ArrowUp: EDirection.Up,
-          ArrowDown: EDirection.Down,
-          ArrowLeft: EDirection.Left,
-          ArrowRight: EDirection.Right,
-        }[e.key]
-      );
+      cursor.handleEvent(e);
       break;
     case "w":
     case "a":

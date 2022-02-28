@@ -81,6 +81,23 @@ class Cursor {
   update() {
     Updater.Instance.updateCursor(this, this.x, this.y);
   }
+
+  handleEvent(e: KeyboardEvent) {
+    switch (e.key) {
+    case "ArrowUp":
+      this.move(EDirection.Up);
+      break;
+    case "ArrowDown":
+      this.move(EDirection.Down);
+      break;
+    case "ArrowLeft":
+      this.move(EDirection.Left);
+      break;
+    case "ArrowRight":
+      this.move(EDirection.Right);
+      break;
+    }
+  }
 }
 
 // class Cursor

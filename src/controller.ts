@@ -5,6 +5,7 @@ import { Updater } from "./updater";
 import { cardList } from "./cardList";
 import { Board } from "./board";
 import { IUpdater } from "./IUpdater";
+import { Cursor } from "./cursor";
 
 enum EScreenType {
   Game = 0,
@@ -77,8 +78,11 @@ export { Menu };
 
 class DeckBuilderController implements IController {
   board: Board;
+  cursor: Cursor;
+
   constructor() {
     this.board = new Board(Math.ceil(Math.sqrt(cardList.length)), false);
+    this.cursor = new Cursor(this.board.size);
     for (let i = 0; i < cardList.length; i++) {
       const c = cardList[i].copy();
       const x = i % this.board.size;
@@ -93,11 +97,14 @@ class DeckBuilderController implements IController {
   update() {
     Updater.Instance.updateBoardSize(this.board.size);
     this.board.update();
+    this.cursor.update();
   }
 
   handleEvent(e: KeyboardEvent) {
     if (e.key == " ") {
       return EScreenType.MainMenu;
+    } else {
+      this.cursor.handleEvent(e);
     }
   }
 }
