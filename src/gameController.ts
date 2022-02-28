@@ -7,7 +7,7 @@ import { EDirection } from "./board";
 import { Card } from "./card";
 import { Player, Hand } from "./player";
 import { Updater } from "./updater";
-import { EScreenType } from "./controller";
+import { EScreenType, IController } from "./controller";
 
 class Game {
   size: number;
@@ -54,7 +54,7 @@ class Game {
   }
 }
 
-class GameController {
+class GameController implements IController {
   game: Game;
   cursor: Cursor;
   handPosArr = [0, 0];

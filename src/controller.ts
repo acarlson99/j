@@ -2,10 +2,29 @@
 
 import { GameController } from "./gameController";
 import { Updater } from "./updater";
+import { cardList } from "./cardList";
+import { Board } from "./board";
+import { IUpdater } from "./IUpdater";
 
-class Menu {
+enum EScreenType {
+  Game = 0,
+  Map,
+  MainMenu,
+  DeckBuilder,
+  __LENGTH,
+}
+
+export { EScreenType };
+
+interface IController extends IUpdater {
+  handleEvent(e: KeyboardEvent): EScreenType | undefined;
+}
+
+export { IController };
+
+class Menu implements IController {
   arrowPos = 0;
-  menuItems = ["play", "who?", "controls"];
+  menuItems = ["play", "who?", "deck", "controls"];
 
   // constructor() {}
   clampPos() {
@@ -30,6 +49,8 @@ class Menu {
     case "who?":
       window.location.href = "/";
       break;
+    case "deck":
+      return EScreenType.DeckBuilder;
     }
   }
 
@@ -54,21 +75,39 @@ class Menu {
 
 export { Menu };
 
-enum EScreenType {
-  Game = 0,
-  Map,
-  MainMenu,
-  __LENGTH,
-}
+class DeckBuilderController implements IController {
+  board: Board;
+  constructor() {
+    this.board = new Board(Math.ceil(Math.sqrt(cardList.length)), false);
+    for (let i = 0; i < cardList.length; i++) {
+      const c = cardList[i].copy();
+      const x = i % this.board.size;
+      const y = Math.floor(i / this.board.size);
+      if ((x + y) % 2) {
+        c.swapColor();
+      }
+      this.board.setCard_(x, y, c);
+    }
+  }
 
-export { EScreenType };
+  update() {
+    Updater.Instance.updateBoardSize(this.board.size);
+    this.board.update();
+  }
+
+  handleEvent(e: KeyboardEvent) {
+    if (e.key == " ") {
+      return EScreenType.MainMenu;
+    }
+  }
+}
 
 class Controller {
   interval: any;
   frameNo: number;
   handleEvent: (e: KeyboardEvent) => void;
   gameScreenType: EScreenType = EScreenType.MainMenu;
-  screen?: GameController | Menu;
+  screen?: IController;
 
   constructor() {
     this.interval = undefined;
@@ -84,13 +123,16 @@ class Controller {
     })();
   }
 
-  setScreen(stype: any) {
+  setScreen(stype: EScreenType) {
     switch (stype as EScreenType) {
     case EScreenType.Game:
       this.screen = new GameController(8);
       break;
     case EScreenType.MainMenu:
       this.screen = new Menu();
+      break;
+    case EScreenType.DeckBuilder:
+      this.screen = new DeckBuilderController();
       break;
     }
   }
