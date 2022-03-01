@@ -16,7 +16,7 @@ enum EScreenType {
 export { EScreenType };
 
 interface IController extends IUpdater {
-  handleEvent(e: KeyboardEvent): EScreenType | undefined;
+  handleEvent(e: KeyboardEvent): IController | EScreenType | undefined;
 }
 
 export { IController };
@@ -74,6 +74,22 @@ class Menu implements IController {
 
 export { Menu };
 
+export class PauseMenu implements IController {
+  bkg: IController;
+  constructor(bkg: IController) {
+    this.bkg = bkg;
+  }
+
+  handleEvent(e: KeyboardEvent): IController {
+    return this.bkg;
+  }
+
+  update() {
+    this.bkg.update();
+    Updater.Instance.updatePauseMenu(this);
+  }
+}
+
 class Controller {
   interval: any;
   frameNo: number;
@@ -87,9 +103,21 @@ class Controller {
     this.setScreen(EScreenType.MainMenu);
     this.handleEvent = (() => {
       return (e: KeyboardEvent) => {
-        const newScreen = this.screen?.handleEvent(e);
-        if (newScreen !== undefined) {
-          this.setScreen(newScreen);
+        if (e.key === "p") {
+          if (!(this.screen instanceof PauseMenu) && this.screen) {
+            this.screen = new PauseMenu(this.screen);
+          }
+        } else {
+          console.log("Handle event", e);
+          const newScreen = this.screen?.handleEvent(e);
+          console.log(newScreen);
+          if (newScreen?.handleEvent) {
+            // IController instance
+            this.screen = newScreen as IController;
+          } else if (newScreen !== undefined) {
+            // EScreenType
+            this.setScreen(newScreen as EScreenType);
+          }
         }
       };
     })();

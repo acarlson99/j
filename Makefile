@@ -43,7 +43,7 @@ zip:
 
 # testing
 .PHONY: serve
-serve:
+serve: j
 	php -S localhost:9090
 
 .PHONY: start

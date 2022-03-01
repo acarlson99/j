@@ -2,7 +2,7 @@
 
 import { Board, sds } from "./board";
 import { Card, CardStat, statDirection } from "./card";
-import { Menu } from "./controller";
+import { Menu, PauseMenu } from "./controller";
 import { Cursor } from "./cursor";
 import { Game, GameController } from "./gameController";
 import { EObstacleName } from "./obstacles";
@@ -266,6 +266,14 @@ class Updater {
         );
       }
     }
+  }
+
+  updatePauseMenu(m: PauseMenu) {
+    this.ctx.fillStyle = "black";
+    const h = this.canvas.height;
+    const w = this.canvas.width;
+
+    this.ctx.fillRect(w / 4, h / 4, w / 2, h / 2);
   }
 }
 
