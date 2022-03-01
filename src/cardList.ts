@@ -5,7 +5,7 @@ import { Card, CardStat } from "./card";
 
 console.log("READ");
 
-Papa.parse("/cards.csv", {
+Papa.parse("./cards.csv", {
   download: true,
   step: function (row) {
     const i = Number(row.data[3]) - 1;
