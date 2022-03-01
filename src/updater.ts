@@ -1,12 +1,12 @@
 "use strict";
 
-import { Card, CardStat, statDirection } from "./card";
 import { Board, sds } from "./board";
-import { Cursor } from "./cursor";
-import { EObstacleName } from "./obstacles";
-import { GameController, Game } from "./gameController";
-import { clamp } from "./util";
+import { Card, CardStat, statDirection } from "./card";
 import { Menu } from "./controller";
+import { Cursor } from "./cursor";
+import { Game, GameController } from "./gameController";
+import { EObstacleName } from "./obstacles";
+import { clamp } from "./util";
 
 class Updater {
   canvas: HTMLCanvasElement;

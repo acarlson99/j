@@ -1,10 +1,10 @@
 "use strict";
 
-import { clamp } from "./util";
-import { EDirection, Board } from "./board";
-import { Game } from "./gameController";
+import { Board, EDirection } from "./board";
 import { Card } from "./card";
+import { Game } from "./gameController";
 import { Updater } from "./updater";
+import { clamp } from "./util";
 
 class Cursor {
   size: number;

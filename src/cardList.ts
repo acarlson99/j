@@ -1,7 +1,7 @@
 "use strict";
 
-import { CardStat, Card } from "./card";
 import Papa from "papaparse";
+import { Card, CardStat } from "./card";
 
 console.log("READ");
 

@@ -1,7 +1,7 @@
 "use strict";
 
-import { Card, cardStatDirs, statDirection, setStatDirection } from "./card";
 import { sds } from "./board";
+import { Card, cardStatDirs, setStatDirection, statDirection } from "./card";
 import ISerializable from "./ISerializable";
 
 class Deck implements ISerializable {

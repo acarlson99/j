@@ -1,7 +1,7 @@
 "use strict";
 
-import { Deck } from "./deck";
 import { Card } from "./card";
+import { Deck } from "./deck";
 import { Updater } from "./updater";
 
 class Hand {

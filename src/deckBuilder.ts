@@ -1,12 +1,13 @@
 "use strict";
 
-import { IController, EScreenType } from "./controller";
+import * as R from "ramda";
 import { Board } from "./board";
-import { Cursor } from "./cursor";
-import { cardList } from "./cardList";
-import { Updater } from "./updater";
 import { Card, CardStat } from "./card";
+import { cardList } from "./cardList";
+import { EScreenType, IController } from "./controller";
+import { Cursor } from "./cursor";
 import { Deck } from "./deck";
+import { Updater } from "./updater";
 
 function deckBuildCard(c: Card): DeckBuildCard {
   return new DeckBuildCard(c.color, c.name, c.stats);
@@ -41,9 +42,13 @@ class DeckBuilderController implements IController {
     const d = store.getItem("deck");
     const selectedStatSet = new Set();
     if (d) {
-      Deck.deserialize(d).cs.map(({ stats }) =>
-        selectedStatSet.add(JSON.stringify(stats))
+      R.map(
+        R.compose(str => selectedStatSet.add(str), JSON.stringify, ({ stats }) => stats),
+        Deck.deserialize(d).cs
       );
+      // Deck.deserialize(d).cs.map(({ stats }) =>
+      //   selectedStatSet.add(JSON.stringify(stats))
+      // );
     }
     for (let i = 0; i < cardList.length; i++) {
       const c = deckBuildCard(cardList[i]);

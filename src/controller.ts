@@ -1,9 +1,9 @@
 "use strict";
 
-import { GameController } from "./gameController";
-import { Updater } from "./updater";
-import { IUpdater } from "./IUpdater";
 import { DeckBuilderController } from "./deckBuilder";
+import { GameController } from "./gameController";
+import { IUpdater } from "./IUpdater";
+import { Updater } from "./updater";
 
 enum EScreenType {
   Game = 0,

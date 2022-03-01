@@ -1,7 +1,7 @@
 "use strict";
 
+import { Board, EDirection } from "./board";
 import { Card, CardStat } from "./card";
-import { EDirection, Board } from "./board";
 
 type Test = {
   p: {

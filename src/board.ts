@@ -1,10 +1,10 @@
 "use strict";
 
-import { clamp, FString } from "./util";
 import { Card, statDirection } from "./card";
+import ISerializable from "./ISerializable";
 import { Obstacles } from "./obstacles";
 import { Updater } from "./updater";
-import ISerializable from "./ISerializable";
+import { clamp, FString } from "./util";
 // import "regenerator-runtime/runtime.js";
 
 // function sleep(ms: number) {

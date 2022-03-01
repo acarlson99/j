@@ -5,6 +5,7 @@ window.addEventListener("error", function (event) {
 });
 
 import { controller } from "./controller";
+import { cardTest } from "./regressionTest";
 import { Updater } from "./updater";
 
 function startGame() {
@@ -24,5 +25,4 @@ document.onkeydown = (e) => {
   controller.handleEvent(e);
 };
 
-import { cardTest } from "./regressionTest";
 cardTest();

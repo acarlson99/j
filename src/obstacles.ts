@@ -1,8 +1,8 @@
 "use strict";
 
-import { Updater } from "./updater";
-import ISerializable from "./ISerializable";
 import { Board } from "./board";
+import ISerializable from "./ISerializable";
+import { Updater } from "./updater";
 
 enum EObstacleName {
   gem = "gem",
@@ -17,8 +17,6 @@ const obstacleList = [
   EObstacleName.graveyard,
   EObstacleName.pitfall,
 ];
-
-export { EObstacleName };
 
 class Obstacle {
   name: EObstacleName;
@@ -223,4 +221,5 @@ class Obstacles implements ISerializable {
   }
 }
 
+export { EObstacleName };
 export { Obstacles, Obstacle };

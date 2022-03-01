@@ -1,13 +1,12 @@
 "use strict";
 
-import { Board } from "./board";
+import { Board, EDirection } from "./board";
+import { Card } from "./card";
+import { EScreenType, IController } from "./controller";
 import { Cursor } from "./cursor";
 import { colorDeck, Deck } from "./deck";
-import { EDirection } from "./board";
-import { Card } from "./card";
-import { Player, Hand } from "./player";
+import { Hand, Player } from "./player";
 import { Updater } from "./updater";
-import { EScreenType, IController } from "./controller";
 
 class Game {
   size: number;
