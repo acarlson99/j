@@ -47,7 +47,7 @@ function makeObstacle(name: EObstacleName) {
   return new Obstacle(name);
 }
 
-class Obstacles implements ISerializable<Obstacles> {
+class Obstacles implements ISerializable {
   size: number;
   m: Obstacle[][];
 
@@ -92,23 +92,22 @@ class Obstacles implements ISerializable<Obstacles> {
     return JSON.stringify(this);
   }
 
-  deserialize(input: string) {
+  static deserialize(input: string) {
     const obj = JSON.parse(input);
-    this.size = obj.size;
-    this.m = new Array(this.size);
-    for (let i = 0; i < this.size; i++) {
-      this.m[i] = new Array(this.size);
-      for (let j = 0; j < this.size; j++) {
+    const size = obj.size;
+    const o = new Obstacles(size, 0);
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
         const obcp = obj.m[i][j];
         if (obcp) {
-          this.setM_(j, i, new Obstacle(obcp.name));
+          o.setM_(j, i, new Obstacle(obcp.name));
         } else {
-          this.unsetM_(j, i);
+          o.unsetM_(j, i);
         }
       }
     }
 
-    return this;
+    return o;
   }
 
   // TODO: this

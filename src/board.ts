@@ -103,22 +103,24 @@ class PushError extends Error {
   }
 }
 
-class Board implements ISerializable<Board> {
+class Board implements ISerializable {
   size: number;
   cardMap: Card[][];
   obstacles: Obstacles | undefined;
   gameover: boolean;
   lastPushError?: PushError;
 
-  constructor(size: number, createObstacles = true) {
+  constructor(size: number, obstacles?: boolean | Obstacles) {
     this.size = size;
     this.cardMap = new Array(this.size);
     for (let i = 0; i < this.cardMap.length; i++) {
       this.cardMap[i] = new Array(this.size);
     }
     // obstacles
-    if (createObstacles) {
+    if (obstacles === true) {
       this.obstacles = new Obstacles(size, -1);
+    } else if (obstacles instanceof Obstacles) {
+      this.obstacles = obstacles;
     } else {
       this.obstacles = undefined;
     }
@@ -126,36 +128,35 @@ class Board implements ISerializable<Board> {
   }
 
   deepcopy() {
-    return new Board(this.size, false).deserialize(this.serialize());
+    return Board.deserialize(this.serialize());
   }
 
   serialize(): string {
     return JSON.stringify(this);
   }
 
-  deserialize(input: string) {
+  static deserialize(input: string) {
     const obj = JSON.parse(input);
-    this.size = obj.size;
-    this.gameover = obj.gameover;
-    this.cardMap = new Array(this.size);
-    for (let i = 0; i < this.size; i++) {
-      this.cardMap[i] = new Array(this.size);
-      for (let j = 0; j < this.size; j++) {
+    const size = obj.size;
+
+    const obstacles = obj.obstacles
+      ? Obstacles.deserialize(JSON.stringify(obj.obstacles))
+      : undefined;
+
+    const board = new Board(size, obstacles);
+    board.gameover = obj.gameover;
+
+    for (let i = 0; i < board.size; i++) {
+      for (let j = 0; j < board.size; j++) {
         const c = obj.cardMap[i][j] as Card;
         if (c) {
-          this.setCard_(j, i, new Card(c.color, c.name, c.stats));
+          board.setCard_(j, i, new Card(c.color, c.name, c.stats));
         } else {
-          this.unsetCard(j, i);
+          board.unsetCard(j, i);
         }
       }
     }
-
-    this.obstacles = obj.obstacles
-      ? new Obstacles(obj.obstacles.size, 0).deserialize(
-        JSON.stringify(obj.obstacles)
-      )
-      : undefined;
-    return this;
+    return board;
   }
 
   inBounds(x: number, y: number) {

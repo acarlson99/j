@@ -1,9 +1,8 @@
 "use strict";
 
-interface ISerializable<T> {
-  // T === serialize(deserialize(T))
+interface ISerializable {
+  // new T() === T.deserialize(new T().serialize())
   serialize(): string;
-  deserialize(input: string): T;
 }
 
 export default ISerializable;

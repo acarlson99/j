@@ -4,18 +4,52 @@ import { Card, cardStatDirs, statDirection, setStatDirection } from "./card";
 import { sds } from "./board";
 import ISerializable from "./ISerializable";
 
-class Deck implements ISerializable<Deck> {
+class Deck implements ISerializable {
   cs: Card[];
-  constructor(cs: Card[]) {
+  constructor(cs: Card[], color?: string) {
     this.cs = [];
     for (let i = 0; i < cs.length; i++) {
-      const c = cs[i];
+      const c = cs[i].copy();
+      if (color) {
+        c.color = color;
+      }
       this.cs.push(c);
     }
   }
 
+  static new() {
+    return new Deck([], "blue");
+  }
+
+  instanceMethod() {
+    console.log("instance method");
+  }
+
+  static staticMethod() {
+    console.log("static method");
+  }
+
+  setColor(color: string) {
+    this.cs.map((c) => c.setColor(color));
+    return this;
+  }
+
   shuffle() {
     this.cs.sort(() => Math.random() - 0.5);
+    return this;
+  }
+
+  static fromStore(storeName: string, color?: string) {
+    const store = window.localStorage;
+    const s = store.getItem(storeName);
+    if (!s) {
+      return undefined;
+    }
+    const deck = Deck.deserialize(s);
+    if (color) {
+      deck.setColor(color);
+    }
+    return deck;
   }
 
   draw() {
@@ -34,20 +68,22 @@ class Deck implements ISerializable<Deck> {
     return new Deck([...this.cs]);
   }
 
-  serialize() {
+  serialize(): string {
     return JSON.stringify(this);
   }
 
-  deserialize(text: string) {
+  static deserialize(text: string): Deck {
     const obj = JSON.parse(text);
     if (!obj.cs) {
-      return this;
+      // TODO: different exception
+      throw "bad deck deserialize";
+      return new Deck([]);
     }
-    this.cs = [];
+    const cs: Card[] = [];
     obj.cs.forEach((c: Card) => {
-      this.cs.push(new Card(c.color, c.name, c.stats));
+      cs.push(new Card(c.color, c.name, c.stats));
     });
-    return this;
+    return new Deck(cs);
   }
 }
 

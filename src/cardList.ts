@@ -8,7 +8,6 @@ console.log("READ");
 Papa.parse("/cards.csv", {
   download: true,
   step: function (row) {
-    console.log("Row:", row.data);
     const i = Number(row.data[3]) - 1;
     if (cardStatList[i]) {
       cardList[i] = new Card("blue", row.data[2], cardStatList[i]);
@@ -48,16 +47,24 @@ function makeCardStat(
     stat.dirs.r = { v: r };
   }
   us.forEach((e: string) => {
-    if (stat.dirs.u) stat.dirs.u[e] = true;
+    if (stat.dirs.u) {
+      stat.dirs.u[e] = true;
+    }
   });
   ds.forEach((e) => {
-    if (stat.dirs.d) stat.dirs.d[e] = true;
+    if (stat.dirs.d) {
+      stat.dirs.d[e] = true;
+    }
   });
   ls.forEach((e) => {
-    if (stat.dirs.l) stat.dirs.l[e] = true;
+    if (stat.dirs.l) {
+      stat.dirs.l[e] = true;
+    }
   });
   rs.forEach((e) => {
-    if (stat.dirs.r) stat.dirs.r[e] = true;
+    if (stat.dirs.r) {
+      stat.dirs.r[e] = true;
+    }
   });
   stat.graveyard = graveyard;
   return stat;
@@ -96,7 +103,5 @@ const cardStatList: CardStat[] = [
 ];
 
 const cardList: Card[] = Array(cardStatList.length);
-
-console.log("cardList", cardList);
 
 export { cardList };

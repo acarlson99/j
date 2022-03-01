@@ -2,7 +2,7 @@
 
 import { Board } from "./board";
 import { Cursor } from "./cursor";
-import { colorDeck } from "./deck";
+import { colorDeck, Deck } from "./deck";
 import { EDirection } from "./board";
 import { Card } from "./card";
 import { Player, Hand } from "./player";
@@ -17,16 +17,28 @@ class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.players.push(
-      new Player(new Hand(3), colorDeck(10, Player.colors[0]), 0)
-    );
-    this.players.push(
-      new Player(new Hand(3), colorDeck(10, Player.colors[1]), 1)
-    );
+    const store = window.localStorage;
+    let d1 = colorDeck(10, Player.colors[0]);
+    let d2 = colorDeck(10, Player.colors[1]);
+    const s = store.getItem("deck");
+    if (s) {
+      const d1_ = Deck.fromStore("deck", Player.colors[0]);
+      if (d1_) {
+        d1 = d1_;
+      }
+      const d2_ = Deck.fromStore("deck", Player.colors[1]);
+      if (d2_) {
+        d2 = d2_;
+      }
+    }
+    d1.shuffle();
+    d2.shuffle();
+    this.players.push(new Player(new Hand(3), d1, 0));
+    this.players.push(new Player(new Hand(3), d2, 1));
     this.players.forEach((player) => {
       player.drawHand();
     });
-    this.board = new Board(size);
+    this.board = new Board(size, true);
   }
 
   boardSize() {
@@ -120,7 +132,7 @@ class GameController implements IController {
     case "3":
       this.handPosArr[playerIdx] = Number(e.key) - 1;
       break;
-    case "r":
+    case "q":
       return EScreenType.MainMenu;
     case "v":
       {
@@ -130,7 +142,7 @@ class GameController implements IController {
           break;
         }
         const b = atob(prompt);
-        currentPlayer.d.deserialize(b);
+        currentPlayer.d = Deck.deserialize(b);
         currentPlayer.h.clear();
         currentPlayer.d.shuffle();
         currentPlayer.drawHand();
