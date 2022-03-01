@@ -4,6 +4,7 @@ import { DeckBuilderController } from "./deckBuilder";
 import { GameController } from "./gameController";
 import { IUpdater } from "./IUpdater";
 import { Updater } from "./updater";
+import { AMenu } from "./AMenu";
 
 enum EScreenType {
   Game = 0,
@@ -21,27 +22,10 @@ interface IController extends IUpdater {
 
 export { IController };
 
-class Menu implements IController {
-  arrowPos = 0;
+class Menu extends AMenu implements IController {
   menuItems = ["play", "who?", "deck", "controls"];
 
-  // constructor() {}
-  clampPos() {
-    this.arrowPos =
-      (this.arrowPos + this.menuItems.length) % this.menuItems.length;
-  }
-
-  arrowUp() {
-    this.arrowPos -= 1;
-    this.clampPos();
-  }
-
-  arrowDown() {
-    this.arrowPos += 1;
-    this.clampPos();
-  }
-
-  selectCurrentMenuItem() {
+  selectCurrentMenuItem(): EScreenType | undefined {
     switch (this.menuItems[this.arrowPos]) {
     case "play":
       return EScreenType.Game;
@@ -54,7 +38,7 @@ class Menu implements IController {
   }
 
   update() {
-    Updater.Instance.drawMenu(this);
+    Updater.Instance.drawAMenu(this);
   }
 
   handleEvent(e: KeyboardEvent) {
@@ -74,19 +58,43 @@ class Menu implements IController {
 
 export { Menu };
 
-export class PauseMenu implements IController {
+export class PauseMenu extends AMenu implements IController {
   bkg: IController;
+  menuItems = ["continue", "main menu"];
+
   constructor(bkg: IController) {
+    super();
     this.bkg = bkg;
   }
 
-  handleEvent(e: KeyboardEvent): IController {
-    return this.bkg;
+  selectCurrentMenuItem(): IController | EScreenType | undefined {
+    switch (this.menuItems[this.arrowPos]) {
+    case "continue":
+      return this.bkg;
+      break;
+    case "main menu":
+      return EScreenType.MainMenu;
+      break;
+    }
+  }
+
+  handleEvent(e: KeyboardEvent): IController | EScreenType | undefined {
+    switch (e.key) {
+    case "ArrowUp":
+      this.arrowUp();
+      break;
+    case "ArrowDown":
+      this.arrowDown();
+      break;
+    case " ":
+    case "Enter":
+      return this.selectCurrentMenuItem();
+    }
   }
 
   update() {
     this.bkg.update();
-    Updater.Instance.updatePauseMenu(this);
+    Updater.Instance.drawAMenu(this);
   }
 }
 

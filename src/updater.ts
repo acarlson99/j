@@ -7,7 +7,9 @@ import { Cursor } from "./cursor";
 import { Game, GameController } from "./gameController";
 import { EObstacleName } from "./obstacles";
 import { clamp } from "./util";
+import { AMenu } from "./AMenu";
 
+// TODO: change board width/height and card width/height calculations
 class Updater {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -39,10 +41,11 @@ class Updater {
     this.boardSize = n;
   }
 
+  // FIXME: this function is bad and wrong
   updateWH() {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const scw = h + (h / this.boardSize) * 3;
+    const scw = h + (h / this.boardSize) * 3; // TODO: dont do this, scale board properly, dont change canvas size based on difference like this
     if (w >= scw) {
       this.canvas.height = h;
       this.canvas.width = scw;
@@ -63,7 +66,7 @@ class Updater {
 
   getCardWidth() {
     return Math.min(
-      Math.floor(this.canvas.width / (this.boardSize + 3)),
+      Math.floor(this.canvas.width / (this.boardSize + 3)), // FIXME: remove scaling
       Math.floor(this.canvas.height / this.boardSize)
     );
   }
@@ -233,7 +236,7 @@ class Updater {
   updateBoard(v: Board) {}
   /* eslint-enable @typescript-eslint/no-empty-function */
 
-  drawMenu(m: Menu) {
+  drawAMenu(m: AMenu) {
     for (let i = 0; i < m.menuItems.length; i++) {
       const s = m.menuItems[i];
       this.ctx.fillStyle = "black";
@@ -266,14 +269,6 @@ class Updater {
         );
       }
     }
-  }
-
-  updatePauseMenu(m: PauseMenu) {
-    this.ctx.fillStyle = "black";
-    const h = this.canvas.height;
-    const w = this.canvas.width;
-
-    this.ctx.fillRect(w / 4, h / 4, w / 2, h / 2);
   }
 }
 
