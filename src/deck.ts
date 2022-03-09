@@ -47,7 +47,7 @@ class Deck implements ISerializable {
     }
     const deck = Deck.deserialize(s);
     if (color) {
-      deck.setColor(color);
+      deck?.setColor(color);
     }
     return deck;
   }
@@ -72,12 +72,11 @@ class Deck implements ISerializable {
     return JSON.stringify(this);
   }
 
-  static deserialize(text: string): Deck {
+  static deserialize(text: string): Deck | undefined {
     const obj = JSON.parse(text);
     if (!obj.cs) {
-      // TODO: different exception
-      throw "bad deck deserialize";
-      return new Deck([]);
+      console.error("bad deck deserialize");
+      return undefined;
     }
     const cs: Card[] = [];
     obj.cs.forEach((c: Card) => {
@@ -105,7 +104,7 @@ const trouppleAcolyte = (color: string) =>
         v: Math.floor(Math.random() * 4),
       },
     },
-    graveyard: color == "blue",
+    // graveyard: color == "blue",
   });
 
 function colorDeck(size: number, color: string) {

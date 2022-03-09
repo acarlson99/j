@@ -14,18 +14,27 @@ class Game {
   board: Board;
   turnCount = 0;
 
-  constructor(size: number) {
+  constructor(param: number | Board, d1name?: string, d2name?: string) {
+    let size = 0;
+    if (param instanceof Board) {
+      this.board = param;
+      size = this.board.size;
+    } else {
+      size = param;
+      this.board = new Board(size, true);
+    }
     this.size = size;
     const store = window.localStorage;
     let d1 = colorDeck(10, Player.colors[0]);
     let d2 = colorDeck(10, Player.colors[1]);
-    const s = store.getItem("deck");
-    if (s) {
-      const d1_ = Deck.fromStore("deck", Player.colors[0]);
+    if (d1name) {
+      const d1_ = Deck.fromStore(d1name, Player.colors[0]);
       if (d1_) {
         d1 = d1_;
       }
-      const d2_ = Deck.fromStore("deck", Player.colors[1]);
+    }
+    if (d2name) {
+      const d2_ = Deck.fromStore(d2name, Player.colors[1]);
       if (d2_) {
         d2 = d2_;
       }
@@ -37,7 +46,6 @@ class Game {
     this.players.forEach((player) => {
       player.drawHand();
     });
-    this.board = new Board(size, true);
   }
 
   boardSize() {
@@ -71,9 +79,16 @@ class GameController implements IController {
   handPosArr = [0, 0];
   mapEdit = false;
 
-  constructor(size: number) {
-    this.game = new Game(size);
-    this.cursor = new Cursor(size);
+  constructor(param: number | Board) {
+    const d1name = "deck_" + (prompt("deck 1 name") || "TEMP");
+    const d2name = "deck_" + (prompt("deck 2 name") || "TEMP");
+    if (param instanceof Board) {
+      this.game = new Game(param as Board, d1name, d2name);
+    } else {
+      const size = param;
+      this.game = new Game(size, d1name, d2name);
+    }
+    this.cursor = new Cursor(this.game.size);
   }
 
   getPlayer() {
@@ -123,9 +138,9 @@ class GameController implements IController {
         }
       }
       break;
-    case "m":
-      this.mapEdit = !this.mapEdit;
-      break;
+      // case "m":
+      //   this.mapEdit = !this.mapEdit;
+      //   break;
     case "1":
     case "2":
     case "3":
@@ -133,26 +148,26 @@ class GameController implements IController {
       break;
     case "q":
       return EScreenType.MainMenu;
-    case "v":
-      {
-        const prompt = window.prompt("enter deck code");
-        console.log(prompt);
-        if (!(prompt && prompt.length > 0)) {
-          break;
-        }
-        const b = atob(prompt);
-        currentPlayer.d = Deck.deserialize(b);
-        currentPlayer.h.clear();
-        currentPlayer.d.shuffle();
-        currentPlayer.drawHand();
-      }
-      break;
-    case "c":
-      alert(
-        btoa(currentPlayer.d.serialize())
-          .match(/.{1,75}/g)
-          ?.join("\n")
-      );
+      // case "v":
+      //   {
+      //     const prompt = window.prompt("enter deck code");
+      //     console.log(prompt);
+      //     if (!(prompt && prompt.length > 0)) {
+      //       break;
+      //     }
+      //     const b = atob(prompt);
+      //     currentPlayer.d = Deck.deserialize(b);
+      //     currentPlayer.h.clear();
+      //     currentPlayer.d.shuffle();
+      //     currentPlayer.drawHand();
+      //   }
+      //   break;
+      // case "c":
+      //   alert(
+      //     btoa(currentPlayer.d.serialize())
+      //       .match(/.{1,75}/g)
+      //       ?.join("\n")
+      //   );
     }
 
     console.log("current player deck", btoa(currentPlayer.d.serialize()));

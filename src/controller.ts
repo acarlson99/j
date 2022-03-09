@@ -5,12 +5,15 @@ import { GameController } from "./gameController";
 import { IUpdater } from "./IUpdater";
 import { Updater } from "./updater";
 import { AMenu } from "./AMenu";
+import { Board } from "./board";
+import { Cursor } from "./cursor";
 
 enum EScreenType {
   Game = 0,
   Map,
   MainMenu,
   DeckBuilder,
+  BoardEdit,
   __LENGTH,
 }
 
@@ -23,9 +26,9 @@ interface IController extends IUpdater {
 export { IController };
 
 class Menu extends AMenu implements IController {
-  menuItems = ["play", "who?", "deck", "controls"];
+  menuItems = ["play", "deck", "board", "who?", "controls"];
 
-  selectCurrentMenuItem(): EScreenType | undefined {
+  selectCurrentMenuItem(): EScreenType | IController | undefined {
     switch (this.menuItems[this.arrowPos]) {
     case "play":
       return EScreenType.Game;
@@ -34,6 +37,9 @@ class Menu extends AMenu implements IController {
       break;
     case "deck":
       return EScreenType.DeckBuilder;
+    case "board":
+      const size = Number(prompt("size"));
+      return new BoardEditor(Math.max(6, size));
     }
   }
 
@@ -98,12 +104,48 @@ export class PauseMenu extends AMenu implements IController {
   }
 }
 
+class BoardEditor implements IController {
+  board: Board;
+  cursor: Cursor;
+
+  constructor(size: number) {
+    this.board = new Board(size, true);
+    this.cursor = new Cursor(size);
+  }
+
+  handleEvent(e: KeyboardEvent): EScreenType | IController | undefined {
+    switch (e.key) {
+    case " ":
+      this.board.changeObstacleAt(this.cursor.x, this.cursor.y);
+      break;
+    case "s":
+      const store = window.localStorage;
+      store.setItem("board", this.board.serialize());
+      console.log("stored");
+      break;
+    case "q":
+      return EScreenType.MainMenu;
+    default:
+      this.cursor.handleEvent(e);
+      break;
+    }
+    return;
+  }
+
+  update() {
+    Updater.Instance.updateBoardSize(this.board.size);
+    this.board.update();
+    this.cursor.update();
+  }
+}
+
 class Controller {
   interval: any;
   frameNo: number;
   handleEvent: (e: KeyboardEvent) => void;
   gameScreenType: EScreenType = EScreenType.MainMenu;
   screen?: IController;
+  defaultSize = 8;
 
   constructor() {
     this.interval = undefined;
@@ -114,6 +156,8 @@ class Controller {
         if (e.key === "p") {
           if (!(this.screen instanceof PauseMenu) && this.screen) {
             this.screen = new PauseMenu(this.screen);
+          } else if (this.screen instanceof PauseMenu) {
+            this.screen = this.screen.bkg;
           }
         } else {
           console.log("Handle event", e);
@@ -133,8 +177,22 @@ class Controller {
 
   setScreen(stype: EScreenType) {
     switch (stype as EScreenType) {
+    case EScreenType.BoardEdit:
+      this.screen = new BoardEditor(this.defaultSize);
+      break;
     case EScreenType.Game:
-      this.screen = new GameController(8);
+      const s = prompt("load saved board?");
+      console.log(s);
+      if (!s || s[0] == "n") {
+        this.screen = new GameController(this.defaultSize);
+      } else {
+        const board = Board.fromStore("board");
+        if (!board) {
+          console.log("error loading board");
+        } else if (board) {
+          this.screen = new GameController(board);
+        }
+      }
       break;
     case EScreenType.MainMenu:
       this.screen = new Menu();

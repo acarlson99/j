@@ -529,6 +529,16 @@ class Board implements ISerializable {
     return v;
   }
 
+  static fromStore(storeName: string) {
+    const store = window.localStorage;
+    const s = store.getItem(storeName);
+    if (!s) {
+      return undefined;
+    }
+    const board = Board.deserialize(s);
+    return board;
+  }
+
   update() {
     Updater.Instance.updateBoard(this);
     for (let i = 0; i < Updater.Instance.boardSize; i++) {

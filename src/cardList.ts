@@ -72,8 +72,8 @@ function makeCardStat(
 
 const cardStatList: CardStat[] = [
   // 1
-  makeCardStat(1, [], 0, [], 0, [], 0, []),
-  makeCardStat(0, [], 1, [], 0, [], 0, []),
+  makeCardStat(1, ["auto"], 0, [], 0, [], 0, []),
+  makeCardStat(0, [], 1, ["auto"], 0, [], 0, []),
   makeCardStat(0, [], 0, [], 1, [], 0, []),
   makeCardStat(0, [], 0, [], 0, [], 1, []),
   // 2
@@ -94,12 +94,12 @@ const cardStatList: CardStat[] = [
   makeCardStat(0, [], 0, [], 0, [], 0, []),
   // 3
   makeCardStat(1, [], 0, [], 1, [], 1, []),
-  makeCardStat(1, [], 1, [], 0, [], 1, []),
+  makeCardStat(1, [], 1, [], 0, [], 1, [], true),
   // 1, double
-  makeCardStat(2, [], 0, [], 0, [], 0, []),
-  makeCardStat(0, [], 2, [], 0, [], 0, []),
-  makeCardStat(0, [], 0, [], 2, [], 0, []),
-  makeCardStat(0, [], 0, [], 0, [], 2, ["wind"]),
+  makeCardStat(2, ["slam"], 0, [], 0, [], 0, []),
+  makeCardStat(0, [], 2, ["wind"], 0, [], 0, []),
+  makeCardStat(0, [], 0, [], 2, ["bomb"], 0, []),
+  makeCardStat(0, [], 0, [], 0, [], 2, ["swap"]),
 ];
 
 const cardList: Card[] = Array(cardStatList.length);

@@ -169,6 +169,31 @@ class Updater {
       const c = this.colors[clamp(0, s.v, 3)];
       ctx.fillStyle = c;
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
+
+      let nc = undefined;
+      if (s.slam) {
+        nc = "blue";
+      }
+      if (s.wind) {
+        nc = "yellow";
+      }
+      if (s.bomb) {
+        nc = "red";
+      }
+      if (s.swap) {
+        nc = "darkgrey";
+      }
+      if (s.auto) {
+        nc = "orange";
+      }
+      if (nc) {
+        ctx.fillStyle = nc;
+        if (e.d == "u" || e.d == "d") {
+          ctx.fillRect(e.v[0], e.v[1], e.v[2] / 2, e.v[3]);
+        } else {
+          ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3] / 2);
+        }
+      }
     });
   }
 
@@ -179,6 +204,9 @@ class Updater {
     y *= cardWidth;
     ctx.fillStyle = v.color;
     ctx.fillRect(x, y, cardWidth, cardWidth);
+    if (v.stats.graveyard) {
+      ctx.fillStyle = "brown"; ctx.fillRect(x, y + cardWidth / 2, cardWidth, cardWidth / 2);
+    }
     ctx.fillStyle = "black";
     if (v.stats) {
       this.drawCardArrows(x, y, cardWidth, v.stats);
@@ -233,7 +261,7 @@ class Updater {
 
   /* eslint-disable @typescript-eslint/no-empty-function */
   // TODO: something here
-  updateBoard(v: Board) {}
+  updateBoard(v: Board) { }
   /* eslint-enable @typescript-eslint/no-empty-function */
 
   drawAMenu(m: AMenu) {
@@ -263,8 +291,8 @@ class Updater {
         this.ctx.fillText(
           "> " + s + " <",
           this.canvas.width / 2 -
-            metrics.width / 2 -
-            this.ctx.measureText("> ").width,
+          metrics.width / 2 -
+          this.ctx.measureText("> ").width,
           (i + 1) * height * 1.5
         );
       }

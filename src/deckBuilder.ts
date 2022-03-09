@@ -51,6 +51,10 @@ class DeckBuilderController implements IController {
       // );
     }
     for (let i = 0; i < cardList.length; i++) {
+      if (!cardList[i]) {
+        console.error("card empty, possibly error related to cards.csv");
+        continue;
+      }
       const c = deckBuildCard(cardList[i]);
       const x = i % this.board.size;
       const y = Math.floor(i / this.board.size);
@@ -87,7 +91,7 @@ class DeckBuilderController implements IController {
     case "s":
       {
         const deck = new Deck(this.markedCards(), "blue").serialize();
-        window.localStorage.setItem("deck", deck);
+        window.localStorage.setItem("deck_" + (prompt("deck name") || "TEMP"), deck);
       }
       break;
     default:

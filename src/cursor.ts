@@ -35,8 +35,10 @@ class Cursor {
       this.x += 1;
       break;
     }
-    this.x = clamp(0, this.x, this.size - 1);
-    this.y = clamp(0, this.y, this.size - 1);
+    // this.x = clamp(0, this.x, this.size - 1);
+    // this.y = clamp(0, this.y, this.size - 1);
+    this.x = (this.x + this.size) % this.size;
+    this.y = (this.y + this.size) % this.size;
   }
 
   holdCard(c: Card) {
