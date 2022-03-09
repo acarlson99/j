@@ -170,29 +170,31 @@ class Updater {
       ctx.fillStyle = c;
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
 
-      let nc = undefined;
+      const numBands = 6;
+      const drawF = (color:string, bandPos: number) => {
+        ctx.fillStyle = color;
+        if (e.d == "u" || e.d == "d") {
+          const w = e.v[2] / numBands;
+          ctx.fillRect(e.v[0] + (w * bandPos), e.v[1], w, e.v[3]);
+        } else {
+          const h = e.v[3] / numBands;
+          ctx.fillRect(e.v[0], e.v[1] + (h * bandPos), e.v[2], h);
+        }
+      };
       if (s.slam) {
-        nc = "blue";
+        drawF("blue", 1);
       }
       if (s.wind) {
-        nc = "yellow";
+        drawF("yellow", 2);
       }
       if (s.bomb) {
-        nc = "red";
+        drawF("red", 3);
       }
       if (s.swap) {
-        nc = "darkgrey";
+        drawF("darkgrey", 4);
       }
       if (s.auto) {
-        nc = "orange";
-      }
-      if (nc) {
-        ctx.fillStyle = nc;
-        if (e.d == "u" || e.d == "d") {
-          ctx.fillRect(e.v[0], e.v[1], e.v[2] / 2, e.v[3]);
-        } else {
-          ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3] / 2);
-        }
+        drawF("orange", 5);
       }
     });
   }
