@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-01 Tue 01:06 -->
+<!-- 2022-03-09 Wed 13:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Joustus</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Alexander Carlson" />
+<meta name="author" content="john" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -40,7 +40,7 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
+    overflow: auto;
     padding-top: 1.2em;
   }
   pre.src:before {
@@ -52,7 +52,7 @@
     padding: 3px;
     border: 1px solid black;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
@@ -161,6 +161,19 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -182,50 +195,26 @@
 </style>
 <link rel="stylesheet" type="text/css" href="/j/doc/style.css" />
 <script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
 </script>
 </head>
 <body>
@@ -235,42 +224,44 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org4ddd7aa">Joustus</a></li>
-<li><a href="#orgd4ca4b6">Rules</a>
+<li><a href="#orgac853c0">Joustus</a></li>
+<li><a href="#org12c6648">Rules</a>
 <ul>
-<li><a href="#org6d65d06">Controls</a></li>
+<li><a href="#org69402f2">Cards</a></li>
+<li><a href="#orge0a2267">Tiles</a></li>
+<li><a href="#orga43b9e7">Controls</a></li>
 </ul>
 </li>
 <li><a href="#ProgressSection">Progress</a>
 <ul>
-<li><a href="#org490454f">MVP <code>[5/5]</code>:</a></li>
-<li><a href="#orgc0dfbf7">Deploy <code>[1/1]</code>:</a></li>
-<li><a href="#orga2212de">Full Game <code>[0/4]</code>:</a></li>
-<li><a href="#org07e46e5">Polish <code>[0/5]</code>:</a></li>
-<li><a href="#org0aa6157">Stretch <code>[0/2]</code>:</a></li>
+<li><a href="#org89ea71f">MVP <code>[5/5]</code>:</a></li>
+<li><a href="#org2cd718e">Deploy <code>[1/1]</code>:</a></li>
+<li><a href="#orgffde528">Full Game <code>[1/4]</code>:</a></li>
+<li><a href="#org6468ba2">Polish <code>[0/5]</code>:</a></li>
+<li><a href="#org7d61f81">Stretch <code>[0/2]</code>:</a></li>
 </ul>
 </li>
-<li><a href="#org15235f3">Notes</a>
+<li><a href="#org8391a83">Notes</a>
 <ul>
-<li><a href="#org0702c74">Sample deck</a></li>
+<li><a href="#orgcb49530">Sample deck</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org4ddd7aa" class="outline-2">
-<h2 id="org4ddd7aa">Joustus</h2>
-<div class="outline-text-2" id="text-org4ddd7aa">
+<div id="outline-container-orgac853c0" class="outline-2">
+<h2 id="orgac853c0">Joustus</h2>
+<div class="outline-text-2" id="text-orgac853c0">
 <p>
 Game based on King of Cards Joustus card game
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd4ca4b6" class="outline-2">
-<h2 id="orgd4ca4b6">Rules</h2>
-<div class="outline-text-2" id="text-orgd4ca4b6">
+<div id="outline-container-org12c6648" class="outline-2">
+<h2 id="org12c6648">Rules</h2>
+<div class="outline-text-2" id="text-org12c6648">
 <p>
 For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a> for rules.  Will populate this section when rules differ substantially
 </p>
@@ -278,11 +269,116 @@ For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a
 <p>
 Card arrow colors: grey &lt; black &lt; white &lt; red
 </p>
+
+<p>
+Cards push in direction of arrow
+</p>
+
+<p>
+To check deck names look under `Web Developer Tools -&gt; Storage -&gt; localstorage` in Firefox, or whatever the equivalent is in Chrome
+</p>
 </div>
 
-<div id="outline-container-org6d65d06" class="outline-3">
-<h3 id="org6d65d06">Controls</h3>
-<div class="outline-text-3" id="text-org6d65d06">
+<div id="outline-container-org69402f2" class="outline-3">
+<h3 id="org69402f2">Cards</h3>
+<div class="outline-text-3" id="text-org69402f2">
+<p>
+<a href="https://shovelknight.fandom.com/wiki/Joustus#Abilities">ability descriptions</a>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">effect</th>
+<th scope="col" class="org-left">arrow color</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">slam</td>
+<td class="org-left">blue</td>
+</tr>
+
+<tr>
+<td class="org-left">wind</td>
+<td class="org-left">yellow</td>
+</tr>
+
+<tr>
+<td class="org-left">bomb</td>
+<td class="org-left">red</td>
+</tr>
+
+<tr>
+<td class="org-left">swap</td>
+<td class="org-left">darkgrey</td>
+</tr>
+
+<tr>
+<td class="org-left">auto</td>
+<td class="org-left">orange</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+and the half-brown ones are graveyard cards
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge0a2267" class="outline-3">
+<h3 id="orge0a2267">Tiles</h3>
+<div class="outline-text-3" id="text-orge0a2267">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">tile</th>
+<th scope="col" class="org-left">color</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">white circle</td>
+<td class="org-left">gem</td>
+</tr>
+
+<tr>
+<td class="org-left">wall</td>
+<td class="org-left">grey</td>
+</tr>
+
+<tr>
+<td class="org-left">grave</td>
+<td class="org-left">dark green</td>
+</tr>
+
+<tr>
+<td class="org-left">pitfall</td>
+<td class="org-left">brown</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-orga43b9e7" class="outline-3">
+<h3 id="orga43b9e7">Controls</h3>
+<div class="outline-text-3" id="text-orga43b9e7">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -294,7 +390,7 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 <tbody>
 <tr>
 <td class="org-left">space</td>
-<td class="org-left">play card</td>
+<td class="org-left">select/play card</td>
 </tr>
 
 <tr>
@@ -332,13 +428,13 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </div>
 </div>
 
-<div id="outline-container-org604edb3" class="outline-2">
-<h2 id="ProgressSection"><a id="org604edb3"></a>Progress</h2>
+<div id="outline-container-ProgressSection" class="outline-2">
+<h2 id="ProgressSection">Progress</h2>
 <div class="outline-text-2" id="text-ProgressSection">
 </div>
-<div id="outline-container-org490454f" class="outline-3">
-<h3 id="org490454f">MVP <code>[5/5]</code>:</h3>
-<div class="outline-text-3" id="text-org490454f">
+<div id="outline-container-org89ea71f" class="outline-3">
+<h3 id="org89ea71f">MVP <code>[5/5]</code>:</h3>
+<div class="outline-text-3" id="text-org89ea71f">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Pushing <code>[1/1]</code>:
 <ul class="org-ul">
@@ -372,9 +468,9 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc0dfbf7" class="outline-3">
-<h3 id="orgc0dfbf7">Deploy <code>[1/1]</code>:</h3>
-<div class="outline-text-3" id="text-orgc0dfbf7">
+<div id="outline-container-org2cd718e" class="outline-3">
+<h3 id="org2cd718e">Deploy <code>[1/1]</code>:</h3>
+<div class="outline-text-3" id="text-org2cd718e">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Github pages:
 <ul class="org-ul">
@@ -387,17 +483,17 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </ul>
 </div>
 </div>
-<div id="outline-container-orga2212de" class="outline-3">
-<h3 id="orga2212de">Full Game <code>[0/4]</code>:</h3>
-<div class="outline-text-3" id="text-orga2212de">
+<div id="outline-container-orgffde528" class="outline-3">
+<h3 id="orgffde528">Full Game <code>[1/4]</code>:</h3>
+<div class="outline-text-3" id="text-orgffde528">
 <ul class="org-ul">
-<li class="trans"><code>[-]</code> Display <code>[3/5]</code>:
+<li class="trans"><code>[-]</code> Display <code>[4/5]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Multi-screen layout</li>
 <li class="on"><code>[X]</code> Major graphics refactor, single canvas for whole screen</li>
 <li class="on"><code>[X]</code> Dynamic resizing</li>
 <li class="off"><code>[&#xa0;]</code> Display push fail reason</li>
-<li class="off"><code>[&#xa0;]</code> Show special arrows (slam,wind,grave,etc)</li>
+<li class="on"><code>[X]</code> Show special arrows (slam,wind,grave,etc)</li>
 </ul></li>
 <li class="trans"><code>[-]</code> Pushing <code>[1/2]</code>:
 <ul class="org-ul">
@@ -464,18 +560,19 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </ul></li>
 </ul></li>
 </ul></li>
-<li class="trans"><code>[-]</code> Players <code>[0/2]</code>:
+<li class="on"><code>[X]</code> Players <code>[2/2]</code>:
 <ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Deck/hand/turn/score display</li>
-<li class="trans"><code>[-]</code> Deck builder <code>[1/3]</code>:
+<li class="on"><code>[X]</code> Deck/hand/turn/score display</li>
+<li class="on"><code>[X]</code> Deck builder <code>[3/3]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Build</li>
-<li class="off"><code>[&#xa0;]</code> Save deck</li>
-<li class="off"><code>[&#xa0;]</code> Import</li>
+<li class="on"><code>[X]</code> Save deck</li>
+<li class="on"><code>[X]</code> Import</li>
 </ul></li>
 </ul></li>
-<li class="trans"><code>[-]</code> Board <code>[0/1]</code>:
+<li class="trans"><code>[-]</code> Board <code>[1/2]</code>:
 <ul class="org-ul">
+<li class="on"><code>[X]</code> Board builder/editor</li>
 <li class="trans"><code>[-]</code> Obstacles <code>[1/2]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Pitfalls</li>
@@ -485,9 +582,9 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </ul>
 </div>
 </div>
-<div id="outline-container-org07e46e5" class="outline-3">
-<h3 id="org07e46e5">Polish <code>[0/5]</code>:</h3>
-<div class="outline-text-3" id="text-org07e46e5">
+<div id="outline-container-org6468ba2" class="outline-3">
+<h3 id="org6468ba2">Polish <code>[0/5]</code>:</h3>
+<div class="outline-text-3" id="text-org6468ba2">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Players <code>[0/2]</code>:
 <ul class="org-ul">
@@ -501,9 +598,9 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </ul>
 </div>
 </div>
-<div id="outline-container-org0aa6157" class="outline-3">
-<h3 id="org0aa6157">Stretch <code>[0/2]</code>:</h3>
-<div class="outline-text-3" id="text-org0aa6157">
+<div id="outline-container-org7d61f81" class="outline-3">
+<h3 id="org7d61f81">Stretch <code>[0/2]</code>:</h3>
+<div class="outline-text-3" id="text-org7d61f81">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Online multiplayer</li>
 <li class="off"><code>[&#xa0;]</code> NFT</li>
@@ -512,13 +609,13 @@ Card arrow colors: grey &lt; black &lt; white &lt; red
 </div>
 </div>
 
-<div id="outline-container-org15235f3" class="outline-2">
-<h2 id="org15235f3">Notes</h2>
-<div class="outline-text-2" id="text-org15235f3">
+<div id="outline-container-org8391a83" class="outline-2">
+<h2 id="org8391a83">Notes</h2>
+<div class="outline-text-2" id="text-org8391a83">
 </div>
-<div id="outline-container-org0702c74" class="outline-3">
-<h3 id="org0702c74">Sample deck</h3>
-<div class="outline-text-3" id="text-org0702c74">
+<div id="outline-container-orgcb49530" class="outline-3">
+<h3 id="orgcb49530">Sample deck</h3>
+<div class="outline-text-3" id="text-orgcb49530">
 <p>
 eyJjcyI6W3siY29sb3IiOiJibHVlIiwibmFtZSI6IlRyb3VwcGxlIEFjb2x5dGUiLCJzdGF0cyI6
 eyJkaXJzIjp7ImwiOnsidiI6MSwiYXV0byI6dHJ1ZX0sInUiOnsidiI6MiwiYXV0byI6dHJ1ZX19
