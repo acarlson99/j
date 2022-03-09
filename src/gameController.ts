@@ -31,12 +31,16 @@ class Game {
       const d1_ = Deck.fromStore(d1name, Player.colors[0]);
       if (d1_) {
         d1 = d1_;
+      } else {
+        console.warn('unable to load deck 1:', d1name)
       }
     }
     if (d2name) {
       const d2_ = Deck.fromStore(d2name, Player.colors[1]);
       if (d2_) {
         d2 = d2_;
+      } else {
+        console.warn('unable to load deck 2:', d2name)
       }
     }
     d1.shuffle();
@@ -170,14 +174,11 @@ class GameController implements IController {
       //   );
     }
 
-    console.log("current player deck", btoa(currentPlayer.d.serialize()));
     playerIdx = this.game.turnCount % 2;
     currentPlayer = this.game.players[playerIdx % 2];
     if (!e) {
       return;
     }
-    console.log("HAND:", currentPlayer.h.cs);
-    console.log("decksize:", currentPlayer.d.size());
     // check if valid move exists
     let playableMove = false;
     const cs = currentPlayer.hand();

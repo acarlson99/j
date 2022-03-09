@@ -21,14 +21,6 @@ class Deck implements ISerializable {
     return new Deck([], "blue");
   }
 
-  instanceMethod() {
-    console.log("instance method");
-  }
-
-  static staticMethod() {
-    console.log("static method");
-  }
-
   setColor(color: string) {
     this.cs.map((c) => c.setColor(color));
     return this;

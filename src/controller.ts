@@ -121,7 +121,6 @@ class BoardEditor implements IController {
     case "s":
       const store = window.localStorage;
       store.setItem("board", this.board.serialize());
-      console.log("stored");
       break;
     case "q":
       return EScreenType.MainMenu;
@@ -160,9 +159,7 @@ class Controller {
             this.screen = this.screen.bkg;
           }
         } else {
-          console.log("Handle event", e);
           const newScreen = this.screen?.handleEvent(e);
-          console.log(newScreen);
           if (newScreen?.handleEvent) {
             // IController instance
             this.screen = newScreen as IController;
@@ -182,13 +179,12 @@ class Controller {
       break;
     case EScreenType.Game:
       const s = prompt("load saved board?");
-      console.log(s);
       if (!s || s[0] == "n") {
         this.screen = new GameController(this.defaultSize);
       } else {
         const board = Board.fromStore("board");
         if (!board) {
-          console.log("error loading board");
+          console.warn("error loading board");
         } else if (board) {
           this.screen = new GameController(board);
         }
@@ -215,7 +211,7 @@ try {
   console.log("CREATE GLOBAL GAME CONTROLLER");
   controller = new Controller();
 } catch (e) {
-  console.warn("UNABLE TO CREATE CONTROLLER:", e);
+  console.error("UNABLE TO CREATE CONTROLLER:", e);
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

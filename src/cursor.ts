@@ -20,7 +20,6 @@ class Cursor {
   }
 
   move(direction: EDirection) {
-    console.log("MOVE", direction);
     switch (direction) {
     case EDirection.Up:
       this.y -= 1;
@@ -43,17 +42,14 @@ class Cursor {
 
   holdCard(c: Card) {
     this.heldCard = c;
-    console.log("HOLDING CARD", this.heldCard);
   }
 
   playHeldCard(direction: EDirection, game: Game) {
-    console.log("cursor push", this.x, this.y, direction);
     // const c = this.game.board.getCard(this.x, this.y);
     // if (!c || !this.heldCard) return false;
     const pushed = game.playCard(this.x, this.y, direction, this.heldCard);
-    console.log("PUSH RETURNED:", pushed);
     if (!pushed) {
-      console.log(game.board.lastPushError);
+      console.log('last push error:', game.board.lastPushError);
       return false;
     }
     this.heldCard = undefined;

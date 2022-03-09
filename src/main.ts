@@ -20,8 +20,6 @@ function updateGameArea() {
 startGame();
 
 document.onkeydown = (e) => {
-  console.log(e);
-
   controller.handleEvent(e);
 };
 
