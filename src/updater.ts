@@ -256,7 +256,6 @@ class Updater {
     ctx.textAlign = "center";
     ctx.fillStyle = "black";
     const winner = v.getWinner();
-    console.log(winner);
     ctx.fillText(
       String(s1),
       this.xToCoord(this.boardSize + 1, this.getCardWidth()),
