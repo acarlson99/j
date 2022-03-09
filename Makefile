@@ -9,6 +9,8 @@ SERVE_LOCATION_DOC := $(addprefix ${SERVE_LOCATION}, doc/)
 all: doc
 	npm run build-deploy || ((echo '--- NPM BUILD FAILED';echo '--- did you mean to `npm install`') && exit 1)
 
+re: clean all
+
 %.html: %.org
 	emacs -q $< --eval '(progn (re-search-forward "style\.css" nil t) (replace-match "'$(addprefix ${SERVE_LOCATION_DOC}, style.css)'") (org-html-export-to-html) (kill-emacs))'
 

@@ -11,10 +11,35 @@
 
   Card arrow colors: grey < black < white < red
 
+  Cards push in direction of arrow
+
+** Cards
+
+   [[https://shovelknight.fandom.com/wiki/Joustus#Abilities][ability descriptions]]
+
+  | effect | arrow color |
+  |--------+-------------|
+  | slam   | blue        |
+  | wind   | yellow      |
+  | bomb   | red         |
+  | swap   | darkgrey    |
+  | auto   | orange      |
+
+  and the half-brown ones are graveyard cards
+
+** Tiles
+
+  | tile         | color      |
+  |--------------+------------|
+  | white circle | gem        |
+  | wall         | grey       |
+  | grave        | dark green |
+  | pitfall      | brown      |
+
 ** Controls
 
 |--------------------+---------------------------|
-| space              | play card                 |
+| space              | select/play card          |
 | wasd               | play card pushing uldr    |
 | up down left right | move cursor               |
 | 123                | select card 1,2,3 in hand |
@@ -50,13 +75,13 @@
    - [X] Deploy
    - [X] Automate deploy build:
      - must take into account that this will be deployed under '/j'
-** Full Game [0/4]:
- - [-] Display [3/5]:
+** Full Game [1/4]:
+ - [-] Display [4/5]:
    - [X] Multi-screen layout
    - [X] Major graphics refactor, single canvas for whole screen
    - [X] Dynamic resizing
    - [ ] Display push fail reason
-   - [ ] Show special arrows (slam,wind,grave,etc)
+   - [X] Show special arrows (slam,wind,grave,etc)
  - [-] Pushing [1/2]:
    - [X] Push fail reasons:
      - If a push fails, return an explanation of why it is illegal
@@ -98,13 +123,14 @@
          - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
        - [X] Count (remove priority 3 arrows after 3 turns):
          - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
- - [-] Players [0/2]:
-   - [ ] Deck/hand/turn/score display
-   - [-] Deck builder [1/3]:
+ - [X] Players [2/2]:
+   - [X] Deck/hand/turn/score display
+   - [X] Deck builder [3/3]:
      - [X] Build
-     - [ ] Save deck
-     - [ ] Import
- - [-] Board [0/1]:
+     - [X] Save deck
+     - [X] Import
+ - [-] Board [1/2]:
+   - [X] Board builder/editor
    - [-] Obstacles [1/2]:
      - [X] Pitfalls
      - [ ] Rocks
