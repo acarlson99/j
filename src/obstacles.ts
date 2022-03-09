@@ -120,7 +120,6 @@ class Obstacles implements ISerializable {
 
   cardPlaced(board: Board, x: number, y: number) {
     if (this.m[y][x]?.name == EObstacleName.pitfall) {
-      console.log("KILL", x, y);
       board.unsetCard(x, y);
       delete this.m[y][x];
     }
@@ -141,7 +140,6 @@ class Obstacles implements ISerializable {
   }
 
   incrementObstacleAt(x: number, y: number) {
-    console.log("incrementing obstacle");
     const name = this.m[y][x]?.name;
     if (!name) {
       this.setM_(x, y, makeObstacle(obstacleList[0]));

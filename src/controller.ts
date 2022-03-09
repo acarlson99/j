@@ -26,7 +26,7 @@ interface IController extends IUpdater {
 export { IController };
 
 class Menu extends AMenu implements IController {
-  menuItems = ["play", "deck", "board", "who?", "controls"];
+  menuItems = ["play", "deck", "board", "who?", "doc"];
 
   selectCurrentMenuItem(): EScreenType | IController | undefined {
     switch (this.menuItems[this.arrowPos]) {
@@ -40,6 +40,8 @@ class Menu extends AMenu implements IController {
     case "board":
       const size = Number(prompt("size (min 6)"));
       return new BoardEditor(Math.max(6, size));
+    case "doc":
+      window.location.href += "doc/";
     }
   }
 

@@ -49,7 +49,7 @@ class Cursor {
     // if (!c || !this.heldCard) return false;
     const pushed = game.playCard(this.x, this.y, direction, this.heldCard);
     if (!pushed) {
-      console.log('last push error:', game.board.lastPushError);
+      console.log("last push error:", game.board.lastPushError);
       return false;
     }
     this.heldCard = undefined;

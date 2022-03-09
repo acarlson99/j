@@ -32,7 +32,7 @@ class Game {
       if (d1_) {
         d1 = d1_;
       } else {
-        console.warn('unable to load deck 1:', d1name)
+        console.warn("unable to load deck 1:", d1name);
       }
     }
     if (d2name) {
@@ -40,7 +40,7 @@ class Game {
       if (d2_) {
         d2 = d2_;
       } else {
-        console.warn('unable to load deck 2:', d2name)
+        console.warn("unable to load deck 2:", d2name);
       }
     }
     d1.shuffle();

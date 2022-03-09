@@ -14,13 +14,16 @@ re: clean all
 %.html: %.org
 	emacs -q $< --eval '(progn (re-search-forward "style\.css" nil t) (replace-match "'$(addprefix ${SERVE_LOCATION_DOC}, style.css)'") (org-html-export-to-html) (kill-emacs))'
 
+${BUILD_DIR}:
+	mkdir -p $@
+
 ${BUILD_DOC_DIR}:
 	mkdir -p $@
 
 ${BUILD_DOC_DIR}index.html: ${ORG_HTML} ${BUILD_DOC_DIR}
 	cp $< $@
 
-${BUILD_DIR}doc.html:
+${BUILD_DIR}doc.html: ${BUILD_DIR}
 	echo '<meta http-equiv="refresh" content="0; URL=/j/doc/" />' > $@
 
 ${BUILD_DOC_DIR}style.css: style.css ${BUILD_DOC_DIR}

@@ -390,6 +390,10 @@ class Board implements ISerializable {
           }
           const [xf, yf] = directionF[dir];
           try {
+            let pushedC = this.getCard(xf(x),yf(y))
+            if (!pushedC) continue; // no card to push
+            if (!pushedC.canBePushed(dir,sdir.v)) continue; // cannot push card
+            // attempt to push card
             this.push(xf(x), yf(y), dir, sdir.v, dontPush, sdir?.wind || false);
           } catch (err) {
             if (!(err instanceof PushError)) {
