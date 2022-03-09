@@ -7,11 +7,14 @@
   Game based on King of Cards Joustus card game
 
 * Rules
+
   For now see [[https://shovelknight.fandom.com/wiki/Joustus#Rules][here]] for rules.  Will populate this section when rules differ substantially
 
   Card arrow colors: grey < black < white < red
 
   Cards push in direction of arrow
+
+  To check deck names look under `Web Developer Tools -> Storage -> localstorage` in Firefox, or whatever the equivalent is in Chrome
 
 ** Cards
 
