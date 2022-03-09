@@ -38,7 +38,7 @@ class Menu extends AMenu implements IController {
     case "deck":
       return EScreenType.DeckBuilder;
     case "board":
-      const size = Number(prompt("size"));
+      const size = Number(prompt("size (min 6)"));
       return new BoardEditor(Math.max(6, size));
     }
   }
