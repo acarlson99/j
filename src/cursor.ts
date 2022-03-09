@@ -46,7 +46,9 @@ class Cursor {
 
   playHeldCard(direction: EDirection, game: Game) {
     // const c = this.game.board.getCard(this.x, this.y);
-    // if (!c || !this.heldCard) return false;
+    if (!this.heldCard) {
+      return false;
+    }
     const pushed = game.playCard(this.x, this.y, direction, this.heldCard);
     if (!pushed) {
       console.log("last push error:", game.board.lastPushError);
