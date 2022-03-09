@@ -532,9 +532,7 @@ class Board implements ISerializable {
     }
     // if (scoreB + scoreR < poss.length) return undefined;
     const v = clamp(-1, scoreB - scoreR, 1);
-    console.log("WINNER WINNER CHICKEN DINNER", v);
     // TODO: readd gameover
-    // this.gameover = true;
     return v;
   }
 
