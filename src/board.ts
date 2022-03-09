@@ -390,9 +390,13 @@ class Board implements ISerializable {
           }
           const [xf, yf] = directionF[dir];
           try {
-            let pushedC = this.getCard(xf(x),yf(y))
-            if (!pushedC) continue; // no card to push
-            if (!pushedC.canBePushed(dir,sdir.v)) continue; // cannot push card
+            const pushedC = this.getCard(xf(x), yf(y));
+            if (!pushedC) {
+              continue;
+            } // no card to push
+            if (!pushedC.canBePushed(dir, sdir.v)) {
+              continue;
+            } // cannot push card
             // attempt to push card
             this.push(xf(x), yf(y), dir, sdir.v, dontPush, sdir?.wind || false);
           } catch (err) {
@@ -516,6 +520,7 @@ class Board implements ISerializable {
     return [scoreB, scoreR];
   }
 
+  // 1 -- p1, -1 -- p2, 0 -- no winner
   checkWin() {
     // const poss = this.obstacles.getGemsPos();
     if (!this.obstacles) {

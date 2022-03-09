@@ -13,6 +13,7 @@ class Game {
   players: Player[] = [];
   board: Board;
   turnCount = 0;
+  possibleMoves = true;
 
   constructor(param: number | Board, d1name?: string, d2name?: string) {
     let size = 0;
@@ -50,6 +51,20 @@ class Game {
     this.players.forEach((player) => {
       player.drawHand();
     });
+  }
+
+  // in case of draw, p2 wins bc they went second
+  getWinner() {
+    if (this.board.checkWin()) {
+      return this.board.checkWin();
+    } else if (!this.possibleMoves) {
+      const [bs, rs] = this.board.getScore();
+      if (bs > rs) {
+        return 1;
+      }
+      return -1;
+    }
+    return 0;
   }
 
   boardSize() {
@@ -194,6 +209,7 @@ class GameController implements IController {
     console.log("END CAN BE PLAYED CHECK");
     if (!playableMove) {
       console.log("no possible moves");
+      this.game.possibleMoves = false;
     }
   }
 
@@ -201,7 +217,7 @@ class GameController implements IController {
     Updater.Instance.updateBoardSize(this.game.boardSize());
     Updater.Instance.updateGameController(
       this,
-      this.mapEdit ? "purple" : undefined
+      this.game.possibleMoves ? "green" : "purple"
     );
     this.game.update();
     this.cursor.update();

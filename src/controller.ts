@@ -202,6 +202,7 @@ class Controller {
   }
 
   update() {
+    Updater.Instance.updateController(this);
     this.screen?.update();
   }
 }

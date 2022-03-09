@@ -54,16 +54,6 @@ class Cursor {
     }
     this.heldCard = undefined;
 
-    // FIXME: this does not belong here
-    const winner = game.board.checkWin();
-    if (winner) {
-      const winnerScore = document.getElementById(
-        winner == 1 ? "p1score" : "p2score"
-      );
-      if (winnerScore) {
-        winnerScore.style.background = "lavender";
-      }
-    }
     console.log("push success");
     return true;
   }

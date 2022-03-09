@@ -2,7 +2,7 @@
 
 import { Board, sds } from "./board";
 import { Card, CardStat, statDirection } from "./card";
-import { Menu, PauseMenu } from "./controller";
+import { Controller, Menu, PauseMenu } from "./controller";
 import { Cursor } from "./cursor";
 import { Game, GameController } from "./gameController";
 import { EObstacleName } from "./obstacles";
@@ -171,7 +171,7 @@ class Updater {
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
 
       const numBands = 6;
-      const drawF = (color:string, bandPos: number) => {
+      const drawF = (color: string, bandPos: number) => {
         ctx.fillStyle = color;
         if (e.d == "u" || e.d == "d") {
           const w = e.v[2] / numBands;
@@ -244,21 +244,39 @@ class Updater {
     document.body.style.backgroundColor = color;
   }
 
+  updateController(c:Controller) {
+    this.ctx.fillStyle = "green";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    document.body.style.backgroundColor = "green";
+  }
+
   updateGame(v: Game, s1: number, s2: number) {
     const ctx = this.ctx;
     ctx.font = "30px Arial";
     ctx.textAlign = "center";
     ctx.fillStyle = "black";
+    const winner = v.getWinner();
+    console.log(winner);
     ctx.fillText(
       String(s1),
       this.xToCoord(this.boardSize + 1, this.getCardWidth()),
       this.yToCoord(2, this.getCardWidth())
     );
+    if (winner === 1) {
+      ctx.fillStyle = "gold";
+      ctx.fillRect(this.xToCoord(this.boardSize + 1, this.getCardWidth()),
+        this.yToCoord(2, this.getCardWidth()), this.getCardWidth(), this.getCardWidth());
+    }
     ctx.fillText(
       String(s2),
       this.xToCoord(this.boardSize + 1, this.getCardWidth()),
       this.yToCoord(this.boardSize - 2, this.getCardWidth())
     );
+    if (winner === -1) {
+      ctx.fillStyle = "gold";
+      ctx.fillRect(this.xToCoord(this.boardSize + 1, this.getCardWidth()),
+        this.yToCoord(this.boardSize - 2, this.getCardWidth()), this.getCardWidth(), this.getCardWidth());
+    }
   }
 
   /* eslint-disable @typescript-eslint/no-empty-function */
