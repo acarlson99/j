@@ -254,8 +254,8 @@ class Updater {
     const ctx = this.ctx;
     ctx.font = "30px Arial";
     ctx.textAlign = "center";
-    ctx.fillStyle = "black";
     const winner = v.getWinner();
+    ctx.fillStyle = "black";
     ctx.fillText(
       String(s1),
       this.xToCoord(this.boardSize + 1, this.getCardWidth()),
@@ -266,6 +266,7 @@ class Updater {
       ctx.fillRect(this.xToCoord(this.boardSize + 1, this.getCardWidth()),
         this.yToCoord(2, this.getCardWidth()), this.getCardWidth(), this.getCardWidth());
     }
+    ctx.fillStyle = "black";
     ctx.fillText(
       String(s2),
       this.xToCoord(this.boardSize + 1, this.getCardWidth()),
