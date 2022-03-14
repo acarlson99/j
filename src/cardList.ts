@@ -5,13 +5,13 @@ import { Card, CardStat } from "./card";
 
 function makeCardStat(
   u: number,
-  us: string[],
   l: number,
-  ls: string[],
   d: number,
-  ds: string[],
   r: number,
-  rs: string[],
+  us: string[] = [],
+  ls: string[] = [],
+  ds: string[] = [],
+  rs: string[] = [],
   graveyard = false
 ) {
   const stat: CardStat = {
@@ -55,45 +55,98 @@ function makeCardStat(
 
 const cardStatList: CardStat[] = [
   // 1
-  makeCardStat(1, [], 0, [], 0, [], 0, []),
-  makeCardStat(0, [], 1, [], 0, [], 0, []),
-  makeCardStat(0, [], 0, [], 1, [], 0, []),
-  makeCardStat(0, [], 0, [], 0, [], 1, []),
+  makeCardStat(1, 0, 0, 0),
+  makeCardStat(0, 1, 0, 0),
+  makeCardStat(0, 0, 1, 0),
+  makeCardStat(0, 0, 0, 1),
   // 2
-  makeCardStat(1, [], 1, [], 0, [], 0, []),
-  makeCardStat(0, [], 1, [], 1, [], 0, []),
-  makeCardStat(0, [], 0, [], 1, [], 1, []),
-  makeCardStat(1, [], 0, [], 0, [], 1, []),
-  makeCardStat(1, [], 0, [], 1, [], 0, []),
-  makeCardStat(0, [], 1, [], 0, [], 1, []),
+  makeCardStat(1, 1, 0, 0),
+  makeCardStat(0, 1, 1, 0),
+  makeCardStat(0, 0, 1, 1),
+  makeCardStat(1, 0, 0, 1),
+  makeCardStat(1, 0, 1, 0),
+  makeCardStat(0, 1, 0, 1),
   // 3
-  makeCardStat(1, [], 1, [], 1, [], 0, []),
-  makeCardStat(0, [], 1, [], 1, [], 1, []),
-  makeCardStat(1, [], 0, [], 1, [], 1, []),
-  makeCardStat(1, [], 1, [], 0, [], 1, []),
+  makeCardStat(1, 1, 1, 0),
+  makeCardStat(0, 1, 1, 1),
+  makeCardStat(1, 0, 1, 1),
+  makeCardStat(1, 1, 0, 1),
   // 4
-  makeCardStat(1, [], 1, [], 1, [], 1, []),
+  makeCardStat(1, 1, 1, 1),
   // 0, rookie
-  makeCardStat(0, [], 0, [], 0, [], 0, []),
+  makeCardStat(0, 0, 0, 0),
   // 3, bard,cooper
-  makeCardStat(1, [], 0, [], 1, [], 1, []),
-  makeCardStat(1, [], 1, [], 0, [], 1, []),
+  makeCardStat(1, 0, 1, 1),
+  makeCardStat(1, 1, 0, 1),
   // 1, double
-  makeCardStat(2, [], 0, [], 0, [], 0, []),
-  makeCardStat(0, [], 2, [], 0, [], 0, []),
-  makeCardStat(0, [], 0, [], 2, [], 0, []),
-  makeCardStat(0, [], 0, [], 0, [], 2, []),
+  makeCardStat(2, 0, 0, 0),
+  makeCardStat(0, 2, 0, 0),
+  makeCardStat(0, 0, 2, 0),
+  makeCardStat(0, 0, 0, 2),
+  // 2
+  makeCardStat(2, 1, 0, 0),
+  makeCardStat(1, 2, 0, 0),
+  makeCardStat(0, 1, 2, 0),
+  makeCardStat(0, 2, 1, 0),
+  makeCardStat(0, 0, 2, 1),
+  makeCardStat(0, 0, 1, 2),
+  makeCardStat(2, 0, 0, 1),
+  makeCardStat(1, 0, 0, 2),
+  makeCardStat(2, 0, 1, 0),
+  makeCardStat(1, 0, 2, 0),
+  makeCardStat(0, 2, 0, 1),
+  makeCardStat(0, 1, 0, 2),
+  // 3
+  makeCardStat(2, 1, 1, 0),
+  makeCardStat(0, 2, 1, 1),
+  makeCardStat(1, 0, 2, 1),
+  makeCardStat(1, 1, 0, 2),
+
+  makeCardStat(2, 1, 0, 1),
+  makeCardStat(1, 2, 1, 0),
+  makeCardStat(0, 1, 2, 1),
+  makeCardStat(1, 0, 1, 2),
+
+  makeCardStat(1, 1, 2, 0),
+  makeCardStat(0, 1, 1, 2),
+  makeCardStat(2, 0, 1, 1),
+  makeCardStat(1, 2, 0, 1),
+  // slammers
+  makeCardStat(2, 0, 0, 0, ["slam"], [], [], []),
+  makeCardStat(0, 2, 0, 0, [], ["slam"], [], []),
+  makeCardStat(0, 0, 2, 0, [], [], ["slam"], []),
+  makeCardStat(0, 0, 0, 2, [], [], [], ["slam"]),
+
+  makeCardStat(1, 1, 1, 1, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(0, 2, 0, 2, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(2, 0, 2, 0, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(0, 1, 2, 1, [], ["slam", "bomb"], ["slam"], ["slam", "bomb"]),
+
+  makeCardStat(2, 2, 0, 0, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(0, 2, 2, 0, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(0, 0, 2, 2, ["slam"], ["slam"], ["slam"], ["slam"]),
+  makeCardStat(2, 0, 0, 2, ["slam"], ["slam"], ["slam"], ["slam"]),
+
+  makeCardStat(0, 2, 0, 2, [], [], [], [], true),
+  makeCardStat(2, 0, 2, 0, [], [], [], [], true),
+  makeCardStat(2, 2, 2, 0, [], [], [], [], true),
+  makeCardStat(2, 0, 2, 2, [], [], [], [], true),
+
+  makeCardStat(0, 2, 2, 2, [], [], ["auto"], [], true),
+
+  makeCardStat(0, 3, 0, 3, [], [], [], [], true),
+  makeCardStat(3, 0, 3, 0, [], [], [], [], true),
 ];
 
 // TODO: save/load to/from localstorage for dynamic cardlists
 const cardStatExtras: Card[] = [
-  new Card("blue", "test", makeCardStat(1, [], 1, [], 1, [], 1, [], true)),
-  new Card("blue", "test", makeCardStat(1, ["slam"], 1, ["slam"], 1, ["slam"], 1, ["slam"], false)),
-  new Card("blue", "test", makeCardStat(1, ["wind"], 1, ["wind"], 1, ["wind"], 1, ["wind"], false)),
-  new Card("blue", "test", makeCardStat(1, ["bomb"], 1, ["bomb"], 1, ["bomb"], 1, ["bomb"], false)),
-  new Card("blue", "test", makeCardStat(1, ["swap"], 1, ["swap"], 1, ["swap"], 1, ["swap"], false)),
-  new Card("blue", "test", makeCardStat(1, ["auto"], 1, ["auto"], 1, ["auto"], 1, ["auto"], false)),
-  new Card("blue", "test", makeCardStat(1, ["slam", "wind", "bomb", "swap", "auto"], 1, ["slam", "wind", "bomb", "swap", "auto"], 1, ["slam", "wind", "bomb", "swap", "auto"], 1, ["slam", "wind", "bomb", "swap", "auto"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, [], [], [], [], true)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["slam"], ["slam"], ["slam"], ["slam"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["wind"], ["wind"], ["wind"], ["wind"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["bomb"], ["bomb"], ["bomb"], ["bomb"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["swap"], ["swap"], ["swap"], ["swap"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["auto"], ["auto"], ["auto"], ["auto"], false)),
+  new Card("blue", "test", makeCardStat(1, 1, 1, 1, ["slam", "wind", "bomb", "swap", "auto"], ["slam", "wind", "bomb", "swap", "auto"], ["slam", "wind", "bomb", "swap", "auto"], ["slam", "wind", "bomb", "swap", "auto"], false)),
 ];
 
 const cardList: Card[] = Array(cardStatList.length);
