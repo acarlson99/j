@@ -1,8 +1,8 @@
 "use strict";
 
-import { Board, sds } from "./board";
+import { Board, sds, EDirection, opposites } from "./board";
 import { Card, CardStat, statDirection } from "./card";
-import { Controller, Menu, PauseMenu } from "./controller";
+import { Controller, Menu, PauseMenu, EScreenType } from "./controller";
 import { Cursor } from "./cursor";
 import { Game, GameController } from "./gameController";
 import { EObstacleName } from "./obstacles";
@@ -13,7 +13,7 @@ import { AMenu } from "./AMenu";
 class Updater {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  colors = ["grey", "black", "white", "maroon"];
+  arrowColors = ["grey", "black", "#EABE7C", "#CE6A85"];
 
   private static _instance: Updater;
   boardSize: number;
@@ -161,40 +161,115 @@ class Updater {
       },
     ];
 
+    ctx.fillStyle = "darkgrey";
+    // if (
+    //   statDirection(stats, EDirection.Up)?.swap ||
+    //   statDirection(stats, EDirection.Down)?.swap
+    // ) {
+    //   ctx.fillRect(
+    //     x + (cardWidth / 5) * 2,
+    //     y + margin,
+    //     cardWidth / 5,
+    //     cardWidth - margin * 2
+    //   );
+    // }
+    // if (
+    //   statDirection(stats, EDirection.Left)?.swap ||
+    //   statDirection(stats, EDirection.Right)?.swap
+    // ) {
+    //   ctx.fillRect(
+    //     x + margin,
+    //     y + (cardWidth / 5) * 2,
+    //     cardWidth - margin * 2,
+    //     cardWidth / 5
+    //   );
+    // }
+
+    const drawRectFromCenter = (
+      ctx: CanvasRenderingContext2D,
+      ratio: number,
+      dir: string
+    ) => {
+      const width = cardWidth / ratio;
+      if (dir == "u" || dir == "d") {
+        ctx.fillRect(
+          x + width * ((ratio - 1) / 2),
+          y + (dir == "d" ? cardWidth / 2 : border),
+          width,
+          cardWidth / 2 - border
+        );
+      } else {
+        ctx.fillRect(
+          x + (dir == "r" ? cardWidth / 2 : border),
+          y + width * ((ratio - 1) / 2),
+          cardWidth / 2 - border,
+          width
+        );
+      }
+    };
+
     arrowFuncs.forEach((e) => {
       const s = statDirection(stats, sds[e.d]);
       if (!s || s?.v < 0) {
         return;
       }
-      const c = this.colors[clamp(0, s.v, 3)];
+      if (s.auto) {
+        ctx.fillStyle = "green";
+        drawRectFromCenter(ctx, 3, e.d);
+      }
+    });
+
+    arrowFuncs.forEach((e) => {
+      const s = statDirection(stats, sds[e.d]);
+      if (!s || s?.v < 0) {
+        return;
+      }
+      if (s.swap || statDirection(stats, opposites[sds[e.d]])?.swap) {
+        ctx.fillStyle = "darkgrey";
+        drawRectFromCenter(ctx, 6, e.d);
+      }
+      const c = this.arrowColors[clamp(0, s.v, 3)];
       ctx.fillStyle = c;
       ctx.fillRect(e.v[0], e.v[1], e.v[2], e.v[3]);
 
-      const numBands = 6;
+      const numBands = 2;
       const drawF = (color: string, bandPos: number) => {
         ctx.fillStyle = color;
         if (e.d == "u" || e.d == "d") {
+          const h = border * 2;
           const w = e.v[2] / numBands;
-          ctx.fillRect(e.v[0] + (w * bandPos), e.v[1], w, e.v[3]);
+          ctx.fillRect(
+            e.v[0] + w * bandPos,
+            e.v[1] + (e.d == "d" ? e.v[3] - h : 0),
+            w,
+            h
+          );
         } else {
           const h = e.v[3] / numBands;
-          ctx.fillRect(e.v[0], e.v[1] + (h * bandPos), e.v[2], h);
+          const w = border * 2;
+          ctx.fillRect(
+            e.v[0] + (e.d == "r" ? e.v[2] - w : 0),
+            e.v[1] + h * bandPos,
+            w,
+            h
+          );
         }
       };
+      if (s.bomb) {
+        ctx.fillStyle = "#FF1B1C";
+        const mgn = border * 2;
+        ctx.fillRect(
+          e.v[0] + mgn,
+          e.v[1] + mgn,
+          e.v[2] - mgn * 2,
+          e.v[3] - mgn * 2
+        );
+      }
       if (s.slam) {
-        drawF("blue", 1);
+        drawF("#3CBBB1", 1);
       }
       if (s.wind) {
-        drawF("yellow", 2);
-      }
-      if (s.bomb) {
-        drawF("red", 3);
-      }
-      if (s.swap) {
-        drawF("darkgrey", 4);
-      }
-      if (s.auto) {
-        drawF("orange", 5);
+        drawF("orange", 0);
       }
     });
   }
@@ -204,16 +279,15 @@ class Updater {
     const cardWidth = this.getCardWidth();
     x *= cardWidth;
     y *= cardWidth;
-    ctx.fillStyle = v.color;
+    ctx.fillStyle = v.color == "blue" ? "blue" : "#9E2B25";
     ctx.fillRect(x, y, cardWidth, cardWidth);
     if (v.stats.graveyard) {
-      ctx.fillStyle = "brown"; ctx.fillRect(x, y + cardWidth / 2, cardWidth, cardWidth / 2);
+      ctx.fillStyle = "brown";
+      ctx.fillRect(x, y + cardWidth / 2, cardWidth, cardWidth / 2);
     }
     ctx.fillStyle = "black";
     if (v.stats) {
       this.drawCardArrows(x, y, cardWidth, v.stats);
-    } else {
-      console.warn("no stats");
     }
   }
 
@@ -244,7 +318,7 @@ class Updater {
     document.body.style.backgroundColor = color;
   }
 
-  updateController(c:Controller) {
+  updateController(c: Controller) {
     this.ctx.fillStyle = "green";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     document.body.style.backgroundColor = "green";
@@ -263,8 +337,12 @@ class Updater {
     );
     if (winner === 1) {
       ctx.fillStyle = "gold";
-      ctx.fillRect(this.xToCoord(this.boardSize + 1, this.getCardWidth()),
-        this.yToCoord(2, this.getCardWidth()), this.getCardWidth(), this.getCardWidth());
+      ctx.fillRect(
+        this.xToCoord(this.boardSize + 1, this.getCardWidth()),
+        this.yToCoord(2, this.getCardWidth()),
+        this.getCardWidth(),
+        this.getCardWidth()
+      );
     }
     ctx.fillStyle = "black";
     ctx.fillText(
@@ -274,14 +352,18 @@ class Updater {
     );
     if (winner === -1) {
       ctx.fillStyle = "gold";
-      ctx.fillRect(this.xToCoord(this.boardSize + 1, this.getCardWidth()),
-        this.yToCoord(this.boardSize - 2, this.getCardWidth()), this.getCardWidth(), this.getCardWidth());
+      ctx.fillRect(
+        this.xToCoord(this.boardSize + 1, this.getCardWidth()),
+        this.yToCoord(this.boardSize - 2, this.getCardWidth()),
+        this.getCardWidth(),
+        this.getCardWidth()
+      );
     }
   }
 
   /* eslint-disable @typescript-eslint/no-empty-function */
   // TODO: something here
-  updateBoard(v: Board) { }
+  updateBoard(v: Board) {}
   /* eslint-enable @typescript-eslint/no-empty-function */
 
   drawAMenu(m: AMenu) {
@@ -311,8 +393,8 @@ class Updater {
         this.ctx.fillText(
           "> " + s + " <",
           this.canvas.width / 2 -
-          metrics.width / 2 -
-          this.ctx.measureText("> ").width,
+            metrics.width / 2 -
+            this.ctx.measureText("> ").width,
           (i + 1) * height * 1.5
         );
       }
