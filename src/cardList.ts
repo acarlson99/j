@@ -292,6 +292,18 @@ const cardStatExtras: Card[] = [
   ),
 ];
 
+// const cardStatList = [
+//   rot2(1, 1, ["auto", "slam", "wind", "bomb", "swap"], [], true),
+//   rot2(2, 2, ["auto", "slam", "wind", "bomb", "swap"], [], true),
+//   rot2(3, 3, ["auto", "slam", "wind", "bomb", "swap"], [], true),
+//   rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+// ].flat();
+
 const cardList: Card[] = Array(cardStatList.length);
 
 export { cardList };
@@ -321,8 +333,8 @@ Papa.parse("./cards.csv", {
   },
 });
 
-cardStatExtras.forEach((c) => {
-  cardList.push(c);
-});
+// cardStatExtras.forEach((c) => {
+//   cardList.push(c);
+// });
 
 console.log("END");

@@ -13,7 +13,25 @@ import { AMenu } from "./AMenu";
 class Updater {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  arrowColors = ["grey", "black", "#EABE7C", "#CE6A85"];
+  pieceColors = {
+    swap: "darkgrey",
+    auto: "green",
+    cardRed: "red",
+    cardBlue: "blue",
+    grave: "#13070C",
+    bomb: "#FF1B1C",
+    slam: "#3C88B1",
+    wind: "#FF3366",
+    arrow1: "black",
+    arrow2: "white",
+    arrow3: "yellow",
+  };
+  arrowColors = [
+    "grey",
+    this.pieceColors.arrow1,
+    this.pieceColors.arrow2,
+    this.pieceColors.arrow3,
+  ];
 
   private static _instance: Updater;
   boardSize: number;
@@ -131,7 +149,6 @@ class Updater {
     const margin = cardWidth / 5;
     const width = cardWidth / 5 - border;
     const ctx = this.ctx;
-    ctx.fillStyle = "black";
     const arrowFuncs = [
       {
         d: "l",
@@ -213,8 +230,9 @@ class Updater {
       if (!s || s?.v < 0) {
         return;
       }
+      // auto
       if (s.auto) {
-        ctx.fillStyle = "green";
+        ctx.fillStyle = this.pieceColors.auto;
         drawRectFromCenter(ctx, 3, e.d);
       }
     });
@@ -224,8 +242,9 @@ class Updater {
       if (!s || s?.v < 0) {
         return;
       }
+      // swap
       if (s.swap || statDirection(stats, opposites[sds[e.d]])?.swap) {
-        ctx.fillStyle = "darkgrey";
+        ctx.fillStyle = this.pieceColors.swap;
         drawRectFromCenter(ctx, 6, e.d);
       }
       const c = this.arrowColors[clamp(0, s.v, 3)];
@@ -235,9 +254,19 @@ class Updater {
       const numBands = 2;
       const drawF = (color: string, bandPos: number) => {
         ctx.fillStyle = color;
+        // swap direction of bands on opposite sides
+        if (e.d == "d" || e.d == "r") {
+          bandPos = numBands - bandPos - 1;
+        }
         if (e.d == "u" || e.d == "d") {
-          const h = border * 2;
+          const h = e.v[3] / 4;
           const w = e.v[2] / numBands;
+          ctx.fillRect(
+            e.v[0] + w * bandPos,
+            e.v[1] + (e.d == "d" ? 0 : e.v[3] - h),
+            w,
+            h
+          );
           ctx.fillRect(
             e.v[0] + w * bandPos,
             e.v[1] + (e.d == "d" ? e.v[3] - h : 0),
@@ -246,7 +275,13 @@ class Updater {
           );
         } else {
           const h = e.v[3] / numBands;
-          const w = border * 2;
+          const w = e.v[2] / 4;
+          ctx.fillRect(
+            e.v[0] + (e.d == "r" ? 0 : e.v[2] - w),
+            e.v[1] + h * bandPos,
+            w,
+            h
+          );
           ctx.fillRect(
             e.v[0] + (e.d == "r" ? e.v[2] - w : 0),
             e.v[1] + h * bandPos,
@@ -255,23 +290,36 @@ class Updater {
           );
         }
       };
+      // bomb
       if (s.bomb) {
-        ctx.fillStyle = "#FF1B1C";
-        const mgn = border * 2;
-        ctx.fillRect(
-          e.v[0] + mgn,
-          e.v[1] + mgn,
-          e.v[2] - mgn * 2,
-          e.v[3] - mgn * 2
-        );
+        ctx.fillStyle = this.pieceColors.bomb;
+        const w = e.v[2] / 2;
+        const h = e.v[3] / 2;
+        ctx.fillRect(e.v[0] + w / 2, e.v[1] + h / 2, w, h);
       }
+      // slam
       if (s.slam) {
-        drawF("#3CBBB1", 1);
+        drawF(this.pieceColors.slam, 1);
       }
+      // wind
       if (s.wind) {
-        drawF("orange", 0);
+        drawF(this.pieceColors.wind, 0);
       }
     });
+    // grave
+    if (stats.graveyard) {
+      const h = margin;
+      const w = margin;
+      ctx.fillStyle = "white";
+      ctx.fillRect(x, y + cardWidth - h, w, h);
+      ctx.fillStyle = this.pieceColors.grave;
+      ctx.fillRect(
+        x + border,
+        y + cardWidth + border - h,
+        w - border * 2,
+        h - border * 2
+      );
+    }
   }
 
   updateCard(v: Card, x: number, y: number) {
@@ -279,12 +327,9 @@ class Updater {
     const cardWidth = this.getCardWidth();
     x *= cardWidth;
     y *= cardWidth;
-    ctx.fillStyle = v.color == "blue" ? "blue" : "#9E2B25";
+    ctx.fillStyle =
+      v.color == "blue" ? this.pieceColors.cardBlue : this.pieceColors.cardRed;
     ctx.fillRect(x, y, cardWidth, cardWidth);
-    if (v.stats.graveyard) {
-      ctx.fillStyle = "brown";
-      ctx.fillRect(x, y + cardWidth / 2, cardWidth, cardWidth / 2);
-    }
     ctx.fillStyle = "black";
     if (v.stats) {
       this.drawCardArrows(x, y, cardWidth, v.stats);
