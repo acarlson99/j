@@ -2,6 +2,20 @@
 
 import { Card } from "./card";
 
+const getDirname = () => {
+  let dirname = window.location.pathname;
+  if (!dirname.endsWith("/")) {
+    const dn = dirname.split("/");
+    dn.splice(-1);
+    dirname = dn.join("/");
+    if (!dirname.endsWith("/")) {
+      dirname += "/";
+    }
+  } return dirname;
+};
+
+export { getDirname };
+
 export function clamp(l: number, n: number, u: number) {
   if (n < l) {
     return l;

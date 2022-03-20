@@ -1,34 +1,27 @@
 #+TITLE: Joustus
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="${SERVE_LOCATION_DOC}style.css" />
 #+OPTIONS: html-postamble:nil
 #+OPTIONS: num:nil
 
 * Joustus
-  Game based on King of Cards Joustus card game
+**** Game based on King of Cards Joustus card game
 
 * Rules
 
-  For now see [[https://shovelknight.fandom.com/wiki/Joustus#Rules][here]] for rules.  Will populate this section when rules differ substantially
-
-  Card arrow colors: grey < black < white < red
-
-  Cards push in direction of arrow
-
-  To check deck names look under `Web Developer Tools -> Storage -> localstorage` in Firefox, or whatever the equivalent is in Chrome
+**** For now see [[https://shovelknight.fandom.com/wiki/Joustus#Rules][here]] for rules.  Will populate this section when rules differ substantially
+**** Card arrow colors: yellow < black < grey < white
+**** Cards push in direction of arrow
+**** To check deck names look under `Web Developer Tools -> Storage -> localstorage` in Firefox, or whatever the equivalent is in Chrome
 
 ** Cards
 
-   [[https://shovelknight.fandom.com/wiki/Joustus#Abilities][ability descriptions]]
+[[file:../static/joustus-card-example.png]]
 
-  | effect | arrow color |
-  |--------+-------------|
-  | slam   | blue        |
-  | wind   | yellow      |
-  | bomb   | red         |
-  | swap   | darkgrey    |
-  | auto   | orange      |
-
-  and the half-brown ones are graveyard cards
+*** From top to bottom, left to right:
+**** lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,
+**** auto moving up/left, swap arrow directions when pushed, graveyard
+**** slam, wind, bomb
+*** Card ability descriptions can be found [[https://shovelknight.fandom.com/wiki/Joustus#Abilities][here]]
 
 ** Tiles
 

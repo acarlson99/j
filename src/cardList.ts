@@ -2,6 +2,7 @@
 
 import Papa from "papaparse";
 import { Card, CardStat } from "./card";
+import { getDirname } from "./util";
 
 function makeCardStat(
   u: number,
@@ -293,15 +294,28 @@ const cardStatExtras: Card[] = [
 ];
 
 // const cardStatList = [
-//   rot2(1, 1, ["auto", "slam", "wind", "bomb", "swap"], [], true),
-//   rot2(2, 2, ["auto", "slam", "wind", "bomb", "swap"], [], true),
-//   rot2(3, 3, ["auto", "slam", "wind", "bomb", "swap"], [], true),
-//   rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
-//   rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
-//   rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
-//   rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
-//   rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
-//   rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   makeCardStat(0, 0, 0, 1),
+//   makeCardStat(2, 0, 0, 0),
+//   makeCardStat(0, 3, 0, 0),
+//   makeCardStat(1, 1, 0, 0, ...allStat(["auto"])),
+//   makeCardStat(0, 1, 1, 0, ...allStat(["swap"])),
+//   makeCardStat(1, 0, 1, 0, [], [], [], [], true),
+//   makeCardStat(1, 1, 0, 0, ...allStat(["slam"])),
+//   makeCardStat(0, 0, 1, 1, ...allStat(["wind"])),
+//   makeCardStat(1, 0, 0, 1, ...allStat(["bomb"])),
+//   // rot2(3, 3, ["auto", "slam", "wind", "bomb", "swap"], [], true),
+//   // rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(1, 1, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(2, 2, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(3, 3, ["auto", "slam"], ["wind", "bomb", "swap"], true),
+
+//   // rot2(3, 3, ["slam"], ["wind", "bomb", "swap"], true),
+//   // rot2(3, 3, ["slam"], ["wind", "bomb", "swap"], true),
+
+//   // rot2(3, 3, ["auto", "slam"], ["wind", "bomb"], true),
+//   // rot2(3, 3, ["auto", "slam"], ["wind", "bomb"], true),
 // ].flat();
 
 const cardList: Card[] = Array(cardStatList.length);
@@ -310,7 +324,7 @@ export { cardList };
 
 console.log("READ");
 
-Papa.parse("./cards.csv", {
+Papa.parse(getDirname() + "static/cards.csv", {
   download: true,
   step: function (row) {
     const i = Number(row.data[3]) - 1;

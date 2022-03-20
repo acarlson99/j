@@ -16,18 +16,19 @@ class Updater {
   pieceColors = {
     swap: "darkgrey",
     auto: "green",
-    cardRed: "red",
-    cardBlue: "blue",
+    cardRed: "maroon",
+    cardBlue: "darkblue",
     grave: "#13070C",
     bomb: "#FF1B1C",
     slam: "#3C88B1",
     wind: "#FF3366",
+    arrow0: "#F2DD6E",
     arrow1: "black",
-    arrow2: "white",
-    arrow3: "yellow",
+    arrow2: "grey",
+    arrow3: "white",
   };
   arrowColors = [
-    "grey",
+    this.pieceColors.arrow0,
     this.pieceColors.arrow1,
     this.pieceColors.arrow2,
     this.pieceColors.arrow3,
@@ -210,16 +211,16 @@ class Updater {
       const width = cardWidth / ratio;
       if (dir == "u" || dir == "d") {
         ctx.fillRect(
-          x + width * ((ratio - 1) / 2),
-          y + (dir == "d" ? cardWidth / 2 : border),
+          Math.floor(x + width * ((ratio - 1) / 2)),
+          Math.floor(y + (dir == "d" ? cardWidth / 2 : border)),
           width,
-          cardWidth / 2 - border
+          Math.floor(cardWidth / 2 - border)
         );
       } else {
         ctx.fillRect(
-          x + (dir == "r" ? cardWidth / 2 : border),
-          y + width * ((ratio - 1) / 2),
-          cardWidth / 2 - border,
+          Math.floor(x + (dir == "r" ? cardWidth / 2 : border)),
+          Math.floor(y + width * ((ratio - 1) / 2)),
+          Math.floor(cardWidth / 2 - border),
           width
         );
       }
@@ -328,7 +329,7 @@ class Updater {
     x *= cardWidth;
     y *= cardWidth;
     ctx.fillStyle =
-      v.color == "blue" ? this.pieceColors.cardBlue : this.pieceColors.cardRed;
+      v.color == "blue" ? this.pieceColors.cardBlue : v.color == "red" ? this.pieceColors.cardRed : v.color;
     ctx.fillRect(x, y, cardWidth, cardWidth);
     ctx.fillStyle = "black";
     if (v.stats) {
@@ -408,7 +409,7 @@ class Updater {
 
   /* eslint-disable @typescript-eslint/no-empty-function */
   // TODO: something here
-  updateBoard(v: Board) {}
+  updateBoard(v: Board) { }
   /* eslint-enable @typescript-eslint/no-empty-function */
 
   drawAMenu(m: AMenu) {
@@ -438,8 +439,8 @@ class Updater {
         this.ctx.fillText(
           "> " + s + " <",
           this.canvas.width / 2 -
-            metrics.width / 2 -
-            this.ctx.measureText("> ").width,
+          metrics.width / 2 -
+          this.ctx.measureText("> ").width,
           (i + 1) * height * 1.5
         );
       }

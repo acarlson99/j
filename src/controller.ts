@@ -7,6 +7,7 @@ import { Updater } from "./updater";
 import { AMenu } from "./AMenu";
 import { Board } from "./board";
 import { Cursor } from "./cursor";
+import { getDirname } from "./util";
 
 enum EScreenType {
   Game = 0,
@@ -41,7 +42,7 @@ class Menu extends AMenu implements IController {
       const size = Number(prompt("size (min 6)"));
       return new BoardEditor(Math.max(6, size));
     case "doc":
-      window.location.href += "doc/";
+      window.location.href = getDirname() + "doc/";
     }
   }
 

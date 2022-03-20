@@ -5,6 +5,7 @@ ORG_HTML := TODO.html
 
 SERVE_LOCATION := /j/
 SERVE_LOCATION_DOC := $(addprefix ${SERVE_LOCATION}, doc/)
+STATIC_LOCATION = $(addprefix ${SERVE_LOCATION}, static/)
 
 all: doc
 	npm run build-deploy || ((echo '--- NPM BUILD FAILED';echo '--- did you mean to `npm install`') && exit 1)
@@ -12,7 +13,12 @@ all: doc
 re: clean all
 
 %.html: %.org
-	emacs -q $< --eval '(progn (re-search-forward "style\.css" nil t) (replace-match "'$(addprefix ${SERVE_LOCATION_DOC}, style.css)'") (org-html-export-to-html) (kill-emacs))'
+	`emacs -q $< --eval '(progn \
+	(while (re-search-forward "$${SERVE_LOCATION_DOC}" nil t) \
+		(replace-match "${SERVE_LOCATION_DOC}" t)) \
+	(while (re-search-forward "$${STATIC_LOCATION}" nil t) \
+		(replace-match "${STATIC_LOCATION}" t)) \
+	(org-html-export-to-html) (kill-emacs))'`
 
 ${BUILD_DIR}:
 	mkdir -p $@
@@ -39,7 +45,9 @@ doc: ${DOC_FILES}
 .PHONY: clean
 clean:
 	${RM} ${ORG_HTML}
-	rm -rf ${BUILD_DIR}
+	${RM} ${BUILD_DIR}*.html ${BUILD_DIR}*.css ${BUILD_DIR}*.js
+	${RM} ${DOC_FILES}
+	rmdir ${BUILD_DOC_DIR}
 
 j.zip:
 	zip $@ src/* package* LICENSE README.md Makefile TODO.org style.css
