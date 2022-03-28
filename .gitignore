@@ -64,3 +64,4 @@ typings/
 /.vscode/
 *.js.map
 *.css.map
+/index.html
