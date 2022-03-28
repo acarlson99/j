@@ -3,7 +3,7 @@ BUILD_DOC_DIR := ${BUILD_DIR}doc/
 DOC_FILES := $(addprefix ${BUILD_DIR}, doc.html) $(addprefix ${BUILD_DOC_DIR}, index.html style.css)
 ORG_HTML := TODO.html
 
-SERVE_LOCATION := /j/
+SERVE_LOCATION := /joust/
 SERVE_LOCATION_DOC := $(addprefix ${SERVE_LOCATION}, doc/)
 STATIC_LOCATION = $(addprefix ${SERVE_LOCATION}, static/)
 
@@ -30,14 +30,17 @@ ${BUILD_DOC_DIR}index.html: ${ORG_HTML} ${BUILD_DOC_DIR}
 	cp $< $@
 
 ${BUILD_DIR}doc.html: ${BUILD_DIR}
-	echo '<meta http-equiv="refresh" content="0; URL=/j/doc/" />' > $@
+	echo '<meta http-equiv="refresh" content="0; URL=${SERVE_LOCATION}doc/" />' > $@
 
 ${BUILD_DOC_DIR}style.css: style.css ${BUILD_DOC_DIR}
 	cp $< $@
 
 # utility
-j:
-	ln -s ${BUILD_DIR} j
+joust:
+	ln -s ${BUILD_DIR} joust
+
+index.html:
+	echo '<meta http-equiv="refresh" content="0; URL=${SERVE_LOCATION}" />' > $@
 
 .PHONY: doc
 doc: ${DOC_FILES}
@@ -59,7 +62,7 @@ zip:
 
 # testing
 .PHONY: serve
-serve: j
+serve: joust index.html
 	php -S localhost:9090
 
 .PHONY: start
