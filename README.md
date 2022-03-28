@@ -1,6 +1,6 @@
 # joustus
 A JavaScript project
 
-https://acarlson99.github.io/j/
+https://acarlson99.github.io/joust/
 
-https://acarlson99.github.io/j/doc/
+https://acarlson99.github.io/joust/doc/
