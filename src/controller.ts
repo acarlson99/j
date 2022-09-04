@@ -121,11 +121,14 @@ class BoardEditor implements IController {
     case " ":
       this.board.changeObstacleAt(this.cursor.x, this.cursor.y);
       break;
-    case "s":
+    case "s": {
       const store = window.localStorage;
       store.setItem("board", this.board.serialize());
       break;
+    }
     case "q":
+    case "Esc":
+    case "Escape":
       return EScreenType.MainMenu;
     default:
       this.cursor.handleEvent(e);

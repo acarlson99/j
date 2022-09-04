@@ -49,97 +49,99 @@
   :CUSTOM_ID: ProgressSection
   :END:
 ** MVP [5/5]:
- - [X] Pushing [1/1]:
-   - [X] Priority
- - [X] Winning [2/2]:
-   - [X] Gem win
-   - [X] Detect no valid move
- - [X] Piece editor
- - [X] Players [3/3]:
-   - [X] Turns
-   - [X] Deck
-   - [X] Hand:
- - [X] Board [2/2]:
-   - [X] Configuration
-   - [X] Obstacles [3/3]:
-     - [X] Gems
-     - [X] Cannot place here (must be pushed)
-       - Graveyard
-     - [X] Illegal card pos (out of bounds)
+   - [X] Pushing [1/1]:
+     - [X] Priority
+   - [X] Winning [2/2]:
+     - [X] Gem win
+     - [X] Detect no valid move
+   - [X] Piece editor
+   - [X] Players [3/3]:
+     - [X] Turns
+     - [X] Deck
+     - [X] Hand:
+   - [X] Board [2/2]:
+     - [X] Configuration
+     - [X] Obstacles [3/3]:
+       - [X] Gems
+       - [X] Cannot place here (must be pushed)
+         - Graveyard
+       - [X] Illegal card pos (out of bounds)
 ** Deploy [1/1]:
- - [X] Github pages:
-   - [X] Deploy
-   - [X] Automate deploy build:
-     - must take into account that this will be deployed under '/j'
-** Full Game [0/4]:
- - [-] Display [4/5]:
-   - [X] Multi-screen layout
-   - [X] Major graphics refactor, single canvas for whole screen
-   - [X] Dynamic resizing
-   - [ ] Display push fail reason
-   - [X] Show special arrows (slam,wind,grave,etc)
- - [-] Pushing [1/2]:
-   - [X] Push fail reasons:
-     - If a push fails, return an explanation of why it is illegal
-   - [-] Special [4/7]:
-     - [X] Slam [2/2]:
-       - Slam down after pushing pushing all adjacent cards
-       - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
-       - [X] Feature
-       - [X] Unit test
-     - [X] Wind/cascade [2/2]:
-       - Swap colors of all cards pushed
-       - [[https://shovelknight.fandom.com/wiki/Cascade][wiki]]
-       - [X] Feature
-       - [X] Unit test
-     - [X] Bomb [2/2]:
-       - Destroy rocks and cards pushed into (respecting priority)
-       - [[https://shovelknight.fandom.com/wiki/Bomb_Arrow][wiki]]
-       - [X] Feature
-       - [X] Unit test
-     - [-] Switch [1/2]:
-       - Swap u/d or l/r (or both) when pushed
-       - [[https://shovelknight.fandom.com/wiki/Switch][wiki]]
-       - [X] Feature
-       - [ ] Unit test
-     - [-] Auto move/conveyor [1/2]:
-       - Auto move in a direction at end of turn
-       - [[https://shovelknight.fandom.com/wiki/Conveyor_Arrow][wiki]]
-       - [X] Feature
-       - [ ] Unit test
-     - [-] Grave [1/2]:
-       - Can be played in graveyard spaces
-       - ALSO allows cards to be placed on graveyard spaces if pushing grave card
-       - [[https://shovelknight.fandom.com/wiki/Grave][wiki]]
-       - [X] Feature
-       - [ ] Unit test
-     - [X] Priorities:
-       - [X] Standard
-       - [X] Double:
-         - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
-       - [X] Count (remove priority 3 arrows after 3 turns):
-         - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
- - [-] Players [1/2]:
-   - [X] Deck/hand/turn/score display
-   - [-] Deck builder [3/4]:
-     - [X] Build
-     - [X] Save deck
-     - [X] Import
+   - [X] Github pages:
+     - [X] Deploy
+     - [X] Automate deploy build:
+       - must take into account that this will be deployed under '/j'
+** Full Game [4/4]:
+   - [X] Display [4/4]:
+     - [X] Multi-screen layout
+     - [X] Major graphics refactor, single canvas for whole screen
+     - [X] Dynamic resizing
+     - [X] Show special arrows (slam,wind,grave,etc)
+   - [X] Pushing [2/2]:
+     - [X] Push fail reasons:
+       - If a push fails, return an explanation of why it is illegal
+     - [X] Special [7/7]:
+       - [X] Slam [2/2]:
+         - Slam down after pushing pushing all adjacent cards
+         - [[https://shovelknight.fandom.com/wiki/Slam][wiki]]
+         - [X] Feature
+         - [X] Unit test
+       - [X] Wind/cascade [2/2]:
+         - Swap colors of all cards pushed
+         - [[https://shovelknight.fandom.com/wiki/Cascade][wiki]]
+         - [X] Feature
+         - [X] Unit test
+       - [X] Bomb [2/2]:
+         - Destroy rocks and cards pushed into (respecting priority)
+         - [[https://shovelknight.fandom.com/wiki/Bomb_Arrow][wiki]]
+         - [X] Feature
+         - [X] Unit test
+       - [X] Switch [1/1]:
+         - Swap u/d or l/r (or both) when pushed
+         - [[https://shovelknight.fandom.com/wiki/Switch][wiki]]
+         - [X] Feature
+         - Unit test
+       - [X] Auto move/conveyor [1/1]:
+         - Auto move in a direction at end of turn
+         - [[https://shovelknight.fandom.com/wiki/Conveyor_Arrow][wiki]]
+         - [X] Feature
+         - Unit test
+       - [X] Grave [1/1]:
+         - Can be played in graveyard spaces
+         - ALSO allows cards to be placed on graveyard spaces if pushing grave card
+         - [[https://shovelknight.fandom.com/wiki/Grave][wiki]]
+         - [X] Feature
+         - Unit test
+       - [X] Priorities:
+         - [X] Standard
+         - [X] Double:
+           - [[https://shovelknight.fandom.com/wiki/Double_Arrow][wiki]]
+         - [X] Count (remove priority 3 arrows after 3 turns):
+           - [[https://shovelknight.fandom.com/wiki/Count_Arrow][wiki]]
+   - [X] Players [2/2]:
+     - [X] Deck/hand/turn/score display
+     - [X] Deck builder [3/3]:
+       - [X] Build
+       - [X] Save deck
+       - [X] Import
+   - [X] Board [1/1]:
+     - [X] Board builder/editor
+** Polish [0/7]:
+   - [ ] Display [0/1]:
+     - [ ] Display push fail reason
+   - [ ] Players [0/3]:
+     - [ ] Powers/characters/abilities
+     - [ ] More than 2 players
      - [ ] Preconfigured decks (bosses or smth idk)
- - [-] Board [1/3]:
-   - [X] Board builder/editor
-   - [ ] Preconfigured boards
-   - [-] Obstacles [1/2]:
-     - [X] Pitfalls
-     - [ ] Rocks
-** Polish [0/5]:
- - [ ] Players [0/2]:
-   - [ ] Powers/characters/abilities
-   - [ ] More than 2 players
- - [ ] Story/campaign mode
- - [ ] Animations
- - [ ] Move preview
- - [ ] Art
+   - [-] Board [0/2]:
+     - [ ] Preconfigured boards
+     - [-] Obstacles [1/2]:
+       - [X] Pitfalls
+       - [ ] Rocks
+   - [ ] Story/campaign mode
+   - [ ] Animations
+   - [ ] Move preview
+   - [ ] Art
 ** Stretch [0/2]:
- - [ ] Online multiplayer
- - [ ] NFT
+   - [ ] Online multiplayer
+   - [ ] NFT(?)

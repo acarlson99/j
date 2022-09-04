@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-28 Mon 11:41 -->
+<!-- 2022-09-04 Sun 00:57 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Joustus</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="john" />
+<meta name="author" content="chumshack" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -40,7 +40,7 @@
   }
   pre.src {
     position: relative;
-    overflow: auto;
+    overflow: visible;
     padding-top: 1.2em;
   }
   pre.src:before {
@@ -52,7 +52,7 @@
     padding: 3px;
     border: 1px solid black;
   }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
+  pre.src:hover:before { display: inline;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
@@ -161,19 +161,6 @@
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -195,26 +182,50 @@
 </style>
 <link rel="stylesheet" type="text/css" href="/joust/doc/style.css" />
 <script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
 <!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
 </script>
 </head>
 <body>
@@ -224,80 +235,80 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6965d40">Joustus</a></li>
-<li><a href="#org67ad21e">Rules</a>
+<li><a href="#orgf6c9203">Joustus</a></li>
+<li><a href="#orgfa91b1c">Rules</a>
 <ul>
-<li><a href="#org9d189a9">Cards</a>
+<li><a href="#orgebd07be">Cards</a>
 <ul>
-<li><a href="#orgaa96265">From top to bottom, left to right:</a></li>
-<li><a href="#org3196a25">Card ability descriptions can be found here</a></li>
+<li><a href="#orga5cd60b">From top to bottom, left to right:</a></li>
+<li><a href="#orgec1eb22">Card ability descriptions can be found here</a></li>
 </ul>
 </li>
-<li><a href="#orgebd7870">Tiles</a></li>
-<li><a href="#org7f235a8">Controls</a></li>
+<li><a href="#org035d89f">Tiles</a></li>
+<li><a href="#org2d3c038">Controls</a></li>
 </ul>
 </li>
 <li><a href="#ProgressSection">Progress</a>
 <ul>
-<li><a href="#orga29d8c9">MVP <code>[5/5]</code>:</a></li>
-<li><a href="#orgb05c81e">Deploy <code>[1/1]</code>:</a></li>
-<li><a href="#orgc942789">Full Game <code>[0/4]</code>:</a></li>
-<li><a href="#orgfd37b21">Polish <code>[0/5]</code>:</a></li>
-<li><a href="#org6352716">Stretch <code>[0/2]</code>:</a></li>
+<li><a href="#org5b6c622">MVP <code>[5/5]</code>:</a></li>
+<li><a href="#org0ed942e">Deploy <code>[1/1]</code>:</a></li>
+<li><a href="#org920d2f7">Full Game <code>[4/4]</code>:</a></li>
+<li><a href="#org77e5939">Polish <code>[0/7]</code>:</a></li>
+<li><a href="#org7530461">Stretch <code>[0/2]</code>:</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org6965d40" class="outline-2">
-<h2 id="org6965d40">Joustus</h2>
-<div class="outline-text-2" id="text-org6965d40">
+<div id="outline-container-orgf6c9203" class="outline-2">
+<h2 id="orgf6c9203">Joustus</h2>
+<div class="outline-text-2" id="text-orgf6c9203">
 </div>
 <ul class="org-ul">
-<li><a id="org305e068"></a>Game based on King of Cards Joustus card game<br /></li>
+<li><a id="org0959e69"></a>Game based on King of Cards Joustus card game<br /></li>
 </ul>
 </div>
 
-<div id="outline-container-org67ad21e" class="outline-2">
-<h2 id="org67ad21e">Rules</h2>
-<div class="outline-text-2" id="text-org67ad21e">
+<div id="outline-container-orgfa91b1c" class="outline-2">
+<h2 id="orgfa91b1c">Rules</h2>
+<div class="outline-text-2" id="text-orgfa91b1c">
 </div>
 <ul class="org-ul">
-<li><a id="org190556a"></a>For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a> for rules.  Will populate this section when rules differ substantially<br /></li>
-<li><a id="org1ace27b"></a>Card arrow colors: yellow &lt; black &lt; grey &lt; white<br /></li>
-<li><a id="orgbc56d9b"></a>Cards push in direction of arrow<br /></li>
-<li><a id="org12d2c14"></a>To check deck names look under `Web Developer Tools -&gt; Storage -&gt; localstorage` in Firefox, or whatever the equivalent is in Chrome<br /></li>
+<li><a id="orgae82b9a"></a>For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a> for rules.  Will populate this section when rules differ substantially<br /></li>
+<li><a id="org72ae1ba"></a>Card arrow colors: yellow &lt; black &lt; grey &lt; white<br /></li>
+<li><a id="org579ad18"></a>Cards push in direction of arrow<br /></li>
+<li><a id="orgf671725"></a>To check deck names look under `Web Developer Tools -&gt; Storage -&gt; localstorage` in Firefox, or whatever the equivalent is in Chrome<br /></li>
 </ul>
 
-<div id="outline-container-org9d189a9" class="outline-3">
-<h3 id="org9d189a9">Cards</h3>
-<div class="outline-text-3" id="text-org9d189a9">
+<div id="outline-container-orgebd07be" class="outline-3">
+<h3 id="orgebd07be">Cards</h3>
+<div class="outline-text-3" id="text-orgebd07be">
 
-<div id="orgf5a67a7" class="figure">
+<div class="figure">
 <p><img src="../static/joustus-card-example.png" alt="joustus-card-example.png" />
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgaa96265" class="outline-4">
-<h4 id="orgaa96265">From top to bottom, left to right:</h4>
-<div class="outline-text-4" id="text-orgaa96265">
+<div id="outline-container-orga5cd60b" class="outline-4">
+<h4 id="orga5cd60b">From top to bottom, left to right:</h4>
+<div class="outline-text-4" id="text-orga5cd60b">
 </div>
 <ul class="org-ul">
-<li><a id="orgde505ec"></a>lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,<br /></li>
-<li><a id="org05453be"></a>auto moving up/left, swap arrow directions when pushed, graveyard<br /></li>
-<li><a id="org217b1e2"></a>slam, wind, bomb<br /></li>
+<li><a id="org1cb697e"></a>lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,<br /></li>
+<li><a id="orgaee7507"></a>auto moving up/left, swap arrow directions when pushed, graveyard<br /></li>
+<li><a id="org0ebdd21"></a>slam, wind, bomb<br /></li>
 </ul>
 </div>
-<div id="outline-container-org3196a25" class="outline-4">
-<h4 id="org3196a25">Card ability descriptions can be found <a href="https://shovelknight.fandom.com/wiki/Joustus#Abilities">here</a></h4>
+<div id="outline-container-orgec1eb22" class="outline-4">
+<h4 id="orgec1eb22">Card ability descriptions can be found <a href="https://shovelknight.fandom.com/wiki/Joustus#Abilities">here</a></h4>
 </div>
 </div>
 
-<div id="outline-container-orgebd7870" class="outline-3">
-<h3 id="orgebd7870">Tiles</h3>
-<div class="outline-text-3" id="text-orgebd7870">
+<div id="outline-container-org035d89f" class="outline-3">
+<h3 id="org035d89f">Tiles</h3>
+<div class="outline-text-3" id="text-org035d89f">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -337,9 +348,9 @@
 </div>
 </div>
 
-<div id="outline-container-org7f235a8" class="outline-3">
-<h3 id="org7f235a8">Controls</h3>
-<div class="outline-text-3" id="text-org7f235a8">
+<div id="outline-container-org2d3c038" class="outline-3">
+<h3 id="org2d3c038">Controls</h3>
+<div class="outline-text-3" id="text-org2d3c038">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -389,13 +400,13 @@
 </div>
 </div>
 
-<div id="outline-container-ProgressSection" class="outline-2">
-<h2 id="ProgressSection">Progress</h2>
+<div id="outline-container-org7f75b47" class="outline-2">
+<h2 id="ProgressSection"><a id="org7f75b47"></a>Progress</h2>
 <div class="outline-text-2" id="text-ProgressSection">
 </div>
-<div id="outline-container-orga29d8c9" class="outline-3">
-<h3 id="orga29d8c9">MVP <code>[5/5]</code>:</h3>
-<div class="outline-text-3" id="text-orga29d8c9">
+<div id="outline-container-org5b6c622" class="outline-3">
+<h3 id="org5b6c622">MVP <code>[5/5]</code>:</h3>
+<div class="outline-text-3" id="text-org5b6c622">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Pushing <code>[1/1]</code>:
 <ul class="org-ul">
@@ -429,9 +440,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb05c81e" class="outline-3">
-<h3 id="orgb05c81e">Deploy <code>[1/1]</code>:</h3>
-<div class="outline-text-3" id="text-orgb05c81e">
+<div id="outline-container-org0ed942e" class="outline-3">
+<h3 id="org0ed942e">Deploy <code>[1/1]</code>:</h3>
+<div class="outline-text-3" id="text-org0ed942e">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Github pages:
 <ul class="org-ul">
@@ -444,25 +455,24 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc942789" class="outline-3">
-<h3 id="orgc942789">Full Game <code>[0/4]</code>:</h3>
-<div class="outline-text-3" id="text-orgc942789">
+<div id="outline-container-org920d2f7" class="outline-3">
+<h3 id="org920d2f7">Full Game <code>[4/4]</code>:</h3>
+<div class="outline-text-3" id="text-org920d2f7">
 <ul class="org-ul">
-<li class="trans"><code>[-]</code> Display <code>[4/5]</code>:
+<li class="on"><code>[X]</code> Display <code>[4/4]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Multi-screen layout</li>
 <li class="on"><code>[X]</code> Major graphics refactor, single canvas for whole screen</li>
 <li class="on"><code>[X]</code> Dynamic resizing</li>
-<li class="off"><code>[&#xa0;]</code> Display push fail reason</li>
 <li class="on"><code>[X]</code> Show special arrows (slam,wind,grave,etc)</li>
 </ul></li>
-<li class="trans"><code>[-]</code> Pushing <code>[1/2]</code>:
+<li class="on"><code>[X]</code> Pushing <code>[2/2]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Push fail reasons:
 <ul class="org-ul">
 <li>If a push fails, return an explanation of why it is illegal</li>
 </ul></li>
-<li class="trans"><code>[-]</code> Special <code>[4/7]</code>:
+<li class="on"><code>[X]</code> Special <code>[7/7]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Slam <code>[2/2]</code>:
 <ul class="org-ul">
@@ -485,27 +495,27 @@
 <li class="on"><code>[X]</code> Feature</li>
 <li class="on"><code>[X]</code> Unit test</li>
 </ul></li>
-<li class="trans"><code>[-]</code> Switch <code>[1/2]</code>:
+<li class="on"><code>[X]</code> Switch <code>[1/1]</code>:
 <ul class="org-ul">
 <li>Swap u/d or l/r (or both) when pushed</li>
 <li><a href="https://shovelknight.fandom.com/wiki/Switch">wiki</a></li>
 <li class="on"><code>[X]</code> Feature</li>
-<li class="off"><code>[&#xa0;]</code> Unit test</li>
+<li>Unit test</li>
 </ul></li>
-<li class="trans"><code>[-]</code> Auto move/conveyor <code>[1/2]</code>:
+<li class="on"><code>[X]</code> Auto move/conveyor <code>[1/1]</code>:
 <ul class="org-ul">
 <li>Auto move in a direction at end of turn</li>
 <li><a href="https://shovelknight.fandom.com/wiki/Conveyor_Arrow">wiki</a></li>
 <li class="on"><code>[X]</code> Feature</li>
-<li class="off"><code>[&#xa0;]</code> Unit test</li>
+<li>Unit test</li>
 </ul></li>
-<li class="trans"><code>[-]</code> Grave <code>[1/2]</code>:
+<li class="on"><code>[X]</code> Grave <code>[1/1]</code>:
 <ul class="org-ul">
 <li>Can be played in graveyard spaces</li>
 <li>ALSO allows cards to be placed on graveyard spaces if pushing grave card</li>
 <li><a href="https://shovelknight.fandom.com/wiki/Grave">wiki</a></li>
 <li class="on"><code>[X]</code> Feature</li>
-<li class="off"><code>[&#xa0;]</code> Unit test</li>
+<li>Unit test</li>
 </ul></li>
 <li class="on"><code>[X]</code> Priorities:
 <ul class="org-ul">
@@ -521,38 +531,45 @@
 </ul></li>
 </ul></li>
 </ul></li>
-<li class="trans"><code>[-]</code> Players <code>[1/2]</code>:
+<li class="on"><code>[X]</code> Players <code>[2/2]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Deck/hand/turn/score display</li>
-<li class="trans"><code>[-]</code> Deck builder <code>[3/4]</code>:
+<li class="on"><code>[X]</code> Deck builder <code>[3/3]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Build</li>
 <li class="on"><code>[X]</code> Save deck</li>
 <li class="on"><code>[X]</code> Import</li>
-<li class="off"><code>[&#xa0;]</code> Preconfigured decks (bosses or smth idk)</li>
 </ul></li>
 </ul></li>
-<li class="trans"><code>[-]</code> Board <code>[1/3]</code>:
+<li class="on"><code>[X]</code> Board <code>[1/1]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Board builder/editor</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org77e5939" class="outline-3">
+<h3 id="org77e5939">Polish <code>[0/7]</code>:</h3>
+<div class="outline-text-3" id="text-org77e5939">
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> Display <code>[0/1]</code>:
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> Display push fail reason</li>
+</ul></li>
+<li class="off"><code>[&#xa0;]</code> Players <code>[0/3]</code>:
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> Powers/characters/abilities</li>
+<li class="off"><code>[&#xa0;]</code> More than 2 players</li>
+<li class="off"><code>[&#xa0;]</code> Preconfigured decks (bosses or smth idk)</li>
+</ul></li>
+<li class="trans"><code>[-]</code> Board <code>[0/2]</code>:
+<ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Preconfigured boards</li>
 <li class="trans"><code>[-]</code> Obstacles <code>[1/2]</code>:
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Pitfalls</li>
 <li class="off"><code>[&#xa0;]</code> Rocks</li>
 </ul></li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div id="outline-container-orgfd37b21" class="outline-3">
-<h3 id="orgfd37b21">Polish <code>[0/5]</code>:</h3>
-<div class="outline-text-3" id="text-orgfd37b21">
-<ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Players <code>[0/2]</code>:
-<ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Powers/characters/abilities</li>
-<li class="off"><code>[&#xa0;]</code> More than 2 players</li>
 </ul></li>
 <li class="off"><code>[&#xa0;]</code> Story/campaign mode</li>
 <li class="off"><code>[&#xa0;]</code> Animations</li>
@@ -561,12 +578,12 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org6352716" class="outline-3">
-<h3 id="org6352716">Stretch <code>[0/2]</code>:</h3>
-<div class="outline-text-3" id="text-org6352716">
+<div id="outline-container-org7530461" class="outline-3">
+<h3 id="org7530461">Stretch <code>[0/2]</code>:</h3>
+<div class="outline-text-3" id="text-org7530461">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Online multiplayer</li>
-<li class="off"><code>[&#xa0;]</code> NFT</li>
+<li class="off"><code>[&#xa0;]</code> NFT(?)</li>
 </ul>
 </div>
 </div>

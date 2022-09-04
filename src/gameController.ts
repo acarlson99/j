@@ -166,6 +166,8 @@ class GameController implements IController {
       this.handPosArr[playerIdx] = Number(e.key) - 1;
       break;
     case "q":
+    case "Esc":
+    case "Escape":
       return EScreenType.MainMenu;
       // case "v":
       //   {

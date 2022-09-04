@@ -43,7 +43,11 @@ class DeckBuilderController implements IController {
     const selectedStatSet = new Set();
     if (d) {
       R.map(
-        R.compose(str => selectedStatSet.add(str), JSON.stringify, ({ stats }) => stats),
+        R.compose(
+          (str) => selectedStatSet.add(str),
+          JSON.stringify,
+          ({ stats }) => stats
+        ),
         Deck.deserialize(d).cs
       );
       // Deck.deserialize(d).cs.map(({ stats }) =>
@@ -83,6 +87,8 @@ class DeckBuilderController implements IController {
   handleEvent(e: KeyboardEvent) {
     switch (e.key) {
     case "q":
+    case "Esc":
+    case "Escape":
       return EScreenType.MainMenu;
       break;
     case " ":
@@ -91,7 +97,10 @@ class DeckBuilderController implements IController {
     case "s":
       {
         const deck = new Deck(this.markedCards(), "blue").serialize();
-        window.localStorage.setItem("deck_" + (prompt("deck name") || "TEMP"), deck);
+        window.localStorage.setItem(
+          "deck_" + (prompt("deck name") || "TEMP"),
+          deck
+        );
       }
       break;
     default:

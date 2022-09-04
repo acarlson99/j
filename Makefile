@@ -63,7 +63,7 @@ zip:
 # testing
 .PHONY: serve
 serve: joust index.html
-	php -S localhost:9090
+	php -S localhost:8081
 
 .PHONY: start
 start:
