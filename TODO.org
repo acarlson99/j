@@ -42,6 +42,7 @@
 | q                  | quit to menu              |
 | c                  | copy deck code            |
 | v                  | paste deck code           |
+| s                  | save deck/board in editor |
 |--------------------+---------------------------|
 
 * Progress
