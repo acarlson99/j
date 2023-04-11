@@ -13,15 +13,13 @@
 **** Cards push in direction of arrow
 **** To check deck names look under `Web Developer Tools -> Storage -> localstorage` in Firefox, or whatever the equivalent is in Chrome
 
-** Cards
+** Deck builder
 
-[[file:../static/joustus-card-example.png]]
+Press `space` to select desired cards.  Press `s` to save marked cards as a deck.  Name your deck to load in `play` mode.
 
-*** From top to bottom, left to right:
-**** lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,
-**** auto moving up/left, swap arrow directions when pushed, graveyard
-**** slam, wind, bomb
-*** Card ability descriptions can be found [[https://shovelknight.fandom.com/wiki/Joustus#Abilities][here]]
+** Board editor
+
+Press `space` to toggle tile, press `s` to save board.
 
 ** Tiles
 
@@ -44,6 +42,16 @@
 | v                  | paste deck code           |
 | s                  | save deck/board in editor |
 |--------------------+---------------------------|
+
+** Cards
+
+[[file:../static/joustus-card-example.png]]
+
+*** From top to bottom, left to right:
+**** lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,
+**** auto moving up/left, swap arrow directions when pushed, graveyard
+**** slam, wind, bomb
+*** Card ability descriptions can be found [[https://shovelknight.fandom.com/wiki/Joustus#Abilities][here]]
 
 * Progress
   :PROPERTIES:

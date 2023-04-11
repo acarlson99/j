@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-04-10 Mon 17:26 -->
+<!-- 2023-04-10 Mon 17:35 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Joustus</title>
@@ -235,80 +235,75 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org24e7c6c">Joustus</a></li>
-<li><a href="#orgb249a9e">Rules</a>
+<li><a href="#org4b120ec">Joustus</a></li>
+<li><a href="#org2007c82">Rules</a>
 <ul>
-<li><a href="#orgaf8425a">Cards</a>
+<li><a href="#org424f472">Deck builder</a></li>
+<li><a href="#org6fb5a77">Board editor</a></li>
+<li><a href="#org53b2925">Tiles</a></li>
+<li><a href="#orga8960e6">Controls</a></li>
+<li><a href="#org99a1cf9">Cards</a>
 <ul>
-<li><a href="#orgca0ded3">From top to bottom, left to right:</a></li>
-<li><a href="#org6456cff">Card ability descriptions can be found here</a></li>
+<li><a href="#orgb253280">From top to bottom, left to right:</a></li>
+<li><a href="#org4c4e5fa">Card ability descriptions can be found here</a></li>
 </ul>
 </li>
-<li><a href="#orgfd883cf">Tiles</a></li>
-<li><a href="#org1bb0aa4">Controls</a></li>
 </ul>
 </li>
 <li><a href="#ProgressSection">Progress</a>
 <ul>
-<li><a href="#org726594f">MVP <code>[5/5]</code>:</a></li>
-<li><a href="#org389175e">Deploy <code>[1/1]</code>:</a></li>
-<li><a href="#orgc475866">Full Game <code>[4/4]</code>:</a></li>
-<li><a href="#org2ed2397">Polish <code>[0/7]</code>:</a></li>
-<li><a href="#orged14afb">Stretch <code>[0/2]</code>:</a></li>
+<li><a href="#org88a11e4">MVP <code>[5/5]</code>:</a></li>
+<li><a href="#orgcad9ee3">Deploy <code>[1/1]</code>:</a></li>
+<li><a href="#org29e94c3">Full Game <code>[4/4]</code>:</a></li>
+<li><a href="#org9cbefed">Polish <code>[0/7]</code>:</a></li>
+<li><a href="#orgde941f3">Stretch <code>[0/2]</code>:</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org24e7c6c" class="outline-2">
-<h2 id="org24e7c6c">Joustus</h2>
-<div class="outline-text-2" id="text-org24e7c6c">
+<div id="outline-container-org4b120ec" class="outline-2">
+<h2 id="org4b120ec">Joustus</h2>
+<div class="outline-text-2" id="text-org4b120ec">
 </div>
 <ul class="org-ul">
-<li><a id="orgb164597"></a>Game based on King of Cards Joustus card game<br /></li>
+<li><a id="orga8b468f"></a>Game based on King of Cards Joustus card game<br /></li>
 </ul>
 </div>
 
-<div id="outline-container-orgb249a9e" class="outline-2">
-<h2 id="orgb249a9e">Rules</h2>
-<div class="outline-text-2" id="text-orgb249a9e">
+<div id="outline-container-org2007c82" class="outline-2">
+<h2 id="org2007c82">Rules</h2>
+<div class="outline-text-2" id="text-org2007c82">
 </div>
 <ul class="org-ul">
-<li><a id="org03a2903"></a>For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a> for rules.  Will populate this section when rules differ substantially<br /></li>
-<li><a id="org9b96eb4"></a>Card arrow colors: yellow &lt; black &lt; grey &lt; white<br /></li>
-<li><a id="org5d4e609"></a>Cards push in direction of arrow<br /></li>
-<li><a id="orgf24867c"></a>To check deck names look under `Web Developer Tools -&gt; Storage -&gt; localstorage` in Firefox, or whatever the equivalent is in Chrome<br /></li>
+<li><a id="orga648654"></a>For now see <a href="https://shovelknight.fandom.com/wiki/Joustus#Rules">here</a> for rules.  Will populate this section when rules differ substantially<br /></li>
+<li><a id="orgad09cd9"></a>Card arrow colors: yellow &lt; black &lt; grey &lt; white<br /></li>
+<li><a id="org0c19042"></a>Cards push in direction of arrow<br /></li>
+<li><a id="org25947bb"></a>To check deck names look under `Web Developer Tools -&gt; Storage -&gt; localstorage` in Firefox, or whatever the equivalent is in Chrome<br /></li>
 </ul>
 
-<div id="outline-container-orgaf8425a" class="outline-3">
-<h3 id="orgaf8425a">Cards</h3>
-<div class="outline-text-3" id="text-orgaf8425a">
-
-<div class="figure">
-<p><img src="../static/joustus-card-example.png" alt="joustus-card-example.png" />
+<div id="outline-container-org424f472" class="outline-3">
+<h3 id="org424f472">Deck builder</h3>
+<div class="outline-text-3" id="text-org424f472">
+<p>
+Press `space` to select desired cards.  Press `s` to save marked cards as a deck.  Name your deck to load in `play` mode.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgca0ded3" class="outline-4">
-<h4 id="orgca0ded3">From top to bottom, left to right:</h4>
-<div class="outline-text-4" id="text-orgca0ded3">
-</div>
-<ul class="org-ul">
-<li><a id="org053e43b"></a>lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,<br /></li>
-<li><a id="org4b04db2"></a>auto moving up/left, swap arrow directions when pushed, graveyard<br /></li>
-<li><a id="org74d1e6a"></a>slam, wind, bomb<br /></li>
-</ul>
-</div>
-<div id="outline-container-org6456cff" class="outline-4">
-<h4 id="org6456cff">Card ability descriptions can be found <a href="https://shovelknight.fandom.com/wiki/Joustus#Abilities">here</a></h4>
+<div id="outline-container-org6fb5a77" class="outline-3">
+<h3 id="org6fb5a77">Board editor</h3>
+<div class="outline-text-3" id="text-org6fb5a77">
+<p>
+Press `space` to toggle tile, press `s` to save board.
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgfd883cf" class="outline-3">
-<h3 id="orgfd883cf">Tiles</h3>
-<div class="outline-text-3" id="text-orgfd883cf">
+<div id="outline-container-org53b2925" class="outline-3">
+<h3 id="org53b2925">Tiles</h3>
+<div class="outline-text-3" id="text-org53b2925">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -348,9 +343,9 @@ for the JavaScript code in this tag.
 </div>
 </div>
 
-<div id="outline-container-org1bb0aa4" class="outline-3">
-<h3 id="org1bb0aa4">Controls</h3>
-<div class="outline-text-3" id="text-org1bb0aa4">
+<div id="outline-container-orga8960e6" class="outline-3">
+<h3 id="orga8960e6">Controls</h3>
+<div class="outline-text-3" id="text-orga8960e6">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -403,15 +398,40 @@ for the JavaScript code in this tag.
 </table>
 </div>
 </div>
+
+<div id="outline-container-org99a1cf9" class="outline-3">
+<h3 id="org99a1cf9">Cards</h3>
+<div class="outline-text-3" id="text-org99a1cf9">
+
+<div class="figure">
+<p><img src="../static/joustus-card-example.png" alt="joustus-card-example.png" />
+</p>
+</div>
 </div>
 
-<div id="outline-container-orgac04644" class="outline-2">
-<h2 id="ProgressSection"><a id="orgac04644"></a>Progress</h2>
+<div id="outline-container-orgb253280" class="outline-4">
+<h4 id="orgb253280">From top to bottom, left to right:</h4>
+<div class="outline-text-4" id="text-orgb253280">
+</div>
+<ul class="org-ul">
+<li><a id="orgbdaae97"></a>lv 1 arrow pointing right, lv 2 arrow pointing up, lv 3 arrow pointing left,<br /></li>
+<li><a id="org354f14c"></a>auto moving up/left, swap arrow directions when pushed, graveyard<br /></li>
+<li><a id="orgbe43705"></a>slam, wind, bomb<br /></li>
+</ul>
+</div>
+<div id="outline-container-org4c4e5fa" class="outline-4">
+<h4 id="org4c4e5fa">Card ability descriptions can be found <a href="https://shovelknight.fandom.com/wiki/Joustus#Abilities">here</a></h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeca28cd" class="outline-2">
+<h2 id="ProgressSection"><a id="orgeca28cd"></a>Progress</h2>
 <div class="outline-text-2" id="text-ProgressSection">
 </div>
-<div id="outline-container-org726594f" class="outline-3">
-<h3 id="org726594f">MVP <code>[5/5]</code>:</h3>
-<div class="outline-text-3" id="text-org726594f">
+<div id="outline-container-org88a11e4" class="outline-3">
+<h3 id="org88a11e4">MVP <code>[5/5]</code>:</h3>
+<div class="outline-text-3" id="text-org88a11e4">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Pushing <code>[1/1]</code>:
 <ul class="org-ul">
@@ -445,9 +465,9 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-org389175e" class="outline-3">
-<h3 id="org389175e">Deploy <code>[1/1]</code>:</h3>
-<div class="outline-text-3" id="text-org389175e">
+<div id="outline-container-orgcad9ee3" class="outline-3">
+<h3 id="orgcad9ee3">Deploy <code>[1/1]</code>:</h3>
+<div class="outline-text-3" id="text-orgcad9ee3">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Github pages:
 <ul class="org-ul">
@@ -460,9 +480,9 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc475866" class="outline-3">
-<h3 id="orgc475866">Full Game <code>[4/4]</code>:</h3>
-<div class="outline-text-3" id="text-orgc475866">
+<div id="outline-container-org29e94c3" class="outline-3">
+<h3 id="org29e94c3">Full Game <code>[4/4]</code>:</h3>
+<div class="outline-text-3" id="text-org29e94c3">
 <ul class="org-ul">
 <li class="on"><code>[X]</code> Display <code>[4/4]</code>:
 <ul class="org-ul">
@@ -553,9 +573,9 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-org2ed2397" class="outline-3">
-<h3 id="org2ed2397">Polish <code>[0/7]</code>:</h3>
-<div class="outline-text-3" id="text-org2ed2397">
+<div id="outline-container-org9cbefed" class="outline-3">
+<h3 id="org9cbefed">Polish <code>[0/7]</code>:</h3>
+<div class="outline-text-3" id="text-org9cbefed">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Display <code>[0/1]</code>:
 <ul class="org-ul">
@@ -583,9 +603,9 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-orged14afb" class="outline-3">
-<h3 id="orged14afb">Stretch <code>[0/2]</code>:</h3>
-<div class="outline-text-3" id="text-orged14afb">
+<div id="outline-container-orgde941f3" class="outline-3">
+<h3 id="orgde941f3">Stretch <code>[0/2]</code>:</h3>
+<div class="outline-text-3" id="text-orgde941f3">
 <ul class="org-ul">
 <li class="off"><code>[&#xa0;]</code> Online multiplayer</li>
 <li class="off"><code>[&#xa0;]</code> NFT(?)</li>
